@@ -1,3 +1,5 @@
+import ast
+import pprint as pp
 import time
 
 import requests
@@ -28,12 +30,30 @@ class MainThread(QThread):
     def __del__(self):
         self.wait()
 
-    def authenticate(self):
-        data = {'key': self.getApiKey(),
+    def authenticate(func):
+        def authenticate_and_call(*args, **kwargs):
+            token = args[0].__auth()
+            if 'error' in token:
+                print('Authentication Failed')
+                args[0].sleep_time = 10
+                return
+            return func(token=token,
+                        *args, **kwargs)
+        return authenticate_and_call
+
+    def __auth(self):
+        data = {'key': self.getApiKey() + 'ad',
                 'name': self.getUsername()}
-        return requests.post(self.links['banDetection'], data=data).text
+        return requests.post(self.links['banDetection'],
+                             data=data).text
+
+    @authenticate
+    def getBanDetection(self, token):
+        return ast.literal_eval(token)
 
     def run(self):
+        self.sleep_time = 1
         while(True):
-            response = self.authenticate()
-            print(response)
+            status = self.getBanDetection()
+            pp.pprint(status)
+            time.sleep(self.sleep_time)
