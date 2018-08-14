@@ -18,7 +18,6 @@ class Auth():
 
     def authenticate(func):
         def authenticate_and_call(*args, **kwargs):
-            # @Auth.connection
             def auth_ban_detection():
                 try:
                     data = {'key': args[0].getApiKey(),
