@@ -160,6 +160,7 @@ class TMRemote(QMainWindow):
     def closeEvent(self, event=None):
         self.__writeSettings()
         self.__closeThreads()
+        self.__removeTempFiles()
         self.close()
 
     def __startTerminalManager(self):
@@ -249,7 +250,17 @@ class TMRemote(QMainWindow):
 
     def __closeThreads(self):
         self.thread.quit()
-        pass
+
+    def __getTMRemoteDir(self):
+        return self.settingsWindow.getTMPath().split('TerminalManager.exe')[0] + 'TMRemote'
+
+    def __removeTempFiles(self):
+        tempDir = self.__getTMRemoteDir() + '/temp'
+        for file in os.listdir(tempDir):
+            try:
+                os.remove(os.path.join(tempDir, file))
+            except Exception as ex:
+                print(f'Error Remove File {file}: {ex}')
 
 
 def getCurrentPath():

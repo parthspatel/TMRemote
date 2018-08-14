@@ -30,7 +30,15 @@ class BanDetectionThread(QThread, ):
         self.prevBanDetection = {}
 
     def __del__(self):
+
+        self.__removeTempFiles(self.__getTMRemoteFolder() + '/temp/banDetectStatus')
         self.wait()
+
+    def __removeTempFiles(self, file):
+        try:
+            os.remove(file)
+        except Exception as ex:
+            print(ex)
 
     def __getTMRemoteFolder(self):
         return self.getTmPath().split('TerminalManager.exe')[0] + 'TMRemote'
@@ -72,5 +80,9 @@ class BanDetectionThread(QThread, ):
         return gm_status
 
     def run(self):
-        self.parseBanDetection()
-        time.sleep(self.sleep_time)
+        print(f'inside BanDetect: {self.sleep_time}')
+        while True:
+            self.parseBanDetection()
+            print(f'got BanDetect: {self.sleep_time}')
+
+            time.sleep(self.sleep_time)

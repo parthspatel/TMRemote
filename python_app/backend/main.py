@@ -53,7 +53,7 @@ class MainThread(QThread):
         self.wait()
 
     def run(self):
-        self.sleep_time = 0
+        self.sleep_time = 1
         self.banDetectionThread = BanDetectionThread(username=self.getUsername,
                                                      password=self.getPassword,
                                                      apikey=self.getApiKey,
@@ -62,8 +62,6 @@ class MainThread(QThread):
                                                      logs=self.logs,
                                                      links=self.links)
 
-        while(True):
-            self.banDetectionThread.start()
+        self.banDetectionThread.start()
 
-            self.banDetectionThread.quit()
-        # time.sleep(self.sleep_time)
+        # self.banDetectionThread.quit()
