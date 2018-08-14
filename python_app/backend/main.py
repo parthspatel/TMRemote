@@ -19,7 +19,7 @@ def getCurrentPath():
 
 class MainThread(QThread):
 
-    def __init__(self, username, password, apikey, profilesDir, tmPath, logs, banDetect):
+    def __init__(self, username, password, apikey, profilesDir, tmPath, logs, banDetect, MaintenanceWidget):
         QThread.__init__(self)
 
         self.getUsername = username
@@ -28,8 +28,8 @@ class MainThread(QThread):
 
         self.getProfilesDir = profilesDir
         self.getTmPath = tmPath
-        self.filePaths = {'TerminalManagerFolder':''}
-        self.TMRemoteFolder = self.filePaths['TerminalManagerFolder'] + '/TMRemote' # Sorry parth, but can't make dict recursive
+        self.filePaths = {'TerminalManagerFolder':self.getTmPath()}
+        self.TMRemoteFolder = '' # Sorry parth, but can't make dict recursive
 
         self.baseData = {}
 
@@ -40,12 +40,15 @@ class MainThread(QThread):
         self.previousBanState = {}
         self.banDetect = banDetect
 
+        self.maintenance = MaintenanceWidget
+
         self.links = {'botLogs': 'https://tmremote.io/api/v1/activity',
                       'banDetection': 'https://tmremote.io/api/v1/gm/status',
                       'banPost': '',
                       'tmLog': '',
                       'ExeDownload':'',
-                      'VersionCheck':''}
+                      'VersionCheck':'',
+                      'MaintenanceCheck':''}
 
     def __del__(self):
         self.wait()
@@ -65,7 +68,7 @@ class MainThread(QThread):
         newVersion = requests.post(self.links['VersionCheck'], data = self.baseData).text
         if int(newVersion) > self.version:
             currentPath = getCurrentPath()
-            newNamePath = currentPath.split('TMRemote.exe')[0] + '\TMRemote_old.exe'
+            newNamePath = currentPath.split('TMRemote.exe')[0] + '/TMRemote_old.exe'
             os.rename(currentPath, newNamePath)
             urllib.request.urlretrieve(self.links['ExeDownload'], currentPath)
             os.remove(newNamePath)
@@ -75,6 +78,7 @@ class MainThread(QThread):
         self.baseData = {'key': self.getApiKey(),
                          'name':self.getUsername()}
         self.filePaths['TerminalManagerFolder'] = self.getTmPath().split('TerminalManager.exe')[0]
+        self.TMRemoteFolder = self.filePaths['TerminalManagerFolder'] + '/TMRemote'
 
     def authenticate(self):
         return requests.post(self.links['botLogs'], data=self.baseData).text
@@ -89,6 +93,18 @@ class MainThread(QThread):
 
         with open(self.TMRemoteFolder + '/WorldToCheck', 'wb') as pickleFile:
             pickle.dump(pickleData, pickleFile)
+
+    def __ServerStatus(self):
+        return bool(requests.post(self.links['MaintenanceCheck'], data = self.baseData).text)
+
+    def __MaintenanceCheck(self):
+        serverStatus = self.__ServerStatus()
+        if self.maintenance.crashCheckBox.isChecked() and serverStatus:
+            os.system('shutdown -r -f -t 0')
+        if self.maintenance.restartCheckBox.isChecked() and serverStatus:
+            os.system('Taskkill /IM TerminalManager.exe /F')
+            os.system('Taskkill /IM Maplestory.exe /F')
+            self.__UpdateTMRLogs('Maplestory is now on maintenance.')
 
     def __GetBanLogs(self):
         if self.banDetect.banDetectionCheckBox.isChecked():
@@ -130,12 +146,20 @@ class MainThread(QThread):
 
             self.__FolderCheck(path=self.TMRemoteFolder)
 
-            # Check if update is available
+
             try:
+
+                # Check if update is available
                 self.__UpdateExe()
+
+                # Check if maintenance checkboxes are ticked, if they are, check what to do
+                self.__MaintenanceCheck()
+
             except requests.exceptions.MissingSchema: # We have no link yet
                 pass
 
-            self.__WatchTheseWorlds()
             # Get other users their ban logs if available to the user
             self.__GetBanLogs()
+
+            # Define which worlds to check in the clients
+            self.__WatchTheseWorlds()
