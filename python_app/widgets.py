@@ -1,5 +1,4 @@
 import math
-import time
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -147,11 +146,17 @@ class Widgets(object):
 
         def post(self, time, msg):
             logThread = LogThread()
-            logThread.post(msg)
+            logThread.post(time, msg)
+
             signal = logThread.getSignal()
             signal.connect(self.__post)
+
             logThread.start()
             logThread.quit()
 
-        def __post(self, msg):
-            self.logs.append(msg)
+        def __post(self, time, msg):
+            if list is type(msg):
+                for each in msg:
+                    self.logs.append(f'{time}: {each}')
+            else:
+                self.logs.append(f'{time}: {msg}')
