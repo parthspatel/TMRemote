@@ -125,8 +125,8 @@ class Widgets(object):
             self.setLayout(grid)
 
         def _tickAllWorlds(self):
-            for worldCheckBox in self.worldCheckBoxes:
-                checkbox.setChecked(self.allWorldsCheckBox.isChecked())
+            for worldName in self.worldCheckBoxes:
+                self.worldCheckBoxes[worldName].setChecked(self.allWorldsCheckBox.isChecked())
 
     class TMRLogging(QWidget):
         def __init__(self):
