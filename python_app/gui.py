@@ -240,7 +240,7 @@ class TMRemote(QMainWindow):
                 'restartMaint': bool(self.maintenanceWidget.restartCheckBox.isChecked()),
                 'postBotLogs': bool(self.botLogggingWidget.botLoggingCheckBox.isChecked())}
 
-        for key, value in vars.items():
+        for key, value in vars.items(): # Returns array with tuples?
             settings.setValue(key, value)
 
         settings.endGroup()
