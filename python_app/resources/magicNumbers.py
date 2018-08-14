@@ -6,4 +6,4 @@ class MagicNumbers(object):
     GRID_SPACE = 20
     WORLDS = ['Scania', 'Bera', 'Windia',
               'Khroa', 'GRAZED', 'MYBCKN',
-              'RebootNA', 'Luna', 'RebootEU']
+              'Reboot', 'Luna', 'RebootEU']
