@@ -5,7 +5,7 @@ import requests
 
 
 class Auth():
-    def connection(func):
+    def connected(func):
         def is_network_connection(host="8.8.8.8", port=53, timeout=3, *args, **kwargs):
             try:
                 socket.setdefaulttimeout(timeout)
