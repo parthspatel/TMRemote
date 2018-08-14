@@ -3,7 +3,11 @@ import os
 import sys
 from multiprocessing import Queue
 
-from gui import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+
+from gui import TMRemote
 
 
 def main():
@@ -12,7 +16,7 @@ def main():
         ctypes.windll.shell32.ShellExecuteW(
             None, "runas", sys.executable, getCurrentPath(), None, 1)
 
-    app = runApp(TMRemoteApp)
+    app = runApp(TMRemote)
     # anything after runApp will occur AFTER the application is closed
     closeApp(app)
 
