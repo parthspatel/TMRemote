@@ -31,7 +31,7 @@ class TMRemote(QMainWindow):
                                  apikey=self.settingsWindow.getAPIKey,
                                  profilesDir=self.settingsWindow.getProfileDir,
                                  tmPath=self.settingsWindow.getTMPath,
-                                 logs=self.tmrLoggingWidget.logs)
+                                 logs=self.tmrLoggingWidget)
         self.thread.start()
 
     def __initProperties(self):
@@ -80,7 +80,9 @@ class TMRemote(QMainWindow):
 
         # Exit (ctrl + Q)
         exitButton = QAction(QIcon(r'.\resources\exit.svg'), 'Exit', self)
-        exitButton.setShortcut('Ctrl+Q')
+
+        exitButton.setShortcuts([QKeySequence('Ctrl+Q'),
+                                 QKeySequence('Alt+F4')])
         exitButton.setStatusTip('Exit application')
         exitButton.triggered.connect(self.close)
         fileMenu.addAction(exitButton)

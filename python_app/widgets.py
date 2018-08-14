@@ -1,9 +1,11 @@
 import math
+import time
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
+from backend.log import LogThread
 from resources.magicNumbers import MagicNumbers as Magic
 
 
@@ -142,3 +144,14 @@ class Widgets(object):
             grid.setSpacing(1)
             grid.addWidget(self.logs, 0, 0)
             self.setLayout(grid)
+
+        def post(self, time, msg):
+            logThread = LogThread()
+            logThread.post(msg)
+            signal = logThread.getSignal()
+            signal.connect(self.__post)
+            logThread.start()
+            logThread.quit()
+
+        def __post(self, msg):
+            self.logs.append(msg)
