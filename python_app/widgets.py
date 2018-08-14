@@ -147,10 +147,8 @@ class Widgets(object):
         def post(self, time, msg):
             logThread = LogThread()
             logThread.post(time, msg)
-
             signal = logThread.getSignal()
             signal.connect(self.__post)
-
             logThread.start()
             logThread.quit()
 

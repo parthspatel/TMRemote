@@ -6,7 +6,7 @@ import requests
 
 class Auth():
     def connected(func):
-        def is_network_connection(host="8.8.8.8", port=53, timeout=3, *args, **kwargs):
+        def is_network_connection(host="1.1.1.1", port=53, timeout=3, *args, **kwargs):
             try:
                 socket.setdefaulttimeout(timeout)
                 socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
@@ -26,7 +26,7 @@ class Auth():
                                            data=data).text
                     return status
                 except Exception as ex:
-                    return ex
+                    raise ex
             try:
                 token = auth_ban_detection()
             except Exception as ex:

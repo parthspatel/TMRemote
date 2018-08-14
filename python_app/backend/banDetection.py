@@ -1,5 +1,6 @@
 import ast
 import datetime
+import os
 import pickle
 import time
 
@@ -12,13 +13,15 @@ from backend.log import Log
 
 
 class BanDetectionThread(QThread, ):
-    def __init__(self, username, password, apikey, tmPath, logs, links):
+    def __init__(self, username, password, apikey, tmPath, worldCheckBoxes, logs, links):
         QThread.__init__(self)
         self.getUsername = username
         self.getPassword = password
         self.getApiKey = apikey
 
         self.getTmPath = tmPath
+
+        self.worldCheckBoxes = worldCheckBoxes
 
         self.logs = logs
         self.links = links
@@ -47,17 +50,24 @@ class BanDetectionThread(QThread, ):
             if 'time' in world:
                 continue
             if status[world] != self.prevBanDetection.get(world):
-                gm_status.append(f'{world}:{status[world]}')
+                worldKey = world
+                if world.lower() == 'reboot':
+                    worldKey = 'RebootNA'
+                self.worldCheckBoxes[worldKey.lower()].setState(status[world])
+
+                gm_status.append(f'BD Status: {status[world]} in {world}')
                 self.prevBanDetection[world] = status[world]
+
+        try:
+            if not os.path.exists(self.__getTMRemoteFolder() + '/temp'):
+                os.makedirs(self.__getTMRemoteFolder() + '/temp')
+            with open(self.__getTMRemoteFolder() + '/temp/banDetectStatus', 'wb+') as file:
+                pickle.dump(str(status), file)
+        except Exception as ex:
+            return f'Could not access TMRemote folder: {ex}'
 
         if not self.prevBanDetection:
             self.prevBanDetection = status
-
-        try:
-            with open(self.__getTMRemoteFolder + '/temp/banDetectStatus', 'wb') as file:
-                pickle.dump(str(status), file)
-        except:
-            return 'Could not access TMRemote folder'
 
         return gm_status
 

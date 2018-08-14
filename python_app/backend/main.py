@@ -26,7 +26,7 @@ def getCurrentPath():
 
 class MainThread(QThread):
 
-    def __init__(self, username, password, apikey, profilesDir, tmPath, logs):
+    def __init__(self, username, password, apikey, profilesDir, tmPath, worldCheckBoxes, logs):
         QThread.__init__(self)
 
         self.getUsername = username
@@ -36,7 +36,7 @@ class MainThread(QThread):
         self.getProfilesDir = profilesDir
         self.getTmPath = tmPath
 
-        self.TMRemoteFolder = ''
+        self.worldCheckBoxes = worldCheckBoxes
 
         self.logs = logs
 
@@ -49,23 +49,21 @@ class MainThread(QThread):
                       'MaintenanceCheck': ''}
 
     def __del__(self):
-        banDetectionThread.quit()
+        self.banDetectionThread.quit()
         self.wait()
 
     def run(self):
         self.sleep_time = 0
-        banDetectionThread = BanDetectionThread(username=self.getUsername,
-                                                password=self.getPassword,
-                                                apikey=self.getApiKey,
-                                                tmPath=self.getTmPath,
-                                                logs=self.logs,
-                                                links=self.links)
+        self.banDetectionThread = BanDetectionThread(username=self.getUsername,
+                                                     password=self.getPassword,
+                                                     apikey=self.getApiKey,
+                                                     tmPath=self.getTmPath,
+                                                     worldCheckBoxes=self.worldCheckBoxes,
+                                                     logs=self.logs,
+                                                     links=self.links)
 
         while(True):
+            self.banDetectionThread.start()
 
-            banDetectionThread.start()
-
-            # status = self.parseBanDetection()
-
-            # pp.pprint(status)
-            time.sleep(self.sleep_time)
+            self.banDetectionThread.quit()
+        # time.sleep(self.sleep_time)
