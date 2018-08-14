@@ -1,5 +1,6 @@
 import ast
 import datetime
+import pickle
 import time
 
 from PyQt5.QtCore import *
@@ -38,22 +39,27 @@ class BanDetectionThread(QThread, ):
     @Log.log
     def parseBanDetection(self):
         status = self.__getBanDetection()
-        if not status:
-            return 'Upgrade to unlock Ban Detection'
-
-        l = []
+        if dict is not type(status):
+            return status
+        gm_status = []
 
         for world in status:
             if 'time' in world:
                 continue
             if status[world] != self.prevBanDetection.get(world):
-                l.append(f'{world}:{status[world]}')
+                gm_status.append(f'{world}:{status[world]}')
                 self.prevBanDetection[world] = status[world]
 
         if not self.prevBanDetection:
             self.prevBanDetection = status
 
-        return l
+        try:
+            with open(self.__getTMRemoteFolder + '/temp/banDetectStatus', 'wb') as file:
+                pickle.dump(str(status), file)
+        except:
+            return 'Could not access TMRemote folder'
+
+        return gm_status
 
     def run(self):
         self.parseBanDetection()
