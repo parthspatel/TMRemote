@@ -12,7 +12,7 @@ from backend.auth import Auth
 from backend.log import Log
 
 
-class BanDetectionThread(QThread, ):
+class BanDetectionThread(QThread):
     def __init__(self, username, password, apikey, tmPath, worldCheckBoxes, logs, links):
         QThread.__init__(self)
         self.getUsername = username
