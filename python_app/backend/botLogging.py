@@ -38,11 +38,7 @@ class BotLoggingThread(QThread):
         PostedPreviously = []
         if type(logs) is not list:
             if logs:
-<<<<<<< HEAD
                 pass  # incorrect logs type
-=======
-                pass # incorrect logs type
->>>>>>> 88d8dee23eacfb67113a155d8a234afe37e93526
             return
         toPost = {}
         count = 0
