@@ -41,7 +41,8 @@ class nexon_client:
             'scope': 'us.launcher.all',
             'device_id': self.device_id
         }
-        connection.request('POST', '/account-webapi/login/launcher', json.dumps(body), headers)
+        connection.request(
+            'POST', '/account-webapi/login/launcher', json.dumps(body), headers)
         response = connection.getresponse()
         if response.status != HTTPStatus.OK:
             # fail
@@ -50,8 +51,10 @@ class nexon_client:
         response_body = json.loads(response.read().decode('utf-8'))
         self.id_token = response_body['id_token']
         self.access_token = response_body['access_token']
-        self.id_token_expiry_time = datetime.now() + timedelta(0, response_body['id_token_expires_in'])
-        self.access_token_expiry_time = datetime.now() + timedelta(0, response_body['access_token_expires_in'])
+        self.id_token_expiry_time = datetime.now(
+        ) + timedelta(0, response_body['id_token_expires_in'])
+        self.access_token_expiry_time = datetime.now(
+        ) + timedelta(0, response_body['access_token_expires_in'])
         return True
 
     def logout(self):
@@ -68,7 +71,8 @@ class nexon_client:
             'access_token': self.access_token,
             'auto_login': None,
         }
-        connection.request('POST', '/account-webapi/logout/launcher', json.dumps(body), headers)
+        connection.request(
+            'POST', '/account-webapi/logout/launcher', json.dumps(body), headers)
         response = connection.getresponse()
         if response.status != HTTPStatus.OK:
             # fail
@@ -90,7 +94,8 @@ class nexon_client:
             'client_id': '7853644408',
             'id_token': self.id_token
         }
-        connection.request('POST', '/account-webapi/login/launcher/refresh', json.dumps(body), headers)
+        connection.request(
+            'POST', '/account-webapi/login/launcher/refresh', json.dumps(body), headers)
         response = connection.getresponse()
         if response.status != HTTPStatus.OK:
             # fail
@@ -99,8 +104,10 @@ class nexon_client:
         response_body = json.loads(response.read().decode('utf-8'))
         self.id_token = response_body['id_token']
         self.access_token = response_body['access_token']
-        self.id_token_expiry_time = datetime.now() + timedelta(0, response_body['id_token_expires_in'])
-        self.access_token_expiry_time = datetime.now() + timedelta(0, response_body['access_token_expires_in'])
+        self.id_token_expiry_time = datetime.now(
+        ) + timedelta(0, response_body['id_token_expires_in'])
+        self.access_token_expiry_time = datetime.now(
+        ) + timedelta(0, response_body['access_token_expires_in'])
         return True
 
     def products(self):
@@ -132,7 +139,8 @@ class nexon_client:
             'device_id': self.device_id,
             'product_id': product_id
         }
-        connection.request('POST', '/game-auth/v2/check-playable', json.dumps(body), headers)
+        connection.request(
+            'POST', '/game-auth/v2/check-playable', json.dumps(body), headers)
         response = connection.getresponse()
         return response
 
@@ -171,7 +179,8 @@ def check_playable(nclient, productid):
 
 def main():
     # login
-    nclient = nexon_client("MehoGK@gmail.com", "a123456789", "e902372f6a92b7b9ad5f557851cbc711b190c22f04ac8a6d8c3f26e69bae8230")
+    nclient = nexon_client("MehoGK@gmail.com", "a123456789",
+                           "e902372f6a92b7b9ad5f557851cbc711b190c22f04ac8a6d8c3f26e69bae8230")
     if nclient.login() is True:
         # products
         response = nclient.products()

@@ -9,7 +9,8 @@ class Auth():
         def is_network_connection(host="1.1.1.1", port=53, timeout=3, *args, **kwargs):
             try:
                 socket.setdefaulttimeout(timeout)
-                socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
+                socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(
+                    (host, port))
                 return func(*args, **kwargs)
             except Exception as ex:
                 raise ex

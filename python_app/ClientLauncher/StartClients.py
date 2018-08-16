@@ -1,4 +1,7 @@
-import pyautogui, time, win32gui
+import pyautogui
+import time
+import win32gui
+
 
 class ClientLauncher(object):
     def __init__(self):
@@ -14,28 +17,31 @@ class ClientLauncher(object):
         win32gui.EnumWindows(self.__windowEnumerationHandler, top_windows)
         for i in top_windows:
             if self.processName in i[1].lower():
-                win32gui.ShowWindow(i[0],5)
+                win32gui.ShowWindow(i[0], 5)
                 win32gui.SetForegroundWindow(i[0])
                 break
 
     def __GetInCurrentWindow(self):
-    	self.__GetTerminalManagerWindow()
-    	checkboxArray = list(pyautogui.locateAllOnScreen(r'checkbox.png'))
-    	for Checkbox in checkboxArray:
-    		for index in range(0, len(checkboxArray)):
-    			pyautogui.keyDown('ctrl')
-    			pyautogui.click(checkboxArray[index][0] + 30, checkboxArray[index][1])
-    		pyautogui.rightClick(checkboxArray[0][0], checkboxArray[0][1])
-    		pyautogui.moveRel(10, 10)
-    		pyautogui.click()
-    		break
-    	pyautogui.keyUp('ctrl')
+        self.__GetTerminalManagerWindow()
+        checkboxArray = list(pyautogui.locateAllOnScreen(r'checkbox.png'))
+        for Checkbox in checkboxArray:
+            for index in range(0, len(checkboxArray)):
+                pyautogui.keyDown('ctrl')
+                pyautogui.click(
+                    checkboxArray[index][0] + 30, checkboxArray[index][1])
+            pyautogui.rightClick(checkboxArray[0][0], checkboxArray[0][1])
+            pyautogui.moveRel(10, 10)
+            pyautogui.click()
+            break
+        pyautogui.keyUp('ctrl')
 
     def main(self):
-    	if self.repeatCount < 1: self.repeatCount = 1
-    	for count in range(self.repeatCount):
-    		self.__GetInCurrentWindow()
-    		pyautogui.scroll(-pyautogui.size()[1])
+        if self.repeatCount < 1:
+            self.repeatCount = 1
+        for count in range(self.repeatCount):
+            self.__GetInCurrentWindow()
+            pyautogui.scroll(-pyautogui.size()[1])
+
 
 if __name__ == '__main__':
     ClientLauncher().main()

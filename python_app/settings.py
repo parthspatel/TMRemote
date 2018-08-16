@@ -26,7 +26,8 @@ class Settings(QMainWindow):
         if parent:
             parent.update()
             self.left = (parent.width - self.width) / 2 + parent.x()
-            self.top = (parent.height - self.height) / 2 + parent.y() + Magic.WINDOW_SPACER_TOP
+            self.top = (parent.height - self.height) / 2 + \
+                parent.y() + Magic.WINDOW_SPACER_TOP
             # print(self.left, self.top)
 
         # Initialize UI
@@ -191,7 +192,8 @@ class _FileDirWidget(QWidget):
         terminalLabel.setText('Terminal\nManager:')
 
         self.TerminalManager = QLineEdit(self)
-        self.TerminalManager.setPlaceholderText('Dir Containing TerminalManager.exe')
+        self.TerminalManager.setPlaceholderText(
+            'Dir Containing TerminalManager.exe')
         self.TerminalManager.setReadOnly(True)
         self.TerminalManager.setFixedHeight(Magic.HEIGHT)
 
