@@ -37,9 +37,7 @@ class BotLoggingThread(QThread):
     def __PostLogs(self, logs, token):
         PostedPreviously = []
         if type(logs) is not list:
-            if logs:
-                pass  # incorrect logs type
-            return
+            return logs
         toPost = {}
         count = 0
         for index in range(len(logs)):
@@ -74,7 +72,7 @@ class BotLoggingThread(QThread):
             return f'Posted logs of {count} bots'
 
     # Get the log values and returns data
-    @Log.log
+    # @Log.log
     def __GetLogs(self):
         try:
             with open(self.__getTMRemoteFolder() + '/temp/logs', 'rb') as file:
@@ -89,7 +87,7 @@ class BotLoggingThread(QThread):
             os.remove(self.__getTMRemoteFolder() + '/temp/logs')
             return data
         except FileNotFoundError:
-            return None
+            return 'No logs found'
         except PermissionError:
             return 'TMRemote does not have permissions to read logs'
 
