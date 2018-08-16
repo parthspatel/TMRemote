@@ -53,7 +53,7 @@ class MainThread(QThread):
                                                      logs=self.logs,
                                                      links=self.links)
 
-        self.BotLoggingThread = BotLoggingThread(username=self.getUsername,
+        self.botLoggingThread = BotLoggingThread(username=self.getUsername,
                                                  password=self.getPassword,
                                                  apikey=self.getApiKey,
                                                  tmPath=self.getTmPath,
@@ -62,7 +62,7 @@ class MainThread(QThread):
 
     def __del__(self):
         self.banDetectionThread.quit()
-        self.BotLoggingThread.quit()
+        self.botLoggingThread.quit()
         self.wait()
 
     def run(self):
@@ -70,7 +70,7 @@ class MainThread(QThread):
 
         self.banDetectionThread.start()
 
-        self.BotLoggingThread.start()
+        self.botLoggingThread.start()
 
         # self.banDetectionThread.quit()
 

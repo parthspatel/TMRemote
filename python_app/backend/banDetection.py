@@ -68,7 +68,8 @@ class BanDetectionThread(QThread):
         if not self.banDetectionCheckBox.isEnabled():
             self.banDetectionCheckBox.setEnabled(True)
             self.allWorldsCheckBox.setEnabled(True)
-            self.banDetectionCheckBox.setStyleSheet(''' QCheckBox:indicator {width: 20px; height: 20px;}
+            self.banDetectionCheckBox.setStyleSheet('''
+                                   QCheckBox:indicator {width: 20px; height: 20px;}
                                    QCheckBox:indicator:checked { background-color: #EB5202;
                                                                  border-color: black;
                                                                  border-radius: 10px;

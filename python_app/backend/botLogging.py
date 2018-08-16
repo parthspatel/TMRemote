@@ -24,6 +24,8 @@ class BotLoggingThread(QThread):
         self.logs = logs
         self.links = links
 
+        self.HWID = Auth.HardwareID().asStr()  # Error
+
         self.sleep_time = 30
         self.sleep_time_const = self.sleep_time
 
@@ -47,7 +49,7 @@ class BotLoggingThread(QThread):
                     if not logs[index]['IGN'] in PostedPreviously:
                         data = {'key': self.getApiKey(),
                                 'name': self.getUsername(),
-                                # 'HWID': self.HWID(),
+                                'HWID': self.HWID,
                                 'server': 'GMS',
                                 'world_id': logs[index]['World'],
                                 'channel': logs[index]['Channel'],
@@ -63,7 +65,7 @@ class BotLoggingThread(QThread):
                     continue
                     data = {'key': self.getApiKey(),
                             'name': self.getUsername(),
-                            # 'HWID': self.HWID(),
+                            'HWID': self.HWID,
                             'server': 'GMS',
                             'disconnect': logs[index]['disconnect']}
             except Exception as e:
