@@ -25,7 +25,8 @@ class TMRemote(QMainWindow):
         self.settingsWindow = Settings(self)
 
         self.startEvent()
-        # self.setStyleSheet("QCheckBox:checked { color: #EB5202; } ")
+        # font = QFont('font: Arial', 12)
+        # self.setFont(font)
 
         self.thread = MainThread(username=self.settingsWindow.getUsername,
                                  password=self.settingsWindow.getPassword,
