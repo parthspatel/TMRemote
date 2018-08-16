@@ -14,6 +14,7 @@ from PyQt5.QtWidgets import *
 from backend.auth import Auth
 from backend.banDetection import BanDetectionThread
 from backend.log import Log, LogThread
+from backend.botLogging import BotLoggingThread
 
 
 def getCurrentPath():
@@ -26,7 +27,11 @@ def getCurrentPath():
 
 class MainThread(QThread):
 
+<<<<<<< HEAD
     def __init__(self, username, password, apikey, profilesDir, tmPath, banDetectionWidget, logs):
+=======
+    def __init__(self, username, password, apikey, profilesDir, tmPath, worldCheckBoxes, banDetectionCheckBox, logs):
+>>>>>>> 402f051697bcd3eec9476696ba0b217c9681bd9f
         QThread.__init__(self)
 
         self.getUsername = username
@@ -36,7 +41,13 @@ class MainThread(QThread):
         self.getProfilesDir = profilesDir
         self.getTmPath = tmPath
 
+<<<<<<< HEAD
         self.banDetectionWidget = banDetectionWidget
+=======
+        self.banDetectionCheckBox = banDetectionCheckBox
+
+        self.worldCheckBoxes = worldCheckBoxes
+>>>>>>> 402f051697bcd3eec9476696ba0b217c9681bd9f
 
         self.logs = logs
 
@@ -58,10 +69,26 @@ class MainThread(QThread):
                                                      password=self.getPassword,
                                                      apikey=self.getApiKey,
                                                      tmPath=self.getTmPath,
+<<<<<<< HEAD
                                                      banDetectionWidget=self.banDetectionWidget,
+=======
+                                                     banDetectionCheckBox=self.banDetectionCheckBox,
+                                                     worldCheckBoxes=self.worldCheckBoxes,
+>>>>>>> 402f051697bcd3eec9476696ba0b217c9681bd9f
                                                      logs=self.logs,
                                                      links=self.links)
 
+        self.BotLoggingThread = BotLoggingThread(username=self.getUsername,
+                                                 password=self.getPassword,
+                                                 apikey=self.getApiKey,
+                                                 tmPath=self.getTmPath,
+                                                 logs=self.logs,
+                                                 links=self.links)
+
         self.banDetectionThread.start()
 
+        self.BotLoggingThread.start()
+
         # self.banDetectionThread.quit()
+
+        # self.BotLoggingThread.quit()
