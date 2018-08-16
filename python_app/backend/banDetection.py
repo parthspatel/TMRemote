@@ -28,7 +28,8 @@ class BanDetectionThread(QThread):
         self.logs = logs
         self.links = links
 
-        self.sleep_time = 10
+        self.sleep_time = 30
+        self.sleep_time_const = self.sleep_time
         self.prevBanDetection = {}
 
     def __del__(self):

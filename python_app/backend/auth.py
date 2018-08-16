@@ -35,6 +35,7 @@ class Auth():
                 if 'error' in token:
                     args[0].sleep_time = 10
                     return f'Authentication Failed: {token}'
+                args[0].sleep_time = args[0].sleep_time_const
                 return func(token=token,
                             *args, **kwargs)
         return authenticate_and_call
