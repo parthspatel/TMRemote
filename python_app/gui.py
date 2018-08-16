@@ -77,7 +77,8 @@ class TMRemote(QMainWindow):
         # File Menu
         # ---------------------------------------------------------------------
         # Refresh (F5)
-        refreshButton = QAction(QIcon(r'.\resources\refresh.svg'), 'Refresh', self)
+        refreshButton = QAction(
+            QIcon(r'.\resources\refresh.svg'), 'Refresh', self)
         refreshButton.setShortcut('F5')
         refreshButton.triggered.connect(self.update)
         fileMenu.addAction(refreshButton)
@@ -94,7 +95,8 @@ class TMRemote(QMainWindow):
         # Edit Menu
         # ---------------------------------------------------------------------
         # Settings
-        settingsButton = QAction(QIcon(r'.\resources\settings.svg'), 'Settings', self)
+        settingsButton = QAction(
+            QIcon(r'.\resources\settings.svg'), 'Settings', self)
         settingsButton.triggered.connect(self.__onPushSettings)
         editMenu.addAction(settingsButton)
 
@@ -171,7 +173,8 @@ class TMRemote(QMainWindow):
             if self.settingsWindow.getTMPath() and self.settingsWindow.getTMPath().strip():
                 if not self.__processExists('TerminalManager'):
                     # Get TMR current path
-                    tmr_dir = os.path.dirname(os.path.realpath(getCurrentPath()))
+                    tmr_dir = os.path.dirname(
+                        os.path.realpath(getCurrentPath()))
 
                     # Let TMR load, then start Terminal Manager
                     time.sleep(0.3)
@@ -206,7 +209,8 @@ class TMRemote(QMainWindow):
         for world in Magic.WORLDS:
             checked = False if None is settings.value(
                 world.lower()) or 'false' in settings.value(world.lower()).lower() else True
-            self.banDetectionWidget.worldCheckBoxes[world.lower()].setChecked(checked)
+            self.banDetectionWidget.worldCheckBoxes[world.lower()].setChecked(
+                checked)
 
         self.banDetectionWidget.banDetectionCheckBox.setChecked(False if None is settings.value(
             'banDetection') or 'false' in settings.value('banDetection').lower() else True)
@@ -233,7 +237,8 @@ class TMRemote(QMainWindow):
             settings.setValue("size", self.size())
 
         for world in Magic.WORLDS:
-            value = bool(self.banDetectionWidget.worldCheckBoxes[world.lower()].isChecked())
+            value = bool(
+                self.banDetectionWidget.worldCheckBoxes[world.lower()].isChecked())
             settings.setValue(world.lower(), value)
 
         vars = {'username': self.settingsWindow.getUsername(),
