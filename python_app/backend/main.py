@@ -14,6 +14,7 @@ from PyQt5.QtWidgets import *
 from backend.auth import Auth
 from backend.banDetection import BanDetectionThread
 from backend.log import Log, LogThread
+from backend.botLogging import BotLoggingThread
 
 
 def getCurrentPath():
@@ -26,7 +27,7 @@ def getCurrentPath():
 
 class MainThread(QThread):
 
-    def __init__(self, username, password, apikey, profilesDir, tmPath, worldCheckBoxes, logs):
+    def __init__(self, username, password, apikey, profilesDir, tmPath, worldCheckBoxes, banDetectionCheckBox, logs):
         QThread.__init__(self)
 
         self.getUsername = username
@@ -35,6 +36,8 @@ class MainThread(QThread):
 
         self.getProfilesDir = profilesDir
         self.getTmPath = tmPath
+
+        self.banDetectionCheckBox = banDetectionCheckBox
 
         self.worldCheckBoxes = worldCheckBoxes
 
@@ -58,10 +61,22 @@ class MainThread(QThread):
                                                      password=self.getPassword,
                                                      apikey=self.getApiKey,
                                                      tmPath=self.getTmPath,
+                                                     banDetectionCheckBox=self.banDetectionCheckBox,
                                                      worldCheckBoxes=self.worldCheckBoxes,
                                                      logs=self.logs,
                                                      links=self.links)
 
+        self.BotLoggingThread = BotLoggingThread(username=self.getUsername,
+                                                 password=self.getPassword,
+                                                 apikey=self.getApiKey,
+                                                 tmPath=self.getTmPath,
+                                                 logs=self.logs,
+                                                 links=self.links)
+
         self.banDetectionThread.start()
 
+        self.BotLoggingThread.start()
+
         # self.banDetectionThread.quit()
+
+        # self.BotLoggingThread.quit()

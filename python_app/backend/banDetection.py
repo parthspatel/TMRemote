@@ -13,7 +13,7 @@ from backend.log import Log
 
 
 class BanDetectionThread(QThread):
-    def __init__(self, username, password, apikey, tmPath, worldCheckBoxes, logs, links):
+    def __init__(self, username, password, apikey, tmPath, worldCheckBoxes, banDetectionCheckBox, logs, links):
         QThread.__init__(self)
         self.getUsername = username
         self.getPassword = password
@@ -21,6 +21,7 @@ class BanDetectionThread(QThread):
 
         self.getTmPath = tmPath
 
+        self.banDetectionCheckBox = banDetectionCheckBox
         self.worldCheckBoxes = worldCheckBoxes
 
         self.logs = logs
@@ -74,7 +75,8 @@ class BanDetectionThread(QThread):
     def run(self):
         print(f'inside BanDetect: {self.sleep_time}')
         while True:
-            self.parseBanDetection()
-            print(f'got BanDetect: {self.sleep_time}')
+            if self.banDetectionCheckBox.isChecked():
+                self.parseBanDetection()
+                print(f'got BanDetect: {self.sleep_time}')
 
             time.sleep(self.sleep_time)

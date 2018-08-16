@@ -33,6 +33,7 @@ class TMRemote(QMainWindow):
                                  profilesDir=self.settingsWindow.getProfileDir,
                                  tmPath=self.settingsWindow.getTMPath,
                                  worldCheckBoxes=self.banDetectionWidget.worldCheckBoxes,
+                                 banDetectionCheckBox=self.banDetectionWidget.banDetectionCheckBox,
                                  logs=self.tmrLoggingWidget)
         self.thread.start()
 
