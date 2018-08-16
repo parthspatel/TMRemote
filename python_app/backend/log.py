@@ -39,7 +39,7 @@ class Log():
         def log_output(*args, **kwargs):
             now = datetime.datetime.now().isoformat(' ', 'seconds')
             message = func(*args, **kwargs)
-            if messsage:
+            if message:
                 args[0].logs.post(now, message)
                 return f'{now}: {message}'
         return log_output
