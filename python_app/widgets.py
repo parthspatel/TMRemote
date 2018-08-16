@@ -147,7 +147,8 @@ class Widgets(object):
 
             self.worldCheckBoxes = {}
             for world in Magic.WORLDS:
-                self.worldCheckBoxes.update({world.lower(): self.WorldCheckBox(world)})
+                self.worldCheckBoxes.update(
+                    {world.lower(): self.WorldCheckBox(world)})
 
             grid = QGridLayout()
             grid.setSpacing(2)
@@ -168,7 +169,8 @@ class Widgets(object):
 
         def _tickAllWorlds(self):
             for worldName in self.worldCheckBoxes:
-                self.worldCheckBoxes[worldName].setChecked(self.allWorldsCheckBox.isChecked())
+                self.worldCheckBoxes[worldName].setChecked(
+                    self.allWorldsCheckBox.isChecked())
 
     class TMRLogging(QWidget):
         def __init__(self):

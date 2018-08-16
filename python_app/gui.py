@@ -25,9 +25,8 @@ class TMRemote(QMainWindow):
         self.settingsWindow = Settings(self)
 
         self.startEvent()
-        font = QFont('font: Arial', 12)
-        self.setFont(font)
-        # self.setStyleSheet('''* {font: Arial 50pt;}''')
+        # font = QFont('font: Arial', 12)
+        # self.setFont(font)
 
         self.thread = MainThread(username=self.settingsWindow.getUsername,
                                  password=self.settingsWindow.getPassword,

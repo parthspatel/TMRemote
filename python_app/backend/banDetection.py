@@ -84,7 +84,8 @@ class BanDetectionThread(QThread):
                     worldKey = world
                     if world.lower() == 'reboot':
                         worldKey = 'RebootNA'
-                    self.worldCheckBoxes[worldKey.lower()].setState(status[world])
+                    self.worldCheckBoxes[worldKey.lower()].setState(
+                        status[world])
 
         gm_status = []
         for world in status:
