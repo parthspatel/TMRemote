@@ -13,11 +13,7 @@ from backend.log import Log
 
 
 class BanDetectionThread(QThread):
-<<<<<<< HEAD
     def __init__(self, username, password, apikey, tmPath, banDetectionWidget, logs, links):
-=======
-    def __init__(self, username, password, apikey, tmPath, worldCheckBoxes, banDetectionCheckBox, logs, links):
->>>>>>> 402f051697bcd3eec9476696ba0b217c9681bd9f
         QThread.__init__(self)
         self.getUsername = username
         self.getPassword = password
@@ -25,14 +21,9 @@ class BanDetectionThread(QThread):
 
         self.getTmPath = tmPath
 
-<<<<<<< HEAD
         self.banDetectionCheckBox = banDetectionWidget.banDetectionCheckBox
         self.allWorldsCheckBox = banDetectionWidget.allWorldsCheckBox
         self.worldCheckBoxes = banDetectionWidget.worldCheckBoxes
-=======
-        self.banDetectionCheckBox = banDetectionCheckBox
-        self.worldCheckBoxes = worldCheckBoxes
->>>>>>> 402f051697bcd3eec9476696ba0b217c9681bd9f
 
         self.logs = logs
         self.links = links
@@ -124,15 +115,7 @@ class BanDetectionThread(QThread):
     def run(self):
         print(f'inside BanDetect: {self.sleep_time}')
         while True:
-<<<<<<< HEAD
             if self.__isEnabled():
                 self.parseBanDetection()
                 time.sleep(self.sleep_time)
             print(f'got BanDetect: {self.sleep_time}')
-=======
-            if self.banDetectionCheckBox.isChecked():
-                self.parseBanDetection()
-                print(f'got BanDetect: {self.sleep_time}')
-
-            time.sleep(self.sleep_time)
->>>>>>> 402f051697bcd3eec9476696ba0b217c9681bd9f
