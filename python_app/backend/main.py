@@ -45,13 +45,6 @@ class MainThread(QThread):
                       'VersionCheck': '',
                       'MaintenanceCheck': ''}
 
-    def __del__(self):
-        self.banDetectionThread.quit()
-        self.BotLoggingThread.quit()
-        self.wait()
-
-    def run(self):
-        self.sleep_time = 1
         self.banDetectionThread = BanDetectionThread(username=self.getUsername,
                                                      password=self.getPassword,
                                                      apikey=self.getApiKey,
@@ -66,6 +59,14 @@ class MainThread(QThread):
                                                  tmPath=self.getTmPath,
                                                  logs=self.logs,
                                                  links=self.links)
+
+    def __del__(self):
+        self.banDetectionThread.quit()
+        self.BotLoggingThread.quit()
+        self.wait()
+
+    def run(self):
+        self.sleep_time = 1
 
         self.banDetectionThread.start()
 
