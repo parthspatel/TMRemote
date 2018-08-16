@@ -25,14 +25,14 @@ class TMRemote(QMainWindow):
         self.settingsWindow = Settings(self)
 
         self.startEvent()
-        self.setStyleSheet("QGroupBox { color: red; } ")
+        # self.setStyleSheet("QCheckBox:checked { color: #EB5202; } ")
 
         self.thread = MainThread(username=self.settingsWindow.getUsername,
                                  password=self.settingsWindow.getPassword,
                                  apikey=self.settingsWindow.getAPIKey,
                                  profilesDir=self.settingsWindow.getProfileDir,
                                  tmPath=self.settingsWindow.getTMPath,
-                                 worldCheckBoxes=self.banDetectionWidget.worldCheckBoxes,
+                                 banDetectionWidget=self.banDetectionWidget,
                                  logs=self.tmrLoggingWidget)
         self.thread.start()
 

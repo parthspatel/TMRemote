@@ -26,7 +26,7 @@ def getCurrentPath():
 
 class MainThread(QThread):
 
-    def __init__(self, username, password, apikey, profilesDir, tmPath, worldCheckBoxes, logs):
+    def __init__(self, username, password, apikey, profilesDir, tmPath, banDetectionWidget, logs):
         QThread.__init__(self)
 
         self.getUsername = username
@@ -36,7 +36,7 @@ class MainThread(QThread):
         self.getProfilesDir = profilesDir
         self.getTmPath = tmPath
 
-        self.worldCheckBoxes = worldCheckBoxes
+        self.banDetectionWidget = banDetectionWidget
 
         self.logs = logs
 
@@ -58,7 +58,7 @@ class MainThread(QThread):
                                                      password=self.getPassword,
                                                      apikey=self.getApiKey,
                                                      tmPath=self.getTmPath,
-                                                     worldCheckBoxes=self.worldCheckBoxes,
+                                                     banDetectionWidget=self.banDetectionWidget,
                                                      logs=self.logs,
                                                      links=self.links)
 

@@ -13,7 +13,7 @@ from backend.log import Log
 
 
 class BanDetectionThread(QThread):
-    def __init__(self, username, password, apikey, tmPath, worldCheckBoxes, logs, links):
+    def __init__(self, username, password, apikey, tmPath, banDetectionWidget, logs, links):
         QThread.__init__(self)
         self.getUsername = username
         self.getPassword = password
@@ -21,12 +21,14 @@ class BanDetectionThread(QThread):
 
         self.getTmPath = tmPath
 
-        self.worldCheckBoxes = worldCheckBoxes
+        self.banDetectionCheckBox = banDetectionWidget.banDetectionCheckBox
+        self.allWorldsCheckBox = banDetectionWidget.allWorldsCheckBox
+        self.worldCheckBoxes = banDetectionWidget.worldCheckBoxes
 
         self.logs = logs
         self.links = links
 
-        self.sleep_time = 10
+        self.sleep_time = 1
         self.prevBanDetection = {}
 
     def __del__(self):
@@ -34,6 +36,16 @@ class BanDetectionThread(QThread):
 
     def __getTMRemoteFolder(self):
         return self.getTmPath().split('TerminalManager.exe')[0] + 'TMRemote'
+
+    def __isEnabled(self):
+        if not self.banDetectionCheckBox.isChecked():
+            try:
+                os.remove(self.__getTMRemoteFolder() + '/temp/banDetectStatus')
+            except:
+                pass
+            return False
+        else:
+            return True
 
     @Auth.authenticate
     def __getBanDetection(self, token):
@@ -43,9 +55,38 @@ class BanDetectionThread(QThread):
     def parseBanDetection(self):
         status = self.__getBanDetection()
         if dict is not type(status):
+            self.banDetectionCheckBox.setEnabled(False)
+            self.allWorldsCheckBox.setEnabled(False)
+            for world in self.worldCheckBoxes:
+                self.worldCheckBoxes[world].setState('disabled')
+            self.banDetectionCheckBox.setStyleSheet('''
+            QCheckBox:indicator { background-color: #DEE2E6;
+                                          border-color: #DEE2E6;
+                                          border-radius: 10px;
+                                          border: 2px solid grey;}''')
             return status
-        gm_status = []
+        if not self.banDetectionCheckBox.isEnabled():
+            self.banDetectionCheckBox.setEnabled(True)
+            self.allWorldsCheckBox.setEnabled(True)
+            self.banDetectionCheckBox.setStyleSheet(''' QCheckBox:indicator {width: 20px; height: 20px;}
+                                   QCheckBox:indicator:checked { background-color: #EB5202;
+                                                                 border-color: black;
+                                                                 border-radius: 10px;
+                                                                 border: 2px solid black;}
+                                   QCheckBox:indicator:unchecked { background-color: #DEE2E6;
+                                                                   border-radius: 10px;
+                                                                   border: 2px solid grey;} ''')
 
+            for world in status:
+                if 'time' in world:
+                    continue
+                if status[world] != self.prevBanDetection.get(world):
+                    worldKey = world
+                    if world.lower() == 'reboot':
+                        worldKey = 'RebootNA'
+                    self.worldCheckBoxes[worldKey.lower()].setState(status[world])
+
+        gm_status = []
         for world in status:
             if 'time' in world:
                 continue
@@ -74,7 +115,7 @@ class BanDetectionThread(QThread):
     def run(self):
         print(f'inside BanDetect: {self.sleep_time}')
         while True:
-            self.parseBanDetection()
+            if self.__isEnabled():
+                self.parseBanDetection()
+                time.sleep(self.sleep_time)
             print(f'got BanDetect: {self.sleep_time}')
-
-            time.sleep(self.sleep_time)

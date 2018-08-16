@@ -50,37 +50,68 @@ class Widgets(object):
         class WorldCheckBox(QWidget):
             def __init__(self, world=''):
                 super().__init__()
-
-                self.pixmap_off = QPixmap(r'.\resources\server_state_off_16.svg')
-                self.pixmap_on = QPixmap(r'.\resources\server_state_on_16.svg')
-                self.pixmap_loading = QPixmap(r'.\resources\server_state_loading_16.svg')
-                self.pixmap_disabled = QPixmap(r'.\resources\server_state_disabled_16.svg')
-
                 self.__initElements(world)
 
             def __initElements(self, world):
                 self.worldCheckBox = QCheckBox(world, self)
-
-                self.state = QLabel(self)
                 self.setState('disabled')
-
-                self.worldCheckBox.move(self.state.x() + self.state.height(),
-                                        self.state.y())
-
-                self.state.move(self.state.x(), self.state.y() + 3)
 
             def setState(self, state):
 
                 if 'off' in state:
-                    self.state.setPixmap(self.pixmap_off)
+                    self.setStyleSheet('''
+                        QCheckBox:indicator {width: 20px; height: 20px;}
+                        QCheckBox:indicator:checked { background-color: #E64C3C;
+                                                      border-color: black;
+                                                      border-radius: 12px;
+                                                      border: 2px solid black;}
+                        QCheckBox:indicator:unchecked { background-color: #E64C3C;
+                                                        border-radius: 12px;
+                                                        border: 2px solid grey;} ''')
+
                 elif 'on' in state:
-                    self.state.setPixmap(self.pixmap_on)
+                    self.setStyleSheet('''
+                        QCheckBox:indicator {width: 20px; height: 20px;}
+                        QCheckBox:indicator:checked { background-color: #EFE4F2;
+                                                      border-color: black;
+                                                      border-radius: 12px;
+                                                      border: 2px solid black;}
+                        QCheckBox:indicator:unchecked { background-color: #EFE4F2;
+                                                        border-radius: 12px;
+                                                        border: 2px solid grey;} ''')
+
                 elif 'maint' in state:
-                    self.state.setPixmap(self.pixmap_loading)
+                    self.setStyleSheet('''
+                        QCheckBox:indicator {width: 20px; height: 20px;}
+                        QCheckBox:indicator:checked { background-color: #F0C419;
+                                                      border-color: black;
+                                                      border-radius: 12px;
+                                                      border: 2px solid black;}
+                        QCheckBox:indicator:unchecked { background-color: #F0C419;
+                                                        border-radius: 12px;
+                                                        border: 2px solid grey;} ''')
+
                 elif 'disable' in state:
-                    self.state.setPixmap(self.pixmap_disabled)
+                    self.setStyleSheet('''
+                        QCheckBox:indicator {width: 20px; height: 20px;}
+                        QCheckBox:indicator:checked { background-color: #FFFFFF;
+                                                      border-color: black;
+                                                      border-radius: 12px;
+                                                      border: 2px solid black;}
+                        QCheckBox:indicator:unchecked { background-color: #FFFFFF;
+                                                        border-radius: 12px;
+                                                        border: 2px solid grey;} ''')
+
                 else:
-                    self.state.setPixmap(self.pixmap_disabled)
+                    self.setStyleSheet('''
+                        QCheckBox:indicator {width: 20px; height: 20px;}
+                        QCheckBox:indicator:checked { background-color: pink;
+                                                      border-color: white;
+                                                      border-radius: 12px;
+                                                      border: 2px solid black;}
+                        QCheckBox:indicator:unchecked { background-color: pink;
+                                                        border-radius: 12px;
+                                                        border: 2px solid grey;} ''')
 
             def isChecked(self):
                 return self.worldCheckBox.isChecked()
@@ -105,12 +136,22 @@ class Widgets(object):
             self.allWorldsCheckBox = QCheckBox('All worlds', self)
             self.allWorldsCheckBox.stateChanged.connect(self._tickAllWorlds)
 
+            self.setStyleSheet(''' QCheckBox:indicator {width: 20px; height: 20px;}
+                                   QCheckBox:indicator:checked { background-color: #EB5202;
+                                                                 border-color: black;
+                                                                 border-radius: 12px;
+                                                                 border: 2px solid black;}
+                                   QCheckBox:indicator:unchecked { background-color: #DEE2E6;
+                                                                   border-radius: 12px;
+                                                                   border: 2px solid grey;} ''')
+
             self.worldCheckBoxes = {}
             for world in Magic.WORLDS:
                 self.worldCheckBoxes.update({world.lower(): self.WorldCheckBox(world)})
 
             grid = QGridLayout()
-            grid.setSpacing(1)
+            grid.setSpacing(2)
+            grid.setVerticalSpacing(30)
             grid.addWidget(self.banDetectionCheckBox, 1, 0)
             grid.addWidget(self.allWorldsCheckBox, 1, 1)
             grid.addWidget(self.worldCheckBoxes[Magic.WORLDS[0].lower()], 2, 0)
