@@ -2,7 +2,6 @@ import ast
 import datetime
 import os
 import pickle
-import time
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -97,4 +96,4 @@ class BotLoggingThread(QThread):
         while True:
             self.__PostLogs(logs=self.__GetLogs())
             print('ran botlogs')
-            time.sleep(self.sleep_time)
+            self.sleep(self.sleep_time)

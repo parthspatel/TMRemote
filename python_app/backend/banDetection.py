@@ -2,7 +2,6 @@ import ast
 import datetime
 import os
 import pickle
-import time
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -118,5 +117,6 @@ class BanDetectionThread(QThread):
         while True:
             if self.__isEnabled():
                 self.parseBanDetection()
-                time.sleep(self.sleep_time)
+
             print(f'got BanDetect: {self.sleep_time}')
+            self.sleep(self.sleep_time)

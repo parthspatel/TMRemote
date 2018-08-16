@@ -25,8 +25,9 @@ class TMRemote(QMainWindow):
         self.settingsWindow = Settings(self)
 
         self.startEvent()
-        # font = QFont('font: Arial', 12)
-        # self.setFont(font)
+        font = QFont('font: Arial', 12)
+        self.setFont(font)
+        # self.setStyleSheet('''* {font: Arial 50pt;}''')
 
         self.thread = MainThread(username=self.settingsWindow.getUsername,
                                  password=self.settingsWindow.getPassword,
@@ -40,9 +41,9 @@ class TMRemote(QMainWindow):
     def __initProperties(self):
         self.title = 'Terminal Manager Remote'
 
-        QCoreApplication.setOrganizationName("TMRemoted")
-        QCoreApplication.setOrganizationDomain("TMRemote.iod")
-        QCoreApplication.setApplicationName("TMRemotde")
+        QCoreApplication.setOrganizationName("TMRemote")
+        QCoreApplication.setOrganizationDomain("TMRemote.io")
+        QCoreApplication.setApplicationName("TMRemote")
         QCoreApplication.setApplicationVersion('0.0.0.1')
 
         self.left = 100

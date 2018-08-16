@@ -1,10 +1,6 @@
 import ast
 import datetime
 import os
-import pickle
-import pprint as pp
-import time
-import urllib.request
 
 import requests
 from PyQt5.QtCore import *
