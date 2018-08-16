@@ -2,8 +2,8 @@ import ast
 import datetime
 import os
 import pickle
-import requests
 
+import requests
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -33,7 +33,7 @@ class BotLoggingThread(QThread):
     def __getTMRemoteFolder(self):
         return self.getTmPath().split('TerminalManager.exe')[0] + 'TMRemote'
 
-    @Auth.authenticate
+    @Auth.authenticate(level='basic')
     @Log.log
     def __PostLogs(self, logs, token):
         PostedPreviously = []

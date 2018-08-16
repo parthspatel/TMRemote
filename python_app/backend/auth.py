@@ -16,13 +16,24 @@ class Auth():
 
         return is_network_connection
 
-    def authenticate(func):
+    def parametrized(dec):
+        def layer(*args, **kwargs):
+            def repl(f):
+                return dec(f, *args, **kwargs)
+            return repl
+        return layer
+
+    @parametrized
+    def authenticate(func, level='basic'):
+        level_dict = {'basic': 'botLogs',
+                      'prime': 'banDetection'}
+
         def authenticate_and_call(*args, **kwargs):
             def auth_ban_detection():
                 try:
                     data = {'key': args[0].getApiKey(),
                             'name': args[0].getUsername()}
-                    status = requests.post(args[0].links['banDetection'],
+                    status = requests.post(args[0].links[level_dict[level]],
                                            data=data).text
                     return status
                 except Exception as ex:

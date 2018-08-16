@@ -47,7 +47,7 @@ class BanDetectionThread(QThread):
         else:
             return True
 
-    @Auth.authenticate
+    @Auth.authenticate(level='prime')
     def __getBanDetection(self, token):
         return ast.literal_eval(token)
 
