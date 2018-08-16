@@ -34,7 +34,7 @@ class BotLoggingThread(QThread):
 
     @Auth.authenticate
     @Log.log
-    def __PostLogs(self, logs):
+    def __PostLogs(self, logs, token):
         PostedPreviously = []
         if type(logs) is not list:
             if logs:
