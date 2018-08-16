@@ -60,58 +60,63 @@ class Widgets(object):
 
                 if 'off' in state:
                     self.setStyleSheet('''
-                        QCheckBox:indicator {width: 20px; height: 20px;}
+                        QCheckBox:indicator { width: 20px; height: 20px; }
                         QCheckBox:indicator:checked { background-color: #E64C3C;
                                                       border-color: black;
                                                       border-radius: 10px;
-                                                      border: 2px solid black;}
+                                                      border: 2px solid black; }
                         QCheckBox:indicator:unchecked { background-color: #E64C3C;
                                                         border-radius: 10px;
-                                                        border: 2px solid grey;} ''')
+                                                        border: 2px solid grey;
+                                                        opacity: 127 } ''')
 
                 elif 'on' in state:
                     self.setStyleSheet('''
-                        QCheckBox:indicator {width: 20px; height: 20px;}
+                        QCheckBox:indicator { width: 20px; height: 20px; }
                         QCheckBox:indicator:checked { background-color: #EFE4F2;
                                                       border-color: black;
                                                       border-radius: 10px;
-                                                      border: 2px solid black;}
+                                                      border: 2px solid black; }
                         QCheckBox:indicator:unchecked { background-color: #EFE4F2;
                                                         border-radius: 10px;
-                                                        border: 2px solid grey;} ''')
+                                                        border: 2px solid grey;
+                                                        opacity: 127 } ''')
 
                 elif 'maint' in state:
                     self.setStyleSheet('''
-                        QCheckBox:indicator {width: 20px; height: 20px;}
+                        QCheckBox:indicator { width: 20px; height: 20px; }
                         QCheckBox:indicator:checked { background-color: #F0C419;
                                                       border-color: black;
                                                       border-radius: 10px;
-                                                      border: 2px solid black;}
+                                                      border: 2px solid black; }
                         QCheckBox:indicator:unchecked { background-color: #F0C419;
                                                         border-radius: 10px;
-                                                        border: 2px solid grey;} ''')
+                                                        border: 2px solid grey;
+                                                        opacity: 127 } ''')
 
                 elif 'disable' in state:
                     self.setStyleSheet('''
-                        QCheckBox:indicator {width: 20px; height: 20px;}
+                        QCheckBox:indicator { width: 20px; height: 20px; }
                         QCheckBox:indicator:checked { background-color: #FFFFFF;
                                                       border-color: black;
                                                       border-radius: 10px;
-                                                      border: 2px solid black;}
+                                                      border: 2px solid black; }
                         QCheckBox:indicator:unchecked { background-color: #FFFFFF;
                                                         border-radius: 10px;
-                                                        border: 2px solid grey;} ''')
+                                                        border: 2px solid grey;
+                                                        opacity: 127 } ''')
 
                 else:
                     self.setStyleSheet('''
-                        QCheckBox:indicator {width: 20px; height: 20px;}
+                        QCheckBox:indicator { width: 20px; height: 20px; }
                         QCheckBox:indicator:checked { background-color: pink;
                                                       border-color: white;
                                                       border-radius: 10px;
-                                                      border: 2px solid black;}
+                                                      border: 2px solid black; }
                         QCheckBox:indicator:unchecked { background-color: pink;
                                                         border-radius: 10px;
-                                                        border: 2px solid grey;} ''')
+                                                        border: 2px solid grey;
+                                                        opacity: 127 } ''')
 
             def isChecked(self):
                 return self.worldCheckBox.isChecked()
@@ -136,14 +141,14 @@ class Widgets(object):
             self.allWorldsCheckBox = QCheckBox('All worlds', self)
             self.allWorldsCheckBox.stateChanged.connect(self._tickAllWorlds)
 
-            self.setStyleSheet(''' QCheckBox:indicator {width: 20px; height: 20px;}
+            self.setStyleSheet(''' QCheckBox:indicator { width: 20px; height: 20px; }
                                    QCheckBox:indicator:checked { background-color: #EB5202;
                                                                  border-color: black;
                                                                  border-radius: 10px;
-                                                                 border: 2px solid black;}
+                                                                 border: 2px solid black; }
                                    QCheckBox:indicator:unchecked { background-color: #DEE2E6;
                                                                    border-radius: 10px;
-                                                                   border: 2px solid grey;} ''')
+                                                                   border: 2px solid grey; } ''')
 
             self.worldCheckBoxes = {}
             for world in Magic.WORLDS:

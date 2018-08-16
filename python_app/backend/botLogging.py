@@ -76,25 +76,28 @@ class BotLoggingThread(QThread):
     # @Log.log
     def __GetLogs(self):
         try:
-            with open(self.__getTMRemoteFolder() + '/temp/logs', 'rb') as file:
-                data = []
-                while True:
-                    try:
-                        data.append(pickle.load(file))
-                    except EOFError:
-                        break
-                    except pickle.UnpicklingError:
-                        break
-            os.remove(self.__getTMRemoteFolder() + '/temp/logs')
-            return data
+            if self.__getTMRemoteFolder():
+                with open(self.__getTMRemoteFolder() + '/temp/logs', 'rb') as file:
+                    data = []
+                    while True:
+                        try:
+                            data.append(pickle.load(file))
+                        except EOFError:
+                            break
+                        except pickle.UnpicklingError:
+                            break
+                os.remove(self.__getTMRemoteFolder() + '/temp/logs')
+                return data
+            else:
+                return
         except FileNotFoundError:
             return 'No logs found'
         except PermissionError:
             return 'TMRemote does not have permissions to read logs'
 
     def run(self):
-        print('running BotLogs')
+        print(f'inside BotLogging: {self.sleep_time}')
         while True:
             self.__PostLogs(logs=self.__GetLogs())
-            print('ran botlogs')
+            print(f'ran BotLogging: {self.sleep_time}')
             self.sleep(self.sleep_time)

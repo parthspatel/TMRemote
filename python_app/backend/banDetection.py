@@ -101,10 +101,13 @@ class BanDetectionThread(QThread):
                 self.prevBanDetection[world] = status[world]
 
         try:
-            if not os.path.exists(self.__getTMRemoteFolder() + '/temp'):
-                os.makedirs(self.__getTMRemoteFolder() + '/temp')
-            with open(self.__getTMRemoteFolder() + '/temp/banDetectStatus', 'wb+') as file:
-                pickle.dump(str(status), file)
+            if self.__getTMRemoteFolder():
+                if not os.path.exists(self.__getTMRemoteFolder() + '/temp'):
+                    os.makedirs(self.__getTMRemoteFolder() + '/temp')
+                with open(self.__getTMRemoteFolder() + '/temp/banDetectStatus', 'wb+') as file:
+                    pickle.dump(str(status), file)
+            else:
+                return
         except Exception as ex:
             return f'Could not access TMRemote folder: {ex}'
 
@@ -119,5 +122,5 @@ class BanDetectionThread(QThread):
             if self.__isEnabled():
                 self.parseBanDetection()
 
-            print(f'got BanDetect: {self.sleep_time}')
+            print(f'ran BanDetect: {self.sleep_time}')
             self.sleep(self.sleep_time)

@@ -149,7 +149,7 @@ class TMRemote(QMainWindow):
         tmrLoggingTab.setLayout(tmrLoggingTab.layout)
 
         settingsTab.layout = QVBoxLayout()
-        settingsTab.layout.addWidget(botLoggingBox)
+        # settingsTab.layout.addWidget(botLoggingBox)
         settingsTab.layout.addWidget(maintenanceBox)
         settingsTab.setLayout(settingsTab.layout)
 
@@ -219,8 +219,8 @@ class TMRemote(QMainWindow):
         self.maintenanceWidget.restartCheckBox.setChecked(False if None is settings.value(
             'restartMaint') or 'false' in settings.value('restartMaint').lower() else True)
 
-        self.botLogggingWidget.botLoggingCheckBox.setChecked(False if None is settings.value(
-            'postBotLogs') or 'false' in settings.value('postBotLogs').lower() else True)
+        # self.botLogggingWidget.botLoggingCheckBox.setChecked(False if None is settings.value(
+        #     'postBotLogs') or 'false' in settings.value('postBotLogs').lower() else True)
 
         settings.endGroup()
 
@@ -247,8 +247,8 @@ class TMRemote(QMainWindow):
                 'tmPath': self.settingsWindow.getTMPath(),
                 'banDetection': bool(self.banDetectionWidget.banDetectionCheckBox.isChecked()),
                 'crashMaint': bool(self.maintenanceWidget.crashCheckBox.isChecked()),
-                'restartMaint': bool(self.maintenanceWidget.restartCheckBox.isChecked()),
-                'postBotLogs': bool(self.botLogggingWidget.botLoggingCheckBox.isChecked())}
+                'restartMaint': bool(self.maintenanceWidget.restartCheckBox.isChecked())}
+        # 'postBotLogs': bool(self.botLogggingWidget.botLoggingCheckBox.isChecked())}
 
         for key, value in vars.items():
             settings.setValue(key, value)
