@@ -87,7 +87,7 @@ class BotLoggingThread(QThread):
                     while True:
                         try:
                             data.append(pickle.load(file))
-                        except Excption as ex:
+                        except Exception as ex:
                             return ex
                 os.remove(self.__getTMRemoteFolder() + '/temp/logs')
                 return data

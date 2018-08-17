@@ -1,6 +1,9 @@
+import sys
+
+sys.path.append(r'C:\Users\Parth\Documents\GitHub\TMRemote\scripts')
 try:
-    import TMRLogger
+    import TMRLogger_old as TMR
 except:
     print('> Logger: Could not import TMRLogger')
 
-TMRLogger.Log().main()
+TMR.Log()

@@ -35,9 +35,12 @@ class Auth():
                 try:
                     data = {'key': args[0].getApiKey(),
                             'name': args[0].getUsername()}
-                    status = requests.post(args[0].links[level_dict[level]],
-                                           data=data).text
-                    return status
+                    link = args[0].links[level_dict[level]]
+                    if 'http' in link:
+                        status = requests.post(link,
+                                               data=data).text
+                        return status
+                    raise Exception('No Link')
                 except Exception as ex:
                     raise ex
             try:
