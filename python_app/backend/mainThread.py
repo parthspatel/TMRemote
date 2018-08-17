@@ -12,7 +12,9 @@ from backend.banDetection import BanDetectionThread
 from backend.botLogging import BotLoggingThread
 from backend.tmLogging import TMLoggingThread
 from backend.worldCheckboxStatus import WorldCheckBoxThread
+from backend.maintenance import MaintenanceCheckThread
 
+from backend.log import Log
 
 def getCurrentPath():
     if getattr(sys, 'frozen', False):
@@ -24,7 +26,7 @@ def getCurrentPath():
 
 class MainThread(QThread):
 
-    def __init__(self, username, password, apikey, profilesDir, tmPath, banDetectionWidget, logs):
+    def __init__(self, username, password, apikey, profilesDir, tmPath, banDetectionWidget, maintenanceWidget, logs):
         QThread.__init__(self)
 
         self.getUsername = username
@@ -36,6 +38,8 @@ class MainThread(QThread):
 
         self.banDetectionWidget = banDetectionWidget
         self.worldCheckBoxes = self.banDetectionWidget.worldCheckBoxes
+
+        self.maintenanceWidget = maintenanceWidget
 
         self.logs = logs
 
@@ -72,17 +76,33 @@ class MainThread(QThread):
         self.WorldCheckboxThread = WorldCheckBoxThread(banDetectionWidget=self.banDetectionWidget,
                                                        tmPath=self.getTmPath)
 
+        self.MaintenanceCheckThread = MaintenanceCheckThread(username=self.getUsername,
+                                                             password=self.getPassword,
+                                                             apikey=self.getApiKey,
+                                                             maintenanceWidget=self.maintenanceWidget,
+                                                             links=self.links)
+    @Log.log
+    def __filePathCheck(self):
+        if self.getTmPath() == None:
+            return 'Terminal Manager path is not defined, please select this in settings'
+        elif self.getProfilesDir() == None:
+            return 'Profiles directory is not defined, please select this in settings'
+
+
     def __del__(self):
         self.banDetectionThread.quit()
         self.botLoggingThread.quit()
         self.tmLoggingThread.quit()
         self.WorldCheckboxThread.quit()
+        #self.MaintenanceCheckThread.quit()
         self.wait()
 
     def run(self):
-        self.sleep_time = 1
+        if self.__filePathCheck() == None:
+            self.sleep_time = 1
 
-        self.banDetectionThread.start()
-        self.botLoggingThread.start()
-        self.tmLoggingThread.start()
-        self.WorldCheckboxThread.start()
+            self.banDetectionThread.start()
+            self.botLoggingThread.start()
+            self.tmLoggingThread.start()
+            self.WorldCheckboxThread.start()
+            self.MaintenanceCheckThread.start()
