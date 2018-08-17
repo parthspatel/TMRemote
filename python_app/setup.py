@@ -14,7 +14,7 @@ options = {
 
 executables = [Executable("TMRemote.py",
                           base=base,
-                          icon=r'resources/icon.ico')]
+                          icon=r'icons/icon.ico')]
 
 setup(
     name="TMRemote",
