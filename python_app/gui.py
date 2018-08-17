@@ -10,7 +10,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
 from backend.mainThread import MainThread
-from icons.magicNumbers import MagicNumbers as Magic
+from resources.magicNumbers import MagicNumbers as Magic
 from settings import Settings
 from widgets import Widgets
 

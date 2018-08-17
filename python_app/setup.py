@@ -2,7 +2,7 @@ from cx_Freeze import Executable, setup
 
 base = 'Win32GUI'
 
-include_files = []
+include_files = ['./icons']
 packages = ['idna', 'backend']
 
 options = {
