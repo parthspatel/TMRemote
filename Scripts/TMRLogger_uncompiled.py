@@ -128,13 +128,13 @@ class Log(object):
                  'PotentialScrolls': PotentialScrolls}
 
         try:
-            self.__toFile('TMRemote/logs', 'ab', items)
+            self.__toFile('TMRemote/temp/logs', 'ab', items)
             return True
         except:
             try:
-                with open('TMRemote/logs', 'wb+')as temp:
+                with open('TMRemote/temp/logs', 'wb+')as temp:
                     pass
-                self.__toFile('TMRemote/logs', 'ab', items)
+                self.__toFile('TMRemote/temp/logs', 'ab', items)
                 return True
             except:
                 return False
@@ -145,20 +145,20 @@ class Log(object):
                                                                        currentTime.second, currentTime.day,
                                                                        currentTime.month, currentTime.year)}
 
-        self.__toFile('TMRemote/logs', 'ab', disconnect)
+        self.__toFile('TMRemote/temp/logs', 'ab', disconnect)
         return True
 
         try:
-            with open('TMRemote/logs', 'wb+')as temp:
+            with open('TMRemote/temp/logs', 'wb+')as temp:
                 pass
-            Log.toFile('TMRemote/logs', 'ab', disconnect)
+            Log.toFile('TMRemote/temp/logs', 'ab', disconnect)
             return True
         except:
             return False
 
     def __ReadGMLogs(self):
         try:
-            with open('TMRemote/GMStatus', 'rb') as file:
+            with open('TMRemote/temp/GMStatus', 'rb') as file:
                 GMStatus = pickle.load(file)
             return GMStatus
         except FileNotFoundError:
@@ -166,7 +166,7 @@ class Log(object):
 
     def __ReadWorldsToLogOut(self):
         try:
-            with open('TMRemote/WorldToCheck', 'rb') as file:
+            with open('TMRemote/temp/WorldToCheck', 'rb') as file:
                 WorldsToCheck = pickle.load(file)
             return GMStatus
         except FileNotFoundError:

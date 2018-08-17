@@ -1,6 +1,2 @@
-try:
-    import TMRLogger
-except:
-    print('> Logger: Could not import TMRLogger')
-
+import TMRLogger
 TMRLogger.Log().main()
