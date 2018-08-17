@@ -31,7 +31,7 @@ class LogThread(QThread):
         if list is type(self.msg):
             self.signal_list.emit(self.time, self.msg)
         else:
-            self.signal_str.emit(self.time, self.msg)
+            self.signal_str.emit(self.time, str(self.msg))
 
 
 class Log():
