@@ -11,6 +11,7 @@ from backend.auth import Auth
 from backend.banDetection import BanDetectionThread
 from backend.botLogging import BotLoggingThread
 from backend.log import Log, LogThread
+from backend.tmLogging import TMLoggingThread
 
 
 def getCurrentPath():
@@ -60,17 +61,25 @@ class MainThread(QThread):
                                                  logs=self.logs,
                                                  links=self.links)
 
+        self.tmLoggingThread = TMLoggingThread(username=self.getUsername,
+                                               password=self.getPassword,
+                                               apikey=self.getApiKey,
+                                               tmPath=self.getTmPath,
+                                               logs=self.logs,
+                                               links=self.links)
+
     def __del__(self):
         self.banDetectionThread.quit()
         self.botLoggingThread.quit()
+        self.tmLoggingThread.quit()
         self.wait()
 
     def run(self):
         self.sleep_time = 1
 
         self.banDetectionThread.start()
-
         self.botLoggingThread.start()
+        self.tmLoggingThread.start()
 
         # self.banDetectionThread.quit()
 

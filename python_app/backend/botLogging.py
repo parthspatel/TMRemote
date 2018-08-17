@@ -24,10 +24,10 @@ class BotLoggingThread(QThread):
         self.logs = logs
         self.links = links
 
-        self.HWID = Auth.HardwareID().asStr()  # Error
-
         self.sleep_time = 30
         self.sleep_time_const = self.sleep_time
+
+        self.HWID = Auth.HardwareID().asStr()  # Error
 
     def __del__(self):
         self.wait()
@@ -71,12 +71,15 @@ class BotLoggingThread(QThread):
             except Exception as e:
                 return e
         if count > 0:
-            response = requests.post(self.links['botLogs'], data=toPost)
+            try:
+                response = requests.post(self.links['botLogs'], data=toPost)
+            except Exception as ex:
+                return f'No Internet: {ex}'
             return f'Posted logs of {count} bots'
 
     # Get the log values and returns data
     # @Log.log
-    def __GetLogs(self):
+    def __getLogs(self):
         try:
             if self.__getTMRemoteFolder():
                 with open(self.__getTMRemoteFolder() + '/temp/logs', 'rb') as file:
@@ -84,10 +87,8 @@ class BotLoggingThread(QThread):
                     while True:
                         try:
                             data.append(pickle.load(file))
-                        except EOFError:
-                            break
-                        except pickle.UnpicklingError:
-                            break
+                        except Excption as ex:
+                            return ex
                 os.remove(self.__getTMRemoteFolder() + '/temp/logs')
                 return data
             else:
@@ -100,6 +101,6 @@ class BotLoggingThread(QThread):
     def run(self):
         print(f'inside BotLogging: {self.sleep_time}')
         while True:
-            self.__PostLogs(logs=self.__GetLogs())
+            self.__PostLogs(logs=self.__getLogs())
             print(f'ran BotLogging: {self.sleep_time}')
             self.sleep(self.sleep_time)
