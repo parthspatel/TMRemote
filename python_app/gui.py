@@ -9,8 +9,8 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
-from backend.main import MainThread
-from resources.magicNumbers import MagicNumbers as Magic
+from backend.mainThread import MainThread
+from icons.magicNumbers import MagicNumbers as Magic
 from settings import Settings
 from widgets import Widgets
 
@@ -52,7 +52,7 @@ class TMRemote(QMainWindow):
 
     def __initGUI(self):
         self.setWindowTitle(self.title)
-        self.setWindowIcon(QIcon(r'.\resources\icon.ico'))
+        self.setWindowIcon(QIcon(r'.\icons\icon.ico'))
         self.setGeometry(self.left,
                          self.top,
                          self.width,
@@ -77,13 +77,13 @@ class TMRemote(QMainWindow):
         # ---------------------------------------------------------------------
         # Refresh (F5)
         refreshButton = QAction(
-            QIcon(r'.\resources\refresh.svg'), 'Refresh', self)
+            QIcon(r'.\icons\refresh.svg'), 'Refresh', self)
         refreshButton.setShortcut('F5')
         refreshButton.triggered.connect(self.update)
         fileMenu.addAction(refreshButton)
 
         # Exit (ctrl + Q)
-        exitButton = QAction(QIcon(r'.\resources\exit.svg'), 'Exit', self)
+        exitButton = QAction(QIcon(r'.\icons\exit.svg'), 'Exit', self)
 
         exitButton.setShortcuts([QKeySequence('Ctrl+Q'),
                                  QKeySequence('Alt+F4')])
@@ -95,7 +95,7 @@ class TMRemote(QMainWindow):
         # ---------------------------------------------------------------------
         # Settings
         settingsButton = QAction(
-            QIcon(r'.\resources\settings.svg'), 'Settings', self)
+            QIcon(r'.\icons\settings.svg'), 'Settings', self)
         settingsButton.triggered.connect(self.__onPushSettings)
         editMenu.addAction(settingsButton)
 

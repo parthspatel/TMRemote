@@ -1,0 +1,1 @@
+from .magicNumbers import MagicNumbers

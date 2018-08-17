@@ -10,9 +10,8 @@ from PyQt5.QtWidgets import *
 from backend.auth import Auth
 from backend.banDetection import BanDetectionThread
 from backend.botLogging import BotLoggingThread
-from backend.log import Log, LogThread
 from backend.tmLogging import TMLoggingThread
-from backend.worldCheckboxStatus import worldCheckBoxThread
+from backend.worldCheckboxStatus import WorldCheckBoxThread
 
 
 def getCurrentPath():
@@ -70,14 +69,14 @@ class MainThread(QThread):
                                                logs=self.logs,
                                                links=self.links)
 
-        self.worldCheckboxThread = worldCheckBoxThread(banDetectionWidget=self.banDetectionWidget,
+        self.WorldCheckboxThread = WorldCheckBoxThread(banDetectionWidget=self.banDetectionWidget,
                                                        tmPath=self.getTmPath)
 
     def __del__(self):
         self.banDetectionThread.quit()
         self.botLoggingThread.quit()
         self.tmLoggingThread.quit()
-        self.worldCheckboxThread.quit()
+        self.WorldCheckboxThread.quit()
         self.wait()
 
     def run(self):
@@ -86,4 +85,4 @@ class MainThread(QThread):
         self.banDetectionThread.start()
         self.botLoggingThread.start()
         self.tmLoggingThread.start()
-        self.worldCheckboxThread.start()
+        self.WorldCheckboxThread.start()

@@ -37,7 +37,7 @@ class Settings(QMainWindow):
 
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
-        self.setWindowIcon(QIcon('icons\icon.png'))
+        self.setWindowIcon(QIcon('icons\icon.ico'))
         self.setFixedSize(self.width, self.height)
 
         self.centralWidget = QWidget()
@@ -183,7 +183,7 @@ class _FileDirWidget(QWidget):
         self.profiles.setFixedHeight(Magic.HEIGHT)
 
         profilesButton = QPushButton(self)
-        profilesButton.setIcon(QIcon('icons\open.png'))
+        profilesButton.setIcon(QIcon('icons\open.svg'))
         profilesButton.setFixedWidth(Magic.HEIGHT)
         profilesButton.clicked.connect(self.__onPushGetProfilesDir)
 
@@ -198,7 +198,7 @@ class _FileDirWidget(QWidget):
         self.TerminalManager.setFixedHeight(Magic.HEIGHT)
 
         terminalButton = QPushButton(self)
-        terminalButton.setIcon(QIcon('icons\open.png'))
+        terminalButton.setIcon(QIcon('icons\open.svg'))
         terminalButton.setFixedWidth(Magic.HEIGHT)
         terminalButton.clicked.connect(self.__onPushGetTMPath)
 

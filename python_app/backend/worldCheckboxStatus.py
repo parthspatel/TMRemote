@@ -7,7 +7,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
 
-class worldCheckBoxThread(QThread):
+class WorldCheckBoxThread(QThread):
     def __init__(self, banDetectionWidget, tmPath):
         QThread.__init__(self)
         self.worldCheckBoxes = banDetectionWidget.worldCheckBoxes
@@ -21,7 +21,7 @@ class worldCheckBoxThread(QThread):
         return status
 
     def __getToCheckPath(self):
-        return self.tmPath().replace('TerminalManager.exe','TMRemote/temp/WorldToCheck')
+        return self.tmPath().replace('TerminalManager.exe', 'TMRemote/temp/WorldToCheck')
 
     def __writeStatus(self):
         try:
@@ -30,7 +30,7 @@ class worldCheckBoxThread(QThread):
             pass
         except PermissionError:
             pass
-        with open(self.__getToCheckPath(),'wb') as toCheckFile:
+        with open(self.__getToCheckPath(), 'wb') as toCheckFile:
             pickle.dump(self.__getStatus(), toCheckFile)
 
     def run(self):
