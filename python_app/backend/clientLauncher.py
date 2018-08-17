@@ -24,7 +24,8 @@ class ClientLauncher(object):
 
     def __GetInCurrentWindow(self):
         self.__GetTerminalManagerWindow()
-        checkboxArray = list(pyautogui.locateAllOnScreen(r'checkbox.png'))
+        checkboxArray = list(pyautogui.locateAllOnScreen(
+            r'.\resources\checkbox.png'))
         for Checkbox in checkboxArray:
             for index in range(0, len(checkboxArray)):
                 pyautogui.keyDown('ctrl')

@@ -1,12 +1,11 @@
+import json
+import sys
 from base64 import b64encode
 from binascii import hexlify
+from datetime import datetime, timedelta, timezone
 from hashlib import sha512
-from http import client
-from http import HTTPStatus
-import json
+from http import HTTPStatus, client
 from time import sleep
-from datetime import datetime, timezone, timedelta
-import sys
 
 # User-Agent
 NXL_USER_AGENT = 'NexonLauncher.nxl-18.11.01-372-365f004'
@@ -14,7 +13,7 @@ NXL_USER_AGENT = 'NexonLauncher.nxl-18.11.01-372-365f004'
 # nexon client
 
 
-class nexon_client:
+class NexonServer(object):
 
     def __init__(self, email, password, device_id):
         self.email = email
