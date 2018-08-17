@@ -2,13 +2,13 @@ from cx_Freeze import Executable, setup
 
 base = 'Win32GUI'
 
-includes = []
+include_files = []
 packages = ['idna', 'backend']
 
 options = {
     'build_exe': {
         'packages': packages,
-  		'includes': includes
+  		'include_files': include_files
     },
 }
 
