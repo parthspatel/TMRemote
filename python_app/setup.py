@@ -9,7 +9,7 @@ options = {
     },
 }
 
-executables = [Executable("TMRGui.py",
+executables = [Executable("TMRemote.py",
                           base=base,
                           icon=r'resources/icon.ico')]
 

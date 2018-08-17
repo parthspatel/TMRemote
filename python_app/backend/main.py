@@ -12,6 +12,7 @@ from backend.banDetection import BanDetectionThread
 from backend.botLogging import BotLoggingThread
 from backend.log import Log, LogThread
 from backend.tmLogging import TMLoggingThread
+from backend.worldCheckboxStatus import worldCheckBoxThread
 
 
 def getCurrentPath():
@@ -35,6 +36,7 @@ class MainThread(QThread):
         self.getTmPath = tmPath
 
         self.banDetectionWidget = banDetectionWidget
+        self.worldCheckBoxes = self.banDetectionWidget.worldCheckBoxes
 
         self.logs = logs
 
@@ -68,10 +70,14 @@ class MainThread(QThread):
                                                logs=self.logs,
                                                links=self.links)
 
+        self.worldCheckboxThread = worldCheckBoxThread(banDetectionWidget=self.banDetectionWidget,
+                                                       tmPath=self.getTmPath)
+
     def __del__(self):
         self.banDetectionThread.quit()
         self.botLoggingThread.quit()
         self.tmLoggingThread.quit()
+        self.worldCheckboxThread.quit()
         self.wait()
 
     def run(self):
@@ -80,7 +86,4 @@ class MainThread(QThread):
         self.banDetectionThread.start()
         self.botLoggingThread.start()
         self.tmLoggingThread.start()
-
-        # self.banDetectionThread.quit()
-
-        # self.BotLoggingThread.quit()
+        self.worldCheckboxThread.start()

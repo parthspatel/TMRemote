@@ -25,7 +25,7 @@ class Log(object):
         if Terminal.GetComboBox('LoginServer') == 0:
             return
         elif Terminal.GetComboBox('LoginServer') == 1:
-            IDToName = {0: 'Reboot',
+            IDToName = {0: 'RebootNA',
                         1: 'GRAZED',
                         2: 'MYBCKN',
                         3: 'MYBCKN',
@@ -46,7 +46,7 @@ class Log(object):
             return IDToName[LineEditID]
         elif Terminal.GetComboBox('LoginServer') == 2:
             IDToName = {0: 'Luna',
-                        1: 'EuReboot'}
+                        1: 'RebootEU'}
             return IDToName[LineEditID]
 
     def __LogGM(self):

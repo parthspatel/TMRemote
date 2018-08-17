@@ -31,6 +31,13 @@ class BanDetectionThread(QThread):
         self.sleep_time_const = self.sleep_time
         self.prevBanDetection = {}
 
+        self.noAccessMessage = 'Please upgrade your license to gain access to ban detection'
+        self.checkBoxGreyscale = '''
+        QCheckBox:indicator { background-color: #DEE2E6;
+                                      border-color: #DEE2E6;
+                                      border-radius: 10px;
+                                      border: 2px solid grey;}'''
+
     def __del__(self):
         self.wait()
 
@@ -56,14 +63,15 @@ class BanDetectionThread(QThread):
         status = self.__getBanDetection()
         if dict is not type(status):
             self.banDetectionCheckBox.setEnabled(False)
+            self.banDetectionCheckBox.setToolTip(self.noAccessMessage)
             self.allWorldsCheckBox.setEnabled(False)
+            self.allWorldsCheckBox.setToolTip(self.noAccessMessage)
             for world in self.worldCheckBoxes:
+                self.worldCheckBoxes[world].setEnabled(False)
+                self.worldCheckBoxes[world].setToolTip(self.noAccessMessage)
                 self.worldCheckBoxes[world].setState('disabled')
-            self.banDetectionCheckBox.setStyleSheet('''
-            QCheckBox:indicator { background-color: #DEE2E6;
-                                          border-color: #DEE2E6;
-                                          border-radius: 10px;
-                                          border: 2px solid grey;}''')
+                self.worldCheckBoxes[world].setStyleSheet(self.checkBoxGreyscale)
+            self.banDetectionCheckBox.setStyleSheet(self.checkBoxGreyscale)
             return status
         if not self.banDetectionCheckBox.isEnabled():
             self.banDetectionCheckBox.setEnabled(True)
@@ -83,8 +91,6 @@ class BanDetectionThread(QThread):
                     continue
                 if status[world] != self.prevBanDetection.get(world):
                     worldKey = world
-                    if world.lower() == 'reboot':
-                        worldKey = 'RebootNA'
                     self.worldCheckBoxes[worldKey.lower()].setState(
                         status[world])
 
@@ -94,8 +100,6 @@ class BanDetectionThread(QThread):
                 continue
             if status[world] != self.prevBanDetection.get(world):
                 worldKey = world
-                if world.lower() == 'reboot':
-                    worldKey = 'RebootNA'
                 self.worldCheckBoxes[worldKey.lower()].setState(status[world])
 
                 gm_status.append(f'BD Status: {status[world]} in {world}')
