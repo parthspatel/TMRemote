@@ -2,7 +2,8 @@ from cx_Freeze import Executable, setup
 
 base = 'Win32GUI'
 
-include_files = ['./icons']
+include_files = ['./icons', './scripts/Logger.py', './scripts/TMRLogger.pyc']
+
 packages = ['idna', 'backend']
 
 options = {
