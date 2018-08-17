@@ -1,5 +1,6 @@
-import pyautogui
 import time
+
+import pyautogui
 import win32gui
 
 
@@ -41,6 +42,9 @@ class ClientLauncher(object):
         for count in range(self.repeatCount):
             self.__GetInCurrentWindow()
             pyautogui.scroll(-pyautogui.size()[1])
+
+	def launch(self):
+		self.main()
 
 
 if __name__ == '__main__':
