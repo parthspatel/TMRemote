@@ -1,10 +1,11 @@
-import ctypes
+import base64
 import os
 import sys
 import time
 from multiprocessing import Queue
 
 import psutil
+from cryptography.fernet import Fernet
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -25,8 +26,6 @@ class TMRemote(QMainWindow):
         self.settingsWindow = Settings(self)
 
         self.startEvent()
-        # font = QFont('font: Arial', 12)
-        # self.setFont(font)
 
         self.thread = MainThread(username=self.settingsWindow.getUsername,
                                  password=self.settingsWindow.getPassword,
@@ -149,11 +148,9 @@ class TMRemote(QMainWindow):
         tmrLoggingTab.setLayout(tmrLoggingTab.layout)
 
         settingsTab.layout = QVBoxLayout()
-        # settingsTab.layout.addWidget(botLoggingBox)
         settingsTab.layout.addWidget(maintenanceBox)
         settingsTab.setLayout(settingsTab.layout)
 
-        # centralWidget.setLayout(tabWidget)
         mainBox.addWidget(tabWidget)
         centralWidget.setLayout(mainBox)
 
@@ -198,8 +195,10 @@ class TMRemote(QMainWindow):
         self.move(settings.value("pos", self.pos()))
         self.resize(settings.value("size", self.size()))
 
-        self.settingsWindow.setUsername(settings.value('username'))
-        self.settingsWindow.setPassword(settings.value('password'))
+        self.settingsWindow.setUsername(
+            settings.value('username'))
+        self.settingsWindow.setPassword(
+            settings.value('password'))
         self.settingsWindow.setAPIKey(settings.value('apikey'))
         self.settingsWindow.setProfileDir(settings.value('profileDir'))
 
@@ -218,9 +217,6 @@ class TMRemote(QMainWindow):
             'crashMaint') or 'false' in settings.value('crashMaint').lower() else True)
         self.maintenanceWidget.restartCheckBox.setChecked(False if None is settings.value(
             'restartMaint') or 'false' in settings.value('restartMaint').lower() else True)
-
-        # self.botLogggingWidget.botLoggingCheckBox.setChecked(False if None is settings.value(
-        #     'postBotLogs') or 'false' in settings.value('postBotLogs').lower() else True)
 
         settings.endGroup()
 
@@ -248,7 +244,6 @@ class TMRemote(QMainWindow):
                 'banDetection': bool(self.banDetectionWidget.banDetectionCheckBox.isChecked()),
                 'crashMaint': bool(self.maintenanceWidget.crashCheckBox.isChecked()),
                 'restartMaint': bool(self.maintenanceWidget.restartCheckBox.isChecked())}
-        # 'postBotLogs': bool(self.botLogggingWidget.botLoggingCheckBox.isChecked())}
 
         for key, value in vars.items():
             settings.setValue(key, value)
