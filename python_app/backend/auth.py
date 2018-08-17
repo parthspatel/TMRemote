@@ -50,7 +50,7 @@ class Auth():
             else:
                 if 'error' in token:
                     args[0].sleep_time = 10
-                    return f'Authentication Failed ({level}): {token}'
+                    return f'{level.capitalize()} Authentication Failed: {token}'
                 args[0].sleep_time = args[0].sleep_time_const
                 return func(token=token,
                             *args, **kwargs)
@@ -65,7 +65,8 @@ class Auth():
             self.hashed = None
 
         def __getBaseID(self):
-            BaseID = subprocess.check_output(self.HWIDCommand, shell=self.shell)
+            BaseID = subprocess.check_output(
+                self.HWIDCommand, shell=self.shell)
             BaseID = ''.join(BaseID.decode('utf-8').split('\n')[-3].split('-'))
             return BaseID
 

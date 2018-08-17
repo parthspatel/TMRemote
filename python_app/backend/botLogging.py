@@ -1,5 +1,3 @@
-import ast
-import datetime
 import os
 import pickle
 
@@ -78,7 +76,6 @@ class BotLoggingThread(QThread):
             return f'Posted logs of {count} bots'
 
     # Get the log values and returns data
-    # @Log.log
     def __getLogs(self):
         try:
             if self.__getTMRemoteFolder():
