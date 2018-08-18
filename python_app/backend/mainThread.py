@@ -13,6 +13,7 @@ from backend.botLogging import BotLoggingThread
 from backend.tmLogging import TMLoggingThread
 from backend.worldCheckboxStatus import WorldCheckBoxThread
 from backend.maintenance import MaintenanceCheckThread
+from backend.profileManager import profileThread
 
 from backend.log import Log
 
@@ -81,6 +82,14 @@ class MainThread(QThread):
                                                              apikey=self.getApiKey,
                                                              maintenanceWidget=self.maintenanceWidget,
                                                              links=self.links)
+
+        self.profileThread = profileThread(username=self.getUsername,
+                                           password=self.getPassword,
+                                           apikey=self.getApiKey,
+                                           profilesDir=self.getProfilesDir,
+                                           tmPath=self.getTmPath,
+                                           logs=self.logs)
+
     @Log.log
     def __filePathCheck(self):
         if self.getTmPath() == None:
@@ -94,7 +103,8 @@ class MainThread(QThread):
         self.botLoggingThread.quit()
         self.tmLoggingThread.quit()
         self.WorldCheckboxThread.quit()
-        #self.MaintenanceCheckThread.quit()
+        self.MaintenanceCheckThread.quit()
+        self.profileThread.quit()
         self.wait()
 
     def run(self):
@@ -106,3 +116,4 @@ class MainThread(QThread):
             self.tmLoggingThread.start()
             self.WorldCheckboxThread.start()
             self.MaintenanceCheckThread.start()
+            self.profileThread.start()
