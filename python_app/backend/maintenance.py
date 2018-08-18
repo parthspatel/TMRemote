@@ -15,9 +15,6 @@ class MaintenanceCheckThread(QThread):
         self.getPassword = password
         self.getApiKey = apikey
 
-        self.gameOnline = 'False'
-        self.gameOnMaint = 'True'
-
         self.maintenanceWidget = maintenanceWidget
         self.crashCheckBox = self.maintenanceWidget.crashCheckBox
         self.restartCheckBox = self.maintenanceWidget.restartCheckBox
