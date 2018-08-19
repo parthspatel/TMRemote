@@ -76,10 +76,7 @@ class Log(object):
 
 
     def __Items(self):
-        try:
-            IGN = Character.GetName()
-        except:
-            IGN = 'N/A'
+        IGN = Character.GetName()
         Channel = GameState.GetChannel()
         World = GameState.GetWorldID()
         Level = Character.GetLevel()
