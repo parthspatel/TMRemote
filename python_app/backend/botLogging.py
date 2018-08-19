@@ -96,8 +96,6 @@ class BotLoggingThread(QThread):
             return 'TMRemote does not have permissions to read logs'
 
     def run(self):
-        print(f'inside BotLogging: {self.sleep_time}')
         while True:
             self.__PostLogs(logs=self.__getLogs())
-            print(f'ran BotLogging: {self.sleep_time}')
             self.sleep(self.sleep_time)

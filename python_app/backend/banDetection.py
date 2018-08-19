@@ -121,10 +121,8 @@ class BanDetectionThread(QThread):
         return gm_status
 
     def run(self):
-        print(f'inside BanDetect: {self.sleep_time}')
         while True:
             if self.__isEnabled():
                 self.parseBanDetection()
 
-            print(f'ran BanDetect: {self.sleep_time}')
             self.sleep(self.sleep_time)

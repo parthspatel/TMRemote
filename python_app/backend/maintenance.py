@@ -39,10 +39,8 @@ class MaintenanceCheckThread(QThread):
     def __maintenanceCheck(self):
         if self.__getMaintenanceStatus():
             if self.restartCheckBox.isChecked():
-                print('restarting pc')
                 #os.system('shutdown -r -f -t 0')
             elif self.crashCheckBox.isChecked():
-                print('killing MS and terminal manager')
                 # os.system('Taskkill -IM TerminalManager.exe -F')
                 # os.system('Taskkill -IM Maplestory.exe -F')
             else:

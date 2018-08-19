@@ -77,7 +77,6 @@ class TMLoggingThread(QThread):
         try:
             status = self.__getFileContent()
         except Exception as ex:
-            print(ex)
             return f'Error getting Terminal Manager Logs: {ex}'
 
         try:
