@@ -46,10 +46,10 @@ class MaintenanceCheckThread(QThread):
         if self.__getMaintenanceStatus():
             self.maintenance = True
             if self.restartCheckBox.isChecked():
-                # os.system('shutdown -r -f -t 0')
+                # os.system('shutdown -r -f -t 0') uncommen in live version
                 return 'Restarting pc' #remove in live version
             elif self.crashCheckBox.isChecked():
-                # os.system('Taskkill -IM TerminalManager.exe -F')
+                # os.system('Taskkill -IM TerminalManager.exe -F') uncomment in live
                 # os.system('Taskkill -IM Maplestory.exe -F')
                 return 'Killing maple' #remove in live version
                 return 'Terminated Manager and Maplestory instances'

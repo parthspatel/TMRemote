@@ -11,6 +11,8 @@ import sys
 
 from winreg import *
 
+import psutil
+
 class setStartupThread(QThread):
     def __init__(self, username, password, apikey, tmPath, logs, links):
         QThread.__init__(self)
@@ -24,6 +26,8 @@ class setStartupThread(QThread):
         self.links = links
 
         self.setStartup = False
+
+        self.processName = 'terminalmanager.exe'
 
         self.sleep_time = 30
 
@@ -48,15 +52,29 @@ class setStartupThread(QThread):
             try:
                 SetValueEx(aKey,"TMRemote",0, REG_SZ, TMRExePath)
                 self.setStartup = True
-                return f'Added TMRemote to startup programs'
+                return 'Added TMRemote to startup programs'
             except EnvironmentError:
                 self.setStartup = False
-                return f'Failed to add TMRemote to startup programs'
+                return 'Failed to add TMRemote to startup programs'
 
             CloseKey(aKey)
             CloseKey(aReg)
 
+    def __terminalIsActive(self):
+        for process in psutil.process_iter():
+            if process.name().lower() == self.processName:
+                return True
+            return False
+
+    @Log.log
+    @Auth.authenticate(level='basic')
+    def __startTerminalManager(self):
+        if not self.__terminalIsActive():
+            os.startfile(self.tmPath())
+            return 'Started Terminal Manager'
+
     def run(self):
         while True:
             self.__WriteRegistry()
+            self.__startTerminalManager()
             self.sleep(self.sleep_time)

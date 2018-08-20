@@ -1,6 +1,9 @@
 from cx_Freeze import Executable, setup
-
+import os
 base = 'Win32GUI'
+
+os.environ['TCL_LIBRARY'] = r'C:\Program Files\Python35-32\tcl\tcl8.6'
+os.environ['TK_LIBRARY'] = r'C:\Program Files\Python35-32\tcl\tk8.6'
 
 include_files = ['./icons', './scripts/Logger.py', './scripts/TMRLogger.pyc']
 
