@@ -39,7 +39,8 @@ class Auth():
                     if 'http' in link:
                         status = requests.post(link,
                                                data=data).text
-                        return status
+                        if not '!DOCTYPE html' in status:
+                            return status
                     raise Exception('No Link')
                 except Exception as ex:
                     raise ex

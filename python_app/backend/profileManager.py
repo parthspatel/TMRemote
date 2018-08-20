@@ -32,7 +32,7 @@ class profileThread(QThread):
     def __del__(self):
         self.wait()
 
-    @Auth.authenticate(level='basic')
+    #@Auth.authenticate(level='basic')
     def __getProfiles(self):
         rootdir = self.getProfilesDir()
         for folder, subs, files in os.walk(rootdir):
@@ -43,15 +43,12 @@ class profileThread(QThread):
 
     @Log.log
     def __modifyProfiles(self):
-        script_path = self.getTmPath() + '/TMRemote/Scripts/Logger.py'
-        profiles = ''
-        count = 0
-        for file in self.__getProfiles():
-            if ProfileFixer().enableScript(profilePath=file,
-                                           script_path=script_path):
-                count += 1
-            if count >= 1:
-                return f'Enabled {script_path} in {count} profiles'
+        script_path = self.getTmPath().replace('TerminalManager.exe','TMRemote/Scripts/Logger.py')
+        if os.path.isfile(script_path):
+            for file in self.__getProfiles():
+                if ProfileFixer().enableScript(profilePath=file,
+                                               script_path=script_path):
+                    return 'Enabled script in XML files'
 
 
     def run(self):
