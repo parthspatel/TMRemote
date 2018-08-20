@@ -1,5 +1,9 @@
 import os, sys
 
+class versionCheck():
+	def __init__(self):
+		self.version = 1.0
+
 moduleFolder = os.getcwd() + '\TMRemote\Scripts'
 if os.path.isdir(moduleFolder):
 	if not moduleFolder in sys.path:

@@ -9,7 +9,7 @@ import requests
 import os
 
 class MaintenanceCheckThread(QThread):
-    def __init__(self, username, password, apikey, maintenanceWidget, links):
+    def __init__(self, username, password, apikey, maintenanceWidget, logs, links):
         QThread.__init__(self)
         self.getUsername = username
         self.getPassword = password
@@ -20,6 +20,7 @@ class MaintenanceCheckThread(QThread):
         self.restartCheckBox = self.maintenanceWidget.restartCheckBox
 
         self.links = links
+        self.logs = logs
 
         self.notified = False
 
@@ -40,9 +41,11 @@ class MaintenanceCheckThread(QThread):
         if self.__getMaintenanceStatus():
             if self.restartCheckBox.isChecked():
                 #os.system('shutdown -r -f -t 0')
+                return 'Restarting pc' #remove in live version
             elif self.crashCheckBox.isChecked():
                 # os.system('Taskkill -IM TerminalManager.exe -F')
                 # os.system('Taskkill -IM Maplestory.exe -F')
+                return 'killing maple' #remove in live version
             else:
                 if not self.notified:
                     return 'Maplestory is now on maintenance'

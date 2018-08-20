@@ -43,7 +43,7 @@ class profileThread(QThread):
 
     @Log.log
     def __modifyProfiles(self):
-        script_path = self.getTmPath().replace('TerminalManager.exe', 'Fuck2.py')
+        script_path = self.getTmPath() + '/TMRemote/Scripts/Logger.py'
         profiles = ''
         count = 0
         for file in self.__getProfiles():

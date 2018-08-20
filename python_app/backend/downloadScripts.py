@@ -11,7 +11,6 @@ from PyQt5.QtWidgets import *
 from backend.auth import Auth
 from backend.log import Log
 
-
 class downloadUpdates(QThread):
     def __init__(self, username, password, apikey, tmPath, logs, links):
         QThread.__init__(self)
@@ -29,13 +28,25 @@ class downloadUpdates(QThread):
     def __del__(self):
         self.wait()
 
+    def __getCurrentScriptVersion(self):
+        data = {'key': self.getApiKey(),
+                'name': self.getUsername()}
+        scriptVersion = int(requests.post(self.links['ScriptVersion'], data=data))
+        moduleVersion = int(requests.post(self.links['ModuleVersion'], data=data))
+        versionDict = {'scriptVersion': scriptVersion,
+                       'moduleVersion': moduleVersion}
+        return versionDict
+
     @Log.log
     @Auth.authenticate(level='basic')
-    def __checkFolders(self):
-        data = {''}
+    def __checkTerminalScripts(self):
         tmPath = self.getTmPath()
         scriptsFolder = tmPath + '/TMRemote/Scripts'
         tmRemoteFolder = tmPath + '/TMRemote'
+        if not scriptsFolder in sys.path:
+            sys.path.append(scriptsFolder)
+        import TMRLogger
+        import Logger
         if not os.path.isdir(tmRemoteFolder):
             try:
                 os.mkdir(tmRemoteFolder)
@@ -49,15 +60,17 @@ class downloadUpdates(QThread):
             except:
                 return f'Failed to create folder {scriptsFolder}'
         if not os.path.isfile(scriptsFolder + '/Logger.py'):
-            if self.__downloadScript(path=scriptsFolder):
-                return f'Successfully downloaded script to {scriptsFolder}'
-            else:
-                return f'Failed to download script to {scriptsFolder}'
+            if self.__getCurrentScriptVersion()['scriptVersion'] < Logger.versionCheck().version:
+                if self.__downloadScript(path=scriptsFolder):
+                    return f'Successfully downloaded script to {scriptsFolder}'
+                else:
+                    return f'Failed to download script to {scriptsFolder}'
         if not os.path.isfile(scriptsFolder + 'TMRLogger.pyc'):
-            if self.__downloadModule(path=scriptsFolder):
-                return f'Successfully downloaded module to {scriptsFolder}'
-            else:
-                return f'Failed to download module to {scriptsFolder}'
+            if self.__getCurrentScriptVersion()['moduleVersion'] < TMRLogger.versionCheck().version:
+                if self.__downloadModule(path=scriptsFolder):
+                    return f'Successfully downloaded module to {scriptsFolder}'
+                else:
+                    return f'Failed to download module to {scriptsFolder}'
 
     def __downloadScript(self):
         data = {'key': self.getApiKey(),
@@ -68,7 +81,6 @@ class downloadUpdates(QThread):
         except:
             return False
 
-    @Auth.authenticate(level='basic')
     def __downloadModule(self):
         data = {'key': self.getApiKey(),
                 'name': self.getUsername()}
@@ -81,5 +93,5 @@ class downloadUpdates(QThread):
 
     def run(self):
         while True:
-            self.__checkFolders()
+            self.__checkTerminalScripts()
             self.sleep(self.sleep_time)

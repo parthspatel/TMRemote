@@ -53,7 +53,9 @@ class MainThread(QThread):
                       'VersionCheck': '',
                       'MaintenanceCheck': '',
                       'ScriptDownload':'',
-                      'ModuleDownload':''}
+                      'ModuleDownload':'',
+                      'ScriptVersion':'',
+                      'ModuleVersion':''}
 
         self.banDetectionThread = BanDetectionThread(username=self.getUsername,
                                                      password=self.getPassword,
@@ -84,6 +86,7 @@ class MainThread(QThread):
                                                              password=self.getPassword,
                                                              apikey=self.getApiKey,
                                                              maintenanceWidget=self.maintenanceWidget,
+                                                             logs=self.logs,
                                                              links=self.links)
 
         self.profileThread = profileThread(username=self.getUsername,
