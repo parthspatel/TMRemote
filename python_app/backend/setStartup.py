@@ -8,6 +8,7 @@ from backend.log import Log
 import requests
 import os
 import sys
+import subprocess
 
 from winreg import *
 
@@ -67,10 +68,10 @@ class setStartupThread(QThread):
             return False
 
     @Log.log
-    @Auth.authenticate(level='basic')
+    # @Auth.authenticate(level='basic')
     def __startTerminalManager(self):
         if not self.__terminalIsActive():
-            os.startfile(self.tmPath())
+            process = subprocess.Popen(self.tmPath(), cwd = self.tmPath().split('TerminalManager.exe')[0])
             return 'Started Terminal Manager'
 
     def run(self):
