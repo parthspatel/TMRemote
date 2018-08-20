@@ -15,6 +15,7 @@ from backend.worldCheckboxStatus import WorldCheckBoxThread
 from backend.maintenance import MaintenanceCheckThread
 from backend.profileManager import profileThread
 from backend.downloadScripts import downloadUpdates
+from backend.setStartup import setStartupThread
 
 from backend.log import Log
 
@@ -86,6 +87,7 @@ class MainThread(QThread):
                                                              password=self.getPassword,
                                                              apikey=self.getApiKey,
                                                              maintenanceWidget=self.maintenanceWidget,
+                                                             tmPath=self.getTmPath,
                                                              logs=self.logs,
                                                              links=self.links)
 
@@ -103,6 +105,13 @@ class MainThread(QThread):
                                                   logs=self.logs,
                                                   links=self.links)
 
+        self.setStartupThread = setStartupThread(username=self.getUsername,
+                                                 password=self.getPassword,
+                                                 apikey=self.getApiKey,
+                                                 tmPath=self.getTmPath,
+                                                 logs=self.logs,
+                                                 links=self.links)
+
     @Log.log
     def __filePathCheck(self):
         if self.getTmPath() == None:
@@ -119,6 +128,7 @@ class MainThread(QThread):
         self.MaintenanceCheckThread.quit()
         self.profileThread.quit()
         self.versionCheckThread.quit()
+        self.setStartupThread.quit()
         self.wait()
 
     def run(self):
@@ -131,3 +141,4 @@ class MainThread(QThread):
             self.WorldCheckboxThread.start()
             self.MaintenanceCheckThread.start()
             self.profileThread.start()
+            self.setStartupThread.start()

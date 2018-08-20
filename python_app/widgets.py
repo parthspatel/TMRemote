@@ -35,11 +35,15 @@ class Widgets(object):
 
             self.restartCheckBox = QCheckBox('Restart PC', self)
 
+            self.startBotsCheckBox = QCheckBox('Start bots', self)
+            self.startBotsCheckBox.setToolTip('''Requires auto restart checkbox to be ticked in TerminalManager, starts bots with checkbox ticked after maintenance, restart PC cannot be ticked.''')
+
             grid = QGridLayout()
             grid.setSpacing(1)
 
-            grid.addWidget(self.crashCheckBox, 1, 0)
-            grid.addWidget(self.restartCheckBox, 1, 1)
+            grid.addWidget(self.crashCheckBox, 0, 0)
+            grid.addWidget(self.restartCheckBox, 0, 1)
+            grid.addWidget(self.startBotsCheckBox, 1, 0)
 
             self.setLayout(grid)
 

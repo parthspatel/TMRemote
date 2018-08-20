@@ -37,16 +37,9 @@ class ClientLauncher(object):
             break
         pyautogui.keyUp('ctrl')
 
-    def main(self):
+    def launchClients(self):
         if self.repeatCount < 1:
             self.repeatCount = 1
         for count in range(self.repeatCount):
             self.__GetInCurrentWindow()
             pyautogui.scroll(-pyautogui.size()[1])
-
-	def launch(self):
-		self.main()
-
-
-if __name__ == '__main__':
-    ClientLauncher().main()
