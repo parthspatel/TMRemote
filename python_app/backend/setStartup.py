@@ -23,6 +23,8 @@ class setStartupThread(QThread):
         self.logs = logs
         self.links = links
 
+        self.setStartup = False
+
         self.sleep_time = 30
 
     def __del__(self):
@@ -31,7 +33,7 @@ class setStartupThread(QThread):
     def __getCurrentPath(self):
         if getattr(sys, 'frozen', False):
             # compiled
-            dir_ = os.path.dirname(sys.executable)
+            dir_ = os.path.dirname(sys.executable + '\TMRemote.exe')
         else:
             # uncompiled
             dir_ = os.path.dirname(os.path.realpath(__file__))
@@ -39,18 +41,20 @@ class setStartupThread(QThread):
 
     @Log.log
     def __WriteRegistry(self):
-        TMRExePath = self.__getCurrentPath() + '\TMRemote.exe'
-        aReg = ConnectRegistry(None,HKEY_LOCAL_MACHINE)
+        if not self.setStartup:
+            TMRExePath = self.__getCurrentPath()
+            aReg = ConnectRegistry(None,HKEY_CURRENT_USER)
+            aKey = OpenKey(aReg, r"Software\Microsoft\Windows\CurrentVersion\Run", 0, KEY_ALL_ACCESS)
+            try:
+                SetValueEx(aKey,"TMRemote",0, REG_SZ, TMRExePath)
+                self.setStartup = True
+                return f'Added TMRemote to startup programs'
+            except EnvironmentError:
+                self.setStartup = False
+                return f'Failed to add TMRemote to startup programs'
 
-        aKey = OpenKey(aReg, r"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", 0, KEY_ALL_ACCESS)
-        try:
-            SetValueEx(aKey,"TMRemote",0, REG_SZ, TMRExePath)
-            return f'Added TMRemote to startup programs'
-        except EnvironmentError:
-            return f'Failed to add TMRemote to startup programs'
-
-        CloseKey(aKey)
-        CloseKey(aReg)
+            CloseKey(aKey)
+            CloseKey(aReg)
 
     def run(self):
         while True:

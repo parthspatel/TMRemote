@@ -23,7 +23,7 @@ class downloadUpdates(QThread):
 
         self.links = links
 
-        self.sleep_time = 30
+        self.sleep_time = 600
 
     def __del__(self):
         self.wait()
@@ -43,34 +43,13 @@ class downloadUpdates(QThread):
         tmPath = self.getTmPath()
         scriptsFolder = tmPath + '/TMRemote/Scripts'
         tmRemoteFolder = tmPath + '/TMRemote'
-        if not scriptsFolder in sys.path:
-            sys.path.append(scriptsFolder)
-        import TMRLogger
-        import Logger
         if not os.path.isdir(tmRemoteFolder):
-            try:
-                os.mkdir(tmRemoteFolder)
-                return f'Successfully created folder {tmRemoteFolder}'
-            except:
-                return f'Failed to create folder {tmRemoteFolder}'
+            os.mkdir(tmRemoteFolder)
         if not os.path.isdir(scriptsFolder):
-            try:
-                os.mkdir(scriptsFolder)
-                return f'Successfully created folder {scriptsFolder}'
-            except:
-                return f'Failed to create folder {scriptsFolder}'
-        if not os.path.isfile(scriptsFolder + '/Logger.py'):
-            if self.__getCurrentScriptVersion()['scriptVersion'] < Logger.versionCheck().version:
-                if self.__downloadScript(path=scriptsFolder):
-                    return f'Successfully downloaded script to {scriptsFolder}'
-                else:
-                    return f'Failed to download script to {scriptsFolder}'
-        if not os.path.isfile(scriptsFolder + 'TMRLogger.pyc'):
-            if self.__getCurrentScriptVersion()['moduleVersion'] < TMRLogger.versionCheck().version:
-                if self.__downloadModule(path=scriptsFolder):
-                    return f'Successfully downloaded module to {scriptsFolder}'
-                else:
-                    return f'Failed to download module to {scriptsFolder}'
+            os.mkdir(scriptsFolder)
+        self.__downloadScript(path=scriptsFolder)
+        self.__downloadModule(path=scriptsFolder)
+
 
     def __downloadScript(self):
         data = {'key': self.getApiKey(),
