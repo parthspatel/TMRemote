@@ -65,7 +65,7 @@ class setStartupThread(QThread):
         for process in psutil.process_iter():
             if process.name().lower() == self.processName:
                 return True
-            return False
+        return False
 
     @Log.log
     # @Auth.authenticate(level='basic')
