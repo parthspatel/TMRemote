@@ -46,8 +46,9 @@ class MainThread(QThread):
 
         self.logs = logs
 
-        self.links = {'botLogs': 'https://tmremote.io/api/v1/activity',
-                      'banDetection': 'https://tmremote.io/api/v1/gm/status',
+        self.links = {'logIn': 'https://beta.tmremote.io/api/login'
+                      'botLogs': 'https://tmremote.io/api/v1/activity',
+                      'banDetection': 'https://beta.tmremote.io/api/gm/status',
                       'banPost': '',
                       'tmLog': '',
                       'ExeDownload': '',
