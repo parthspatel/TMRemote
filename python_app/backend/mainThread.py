@@ -118,6 +118,7 @@ class MainThread(QThread):
             return 'Terminal Manager path is not defined, please select this in settings'
         elif self.getProfilesDir() == None:
             return 'Profiles directory is not defined, please select this in settings'
+        return True
 
 
     def __del__(self):
@@ -132,7 +133,7 @@ class MainThread(QThread):
         self.wait()
 
     def run(self):
-        if self.__filePathCheck() == None:
+        if self.__filePathCheck():
             self.sleep_time = 1
             self.versionCheckThread.start()
             self.banDetectionThread.start()

@@ -60,6 +60,9 @@ class BanDetectionThread(QThread):
     @Log.log
     def parseBanDetection(self):
         status = self.__getBanDetection()
+        if 'Unauthorized' in status:
+            return status
+        status = status['worlds']
         if dict is not type(status):
             self.banDetectionCheckBox.setEnabled(False)
             self.banDetectionCheckBox.setToolTip(self.noAccessMessage)
@@ -86,23 +89,18 @@ class BanDetectionThread(QThread):
                                                                    border: 2px solid grey;} ''')
 
             for world in status:
-                if 'time' in world:
-                    continue
-                if status[world] != self.prevBanDetection.get(world):
-                    worldKey = world
-                    self.worldCheckBoxes[worldKey.lower()].setState(
-                        status[world])
+                if status[world]['status'] != self.prevBanDetection.get(world):
+                    self.worldCheckBoxes[world.lower()].setState(
+                    status[world])
+
 
         gm_status = []
         for world in status:
-            if 'time' in world:
-                continue
-            if status[world] != self.prevBanDetection.get(world):
-                worldKey = world
-                self.worldCheckBoxes[worldKey.lower()].setState(status[world])
+            if status[world]['status'] != self.prevBanDetection.get(world):
+                self.worldCheckBoxes[world.lower()].setState(status[world]['status'])
 
-                gm_status.append(f'BD Status: {status[world]} in {world}')
-                self.prevBanDetection[world] = status[world]
+                gm_status.append(f'BD Status: {status[world]['status']} in {world}')
+                self.prevBanDetection[world] = status[world]['status']
 
         try:
             if self.__getTMRemoteFolder():
