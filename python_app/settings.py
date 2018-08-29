@@ -20,8 +20,8 @@ class Settings(QMainWindow):
 
         self.left = 100
         self.top = 100
-        self.width = 350
-        self.height = 350
+        self.width = 600
+        self.height = 600
         # print(self.left, self.top)
         if parent:
             parent.update()

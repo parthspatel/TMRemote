@@ -19,6 +19,7 @@ from backend.setStartup import setStartupThread
 
 from backend.log import Log
 
+
 def getCurrentPath():
     if getattr(sys, 'frozen', False):
         dir = os.path.dirname(sys.executable)
@@ -34,7 +35,10 @@ class MainThread(QThread):
 
         self.getUsername = username
         self.getPassword = password
-        self.apiKey = self.__getApiKey()
+        try:
+            self.apiKey = self.__getApiKey()
+        except:
+            self.apiKey = '0'
 
         self.getProfilesDir = profilesDir
         self.getTmPath = tmPath
@@ -54,10 +58,10 @@ class MainThread(QThread):
                       'ExeDownload': '',
                       'VersionCheck': '',
                       'MaintenanceCheck': '',
-                      'ScriptDownload':'',
-                      'ModuleDownload':'',
-                      'ScriptVersion':'',
-                      'ModuleVersion':''}
+                      'ScriptDownload': '',
+                      'ModuleDownload': '',
+                      'ScriptVersion': '',
+                      'ModuleVersion': ''}
 
         self.banDetectionThread = BanDetectionThread(username=self.getUsername,
                                                      password=self.getPassword,
@@ -126,20 +130,22 @@ class MainThread(QThread):
         headers = {'User-Agent': 'TMR Bot'}
         data = {'username': self.getUsername(),
                 'password': self.getPassword()}
-        token = ast.literal_eval(requests.post('https://beta.tmremote.io/api/login', headers=headers, data=data).text)['token']
+        token = ast.literal_eval(requests.post(
+            'https://beta.tmremote.io/api/login', headers=headers, data=data).text)['token']
         return token
 
-
-
     def __del__(self):
-        self.banDetectionThread.quit()
-        self.botLoggingThread.quit()
-        self.tmLoggingThread.quit()
-        self.WorldCheckboxThread.quit()
-        self.MaintenanceCheckThread.quit()
-        self.profileThread.quit()
-        self.versionCheckThread.quit()
-        self.setStartupThread.quit()
+        try:
+            self.banDetectionThread.quit()
+            self.botLoggingThread.quit()
+            self.tmLoggingThread.quit()
+            self.WorldCheckboxThread.quit()
+            self.MaintenanceCheckThread.quit()
+            self.profileThread.quit()
+            self.versionCheckThread.quit()
+            self.setStartupThread.quit()
+        except:
+            pass
         self.wait()
 
     def run(self):

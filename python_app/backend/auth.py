@@ -33,26 +33,28 @@ class Auth():
         def authenticate_and_call(*args, **kwargs):
             def auth_ban_detection():
                 try:
+                    headers = {'User-Agent': 'TMR Bot'}
                     if level == 'prime':
-                        headers = {'User-Agent': 'TMR Bot',
-                                   'Authorization': 'Bearer {}'.format(args[0].apiKey)}
+                        headers.update(
+                            {'Authorization': 'Bearer {}'.format(args[0].apiKey)})
                     else:
-                        data = {'username':args[0].getUsername(),
-                                'password':args[0].getPassword()}
-                        headers = {'User-Agent': 'TMR Bot'}
+                        data = {'username': args[0].getUsername(),
+                                'password': args[0].getPassword()}
+
                     link = args[0].links[level_dict[level]]
                     if 'http' in link.lower():
                         if level == 'prime':
                             status = requests.post(link, headers=headers).text
                         else:
-                            status = requests.post(link, headers=headers, data=data).text
+                            status = requests.post(
+                                link, headers=headers, data=data).text
                         if not '!DOCTYPE html' in status:
                             return status
                     raise Exception('No Link')
                 except Exception as ex:
                     raise ex
             try:
-                token = auth_ban_detection()
+                token = yeah()
             except Exception as ex:
                 return f'No Internet: {ex}'
             else:
@@ -108,6 +110,6 @@ class Auth():
 
         def asStr(self):
             self.trueHWID = self.__getGpuID() + self.__getCpuID() + \
-                                            self.__getGpuID2() + self.__getBaseID()
+                self.__getGpuID2() + self.__getBaseID()
             self.trueHWID = self.trueHWID.replace(' ', '').replace('\r', '')
             return self.__encrypt(self.trueHWID)

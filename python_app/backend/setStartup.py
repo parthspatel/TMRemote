@@ -14,6 +14,7 @@ from winreg import *
 
 import psutil
 
+
 class setStartupThread(QThread):
     def __init__(self, username, password, apikey, tmPath, logs, links):
         QThread.__init__(self)
@@ -49,10 +50,11 @@ class setStartupThread(QThread):
     def __WriteRegistry(self):
         if not self.setStartup:
             TMRExePath = self.__getCurrentPath()
-            aReg = ConnectRegistry(None,HKEY_CURRENT_USER)
-            aKey = OpenKey(aReg, r"Software\Microsoft\Windows\CurrentVersion\Run", 0, KEY_ALL_ACCESS)
+            aReg = ConnectRegistry(None, HKEY_CURRENT_USER)
+            aKey = OpenKey(
+                aReg, r"Software\Microsoft\Windows\CurrentVersion\Run", 0, KEY_ALL_ACCESS)
             try:
-                SetValueEx(aKey,"TMRemote",0, REG_SZ, TMRExePath)
+                SetValueEx(aKey, "TMRemote", 0, REG_SZ, TMRExePath)
                 self.setStartup = True
                 return 'Added TMRemote to startup programs'
             except EnvironmentError:
@@ -72,11 +74,15 @@ class setStartupThread(QThread):
     @Auth.authenticate(level='basic')
     def __startTerminalManager(self, token):
         if not self.__terminalIsActive():
-            process = subprocess.Popen(self.tmPath(), cwd = self.tmPath().split('TerminalManager.exe')[0])
+            process = subprocess.Popen(
+                self.tmPath(), cwd=self.tmPath().split('TerminalManager.exe')[0])
             return 'Started Terminal Manager'
 
     def run(self):
         while True:
-            self.__WriteRegistry()
-            self.__startTerminalManager()
+            try:
+                self.__WriteRegistry()
+                self.__startTerminalManager()
+            except:
+                pass
             self.sleep(self.sleep_time)
