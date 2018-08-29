@@ -15,12 +15,14 @@ from backend.profileParser import ProfileManager as ProfileFixer # Because this 
 
 class profileThread(QThread):
 
-    def __init__(self, username, password, apikey, profilesDir, tmPath, logs):
+    def __init__(self, username, password, apikey, profilesDir, tmPath, links, logs):
         QThread.__init__(self)
 
         self.getUsername = username
         self.getPassword = password
-        self.getApiKey = apikey
+        self.apiKey = apikey
+
+        self.links = links
 
         self.getProfilesDir = profilesDir
         self.getTmPath = tmPath
@@ -28,12 +30,13 @@ class profileThread(QThread):
         self.logs = logs
 
         self.sleep_time = 10
+        self.sleep_time_const = self.sleep_time
 
     def __del__(self):
         self.wait()
 
     @Auth.authenticate(level='basic')
-    def __getProfiles(self):
+    def __getProfiles(self, token):
         rootdir = self.getProfilesDir()
         for folder, subs, files in os.walk(rootdir):
         	for filename in files:

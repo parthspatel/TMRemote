@@ -34,7 +34,7 @@ class MainThread(QThread):
 
         self.getUsername = username
         self.getPassword = password
-        self.getApiKey = apikey
+        self.apiKey = self.__getApiKey()
 
         self.getProfilesDir = profilesDir
         self.getTmPath = tmPath
@@ -46,7 +46,7 @@ class MainThread(QThread):
 
         self.logs = logs
 
-        self.links = {'logIn': 'https://beta.tmremote.io/api/login'
+        self.links = {'logIn': 'https://beta.tmremote.io/api/login',
                       'botLogs': 'https://tmremote.io/api/v1/activity',
                       'banDetection': 'https://beta.tmremote.io/api/gm/status',
                       'banPost': '',
@@ -61,7 +61,7 @@ class MainThread(QThread):
 
         self.banDetectionThread = BanDetectionThread(username=self.getUsername,
                                                      password=self.getPassword,
-                                                     apikey=self.getApiKey,
+                                                     apikey=self.apiKey,
                                                      tmPath=self.getTmPath,
                                                      banDetectionWidget=self.banDetectionWidget,
                                                      logs=self.logs,
@@ -69,14 +69,14 @@ class MainThread(QThread):
 
         self.botLoggingThread = BotLoggingThread(username=self.getUsername,
                                                  password=self.getPassword,
-                                                 apikey=self.getApiKey,
+                                                 apikey=self.apiKey,
                                                  tmPath=self.getTmPath,
                                                  logs=self.logs,
                                                  links=self.links)
 
         self.tmLoggingThread = TMLoggingThread(username=self.getUsername,
                                                password=self.getPassword,
-                                               apikey=self.getApiKey,
+                                               apikey=self.apiKey,
                                                tmPath=self.getTmPath,
                                                logs=self.logs,
                                                links=self.links)
@@ -86,7 +86,7 @@ class MainThread(QThread):
 
         self.MaintenanceCheckThread = MaintenanceCheckThread(username=self.getUsername,
                                                              password=self.getPassword,
-                                                             apikey=self.getApiKey,
+                                                             apikey=self.apiKey,
                                                              maintenanceWidget=self.maintenanceWidget,
                                                              tmPath=self.getTmPath,
                                                              logs=self.logs,
@@ -94,21 +94,22 @@ class MainThread(QThread):
 
         self.profileThread = profileThread(username=self.getUsername,
                                            password=self.getPassword,
-                                           apikey=self.getApiKey,
+                                           apikey=self.apiKey,
                                            profilesDir=self.getProfilesDir,
                                            tmPath=self.getTmPath,
+                                           links=self.links,
                                            logs=self.logs)
 
         self.versionCheckThread = downloadUpdates(username=self.getUsername,
                                                   password=self.getPassword,
-                                                  apikey=self.getApiKey,
+                                                  apikey=self.apiKey,
                                                   tmPath=self.getTmPath,
                                                   logs=self.logs,
                                                   links=self.links)
 
         self.setStartupThread = setStartupThread(username=self.getUsername,
                                                  password=self.getPassword,
-                                                 apikey=self.getApiKey,
+                                                 apikey=self.apiKey,
                                                  tmPath=self.getTmPath,
                                                  logs=self.logs,
                                                  links=self.links)
@@ -120,6 +121,14 @@ class MainThread(QThread):
         elif self.getProfilesDir() == None:
             return 'Profiles directory is not defined, please select this in settings'
         return True
+
+    def __getApiKey(self):
+        headers = {'User-Agent': 'TMR Bot'}
+        data = {'username': self.getUsername(),
+                'password': self.getPassword()}
+        token = ast.literal_eval(requests.post('https://beta.tmremote.io/api/login', headers=headers, data=data).text)['token']
+        return token
+
 
 
     def __del__(self):
@@ -136,11 +145,11 @@ class MainThread(QThread):
     def run(self):
         if self.__filePathCheck():
             self.sleep_time = 1
-            self.versionCheckThread.start()
+            # self.versionCheckThread.start()
             self.banDetectionThread.start()
-            self.botLoggingThread.start()
-            self.tmLoggingThread.start()
+            # self.botLoggingThread.start()
+            # self.tmLoggingThread.start()
             self.WorldCheckboxThread.start()
-            self.MaintenanceCheckThread.start()
+            # self.MaintenanceCheckThread.start()
             self.profileThread.start()
             self.setStartupThread.start()

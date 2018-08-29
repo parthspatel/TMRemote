@@ -16,7 +16,7 @@ class downloadUpdates(QThread):
         QThread.__init__(self)
         self.getUsername = username
         self.getPassword = password
-        self.getApiKey = apikey
+        self.apiKey = apikey
 
         self.getTmPath = tmPath
         self.logs = logs
@@ -24,12 +24,13 @@ class downloadUpdates(QThread):
         self.links = links
 
         self.sleep_time = 600
+        self.sleep_time_const = 30
 
     def __del__(self):
         self.wait()
 
     def __getCurrentScriptVersion(self):
-        data = {'key': self.getApiKey(),
+        data = {'key': self.apiKey,
                 'name': self.getUsername()}
         scriptVersion = int(requests.post(self.links['ScriptVersion'], data=data))
         moduleVersion = int(requests.post(self.links['ModuleVersion'], data=data))
@@ -39,7 +40,7 @@ class downloadUpdates(QThread):
 
     @Log.log
     @Auth.authenticate(level='basic')
-    def __checkTerminalScripts(self):
+    def __checkTerminalScripts(self, token):
         tmPath = self.getTmPath()
         scriptsFolder = tmPath + '/TMRemote/Scripts'
         tmRemoteFolder = tmPath + '/TMRemote'
@@ -52,7 +53,7 @@ class downloadUpdates(QThread):
 
 
     def __downloadScript(self):
-        data = {'key': self.getApiKey(),
+        data = {'key': self.apiKey,
                 'name': self.getUsername()}
         try:
             urllib.urlretrieve(self.links['ScriptDownload'], scriptsFolder + '/Logger.py')
@@ -61,7 +62,7 @@ class downloadUpdates(QThread):
             return False
 
     def __downloadModule(self):
-        data = {'key': self.getApiKey(),
+        data = {'key': self.apiKey,
                 'name': self.getUsername()}
         try:
             urllib.urlretrieve(self.links['ModuleDownload'], scriptsFolder + '/TMRLogger.pyc')

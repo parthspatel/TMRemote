@@ -27,18 +27,25 @@ class Auth():
 
     @parametrized
     def authenticate(func, level='basic'):
-        level_dict = {'basic': 'botLogs',
+        level_dict = {'basic': 'logIn',
                       'prime': 'banDetection'}
 
         def authenticate_and_call(*args, **kwargs):
             def auth_ban_detection():
                 try:
-                    data = {'key': args[0].getApiKey(),
-                            'name': args[0].getUsername()}
+                    if level == 'prime':
+                        headers = {'User-Agent': 'TMR Bot',
+                                   'Authorization': 'Bearer {}'.format(args[0].apiKey)}
+                    else:
+                        data = {'username':args[0].getUsername(),
+                                'password':args[0].getPassword()}
+                        headers = {'User-Agent': 'TMR Bot'}
                     link = args[0].links[level_dict[level]]
-                    if 'http' in link:
-                        status = requests.post(link,
-                                               data=data).text
+                    if 'http' in link.lower():
+                        if level == 'prime':
+                            status = requests.post(link, headers=headers).text
+                        else:
+                            status = requests.post(link, headers=headers, data=data).text
                         if not '!DOCTYPE html' in status:
                             return status
                     raise Exception('No Link')

@@ -15,7 +15,7 @@ class BotLoggingThread(QThread):
         QThread.__init__(self)
         self.getUsername = username
         self.getPassword = password
-        self.getApiKey = apikey
+        self.apiKey = apikey
 
         self.getTmPath = tmPath
 
@@ -45,7 +45,7 @@ class BotLoggingThread(QThread):
             try:
                 if not 'disconnect' in logs[index]:
                     if not logs[index]['IGN'] in PostedPreviously:
-                        data = {'key': self.getApiKey(),
+                        data = {'key': self.apiKey,
                                 'name': self.getUsername(),
                                 'HWID': self.HWID,
                                 'server': 'GMS',
@@ -61,7 +61,7 @@ class BotLoggingThread(QThread):
                         PreviouslyPosted.append(logs[index]['IGN'])
                 else:
                     continue
-                    data = {'key': self.getApiKey(),
+                    data = {'key': self.apiKey,
                             'name': self.getUsername(),
                             'HWID': self.HWID,
                             'server': 'GMS',

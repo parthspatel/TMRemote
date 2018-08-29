@@ -15,7 +15,7 @@ class BanDetectionThread(QThread):
         QThread.__init__(self)
         self.getUsername = username
         self.getPassword = password
-        self.getApiKey = apikey
+        self.apiKey = apikey
 
         self.getTmPath = tmPath
 
@@ -62,7 +62,7 @@ class BanDetectionThread(QThread):
         status = self.__getBanDetection()
         if 'Unauthorized' in status:
             return status
-        status = status['worlds']
+        status = ast.literal_eval(status)
         if dict is not type(status):
             self.banDetectionCheckBox.setEnabled(False)
             self.banDetectionCheckBox.setToolTip(self.noAccessMessage)
@@ -99,7 +99,7 @@ class BanDetectionThread(QThread):
             if status[world]['status'] != self.prevBanDetection.get(world):
                 self.worldCheckBoxes[world.lower()].setState(status[world]['status'])
 
-                gm_status.append(f'BD Status: {status[world]['status']} in {world}')
+                gm_status.append('BD Status: {} in {}'.format(status[world]['status'], status[world]['name']))
                 self.prevBanDetection[world] = status[world]['status']
 
         try:

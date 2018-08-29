@@ -17,7 +17,7 @@ class TMLoggingThread(QThread):
         QThread.__init__(self)
         self.getUsername = username
         self.getPassword = password
-        self.getApiKey = apikey
+        self.apiKey = apikey
 
         self.getTmPath = tmPath
 

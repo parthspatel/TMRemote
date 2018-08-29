@@ -14,7 +14,7 @@ class MaintenanceCheckThread(QThread):
         QThread.__init__(self)
         self.getUsername = username
         self.getPassword = password
-        self.getApiKey = apikey
+        self.apiKey = apikey
 
         self.tmPath = tmPath
 
@@ -30,13 +30,14 @@ class MaintenanceCheckThread(QThread):
         self.maintenance = False
 
         self.sleep_time= 5
+        self.sleep_time_const = self.sleep_time
 
     def __del__(self):
         self.wait()
 
     @Auth.authenticate(level='basic')
-    def __getMaintenanceStatus(self):
-        data = {'key': self.getApiKey(),
+    def __getMaintenanceStatus(self, token):
+        data = {'key': self.apiKey,
                 'name': self.getUsername()}
         maintenanceStatus = requests.post(self.links['MaintenanceCheck'], data=data).text
         return bool(maintenanceStatus)

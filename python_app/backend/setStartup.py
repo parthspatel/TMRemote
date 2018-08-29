@@ -19,7 +19,7 @@ class setStartupThread(QThread):
         QThread.__init__(self)
         self.getUsername = username
         self.getPassword = password
-        self.getApiKey = apikey
+        self.apiKey = apikey
 
         self.tmPath = tmPath
 
@@ -31,6 +31,7 @@ class setStartupThread(QThread):
         self.processName = 'terminalmanager.exe'
 
         self.sleep_time = 30
+        self.sleep_time_const = self.sleep_time
 
     def __del__(self):
         self.wait()
@@ -68,8 +69,8 @@ class setStartupThread(QThread):
         return False
 
     @Log.log
-    # @Auth.authenticate(level='basic')
-    def __startTerminalManager(self):
+    @Auth.authenticate(level='basic')
+    def __startTerminalManager(self, token):
         if not self.__terminalIsActive():
             process = subprocess.Popen(self.tmPath(), cwd = self.tmPath().split('TerminalManager.exe')[0])
             return 'Started Terminal Manager'
