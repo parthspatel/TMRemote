@@ -55,15 +55,13 @@ class BanDetectionThread(QThread):
 
     @Auth.authenticate(level='prime')
     def __getBanDetection(self, token):
-        return ast.literal_eval(token)
+        return token
 
     @Log.log
     def parseBanDetection(self):
-        status = self.__getBanDetection()
-        if 'Unauthorized' in status:
-            return status
-        status = ast.literal_eval(status)
-        if dict is not type(status):
+        gmStatus = self.__getBanDetection()
+        GMLogs = ast.literal_eval(gmStatus)
+        if gmStatus.status_code == 401:
             self.banDetectionCheckBox.setEnabled(False)
             self.banDetectionCheckBox.setToolTip(self.noAccessMessage)
             self.allWorldsCheckBox.setEnabled(False)
@@ -74,7 +72,7 @@ class BanDetectionThread(QThread):
                 self.worldCheckBoxes[world].setState('disabled')
                 self.worldCheckBoxes[world].setStyleSheet(self.checkBoxGreyscale)
             self.banDetectionCheckBox.setStyleSheet(self.checkBoxGreyscale)
-            return status
+            return GMLogs
         if not self.banDetectionCheckBox.isEnabled():
             self.banDetectionCheckBox.setEnabled(True)
             self.allWorldsCheckBox.setEnabled(True)
@@ -88,33 +86,33 @@ class BanDetectionThread(QThread):
                                                                    border-radius: 10px;
                                                                    border: 2px solid grey;} ''')
 
-            for world in status:
-                if status[world]['status'] != self.prevBanDetection.get(world):
+            for world in GMLogs:
+                if GMLogs[world]['status'] != self.prevBanDetection.get(world):
                     self.worldCheckBoxes[world.lower()].setState(
-                    status[world])
+                    GMLogs[world])
 
 
         gm_status = []
-        for world in status:
-            if status[world]['status'] != self.prevBanDetection.get(world):
-                self.worldCheckBoxes[world.lower()].setState(status[world]['status'])
+        for world in GMLogs:
+            if GMLogs[world]['status'] != self.prevBanDetection.get(world):
+                self.worldCheckBoxes[world.lower()].setState(GMLogs[world]['status'])
 
-                gm_status.append('BD Status: {} in {}'.format(status[world]['status'], status[world]['name']))
-                self.prevBanDetection[world] = status[world]['status']
+                gm_status.append('BD Status: {} in {}'.format(GMLogs[world]['status'], GMLogs[world]['name']))
+                self.prevBanDetection[world] = GMLogs[world]['status']
 
         try:
             if self.__getTMRemoteFolder():
                 if not os.path.exists(self.__getTMRemoteFolder() + '/temp'):
                     os.makedirs(self.__getTMRemoteFolder() + '/temp')
                 with open(self.__getTMRemoteFolder() + '/temp/banDetectStatus', 'wb+') as file:
-                    pickle.dump(str(status), file)
+                    pickle.dump(str(GMLogs), file)
             else:
                 return
         except Exception as ex:
             return f'Could not access TMRemote folder: {ex}'
 
         if not self.prevBanDetection:
-            self.prevBanDetection = status
+            self.prevBanDetection = GMLogs
 
         return gm_status
 

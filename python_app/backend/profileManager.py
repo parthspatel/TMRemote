@@ -38,18 +38,23 @@ class profileThread(QThread):
     @Auth.authenticate(level='basic')
     def __getProfiles(self, token):
         rootdir = self.getProfilesDir()
+        print(rootdir)
         for folder, subs, files in os.walk(rootdir):
-        	for filename in files:
-        		filepath = os.path.join(folder, filename)
-        		if filepath.endswith('.xml'):
-        			yield filepath
+            print(folder)
+            for filename in files:
+                filepath = os.path.join(folder, filename)
+                if filepath.endswith('.xml'):
+                    yield filepath
 
     @Log.log
     def __modifyProfiles(self):
         script_path = self.getTmPath().replace('TerminalManager.exe','TMRemote/Scripts/Logger.py')
         count = 0
         if os.path.isfile(script_path):
-            for file in self.__getProfiles():
+            profiles = self.__getProfiles()
+            if profiles == None:
+                return 'Could not find profiles'
+            for file in profiles:
                 if ProfileFixer().enableScript(profilePath=file,
                                                script_path=script_path):
                     count += 1

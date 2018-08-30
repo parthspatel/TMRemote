@@ -32,38 +32,29 @@ class Auth():
 
         def authenticate_and_call(*args, **kwargs):
             def auth_ban_detection():
-                try:
-                    headers = {'User-Agent': 'TMR Bot'}
-                    if level == 'prime':
-                        headers.update(
-                            {'Authorization': 'Bearer {}'.format(args[0].apiKey)})
-                    else:
-                        data = {'username': args[0].getUsername(),
-                                'password': args[0].getPassword()}
+                headers = {'User-Agent': 'TMR Bot'}
+                if level == 'prime':
+                    headers.update(
+                        {'Authorization': 'Bearer {}'.format(args[0].apiKey)}
+                        )
+                else:
+                    data = {'username': args[0].getUsername(),
+                            'password': args[0].getPassword()}
 
-                    link = args[0].links[level_dict[level]]
-                    if 'http' in link.lower():
-                        if level == 'prime':
-                            status = requests.post(link, headers=headers).text
-                        else:
-                            status = requests.post(
-                                link, headers=headers, data=data).text
-                        if not '!DOCTYPE html' in status:
-                            return status
-                    raise Exception('No Link')
-                except Exception as ex:
-                    raise ex
-            try:
-                token = yeah()
-            except Exception as ex:
-                return f'No Internet: {ex}'
-            else:
-                if 'error' in token:
+                link = args[0].links[level_dict[level]]
+                if 'http' in link.lower():
+                    if level == 'prime':
+                        status = requests.post(link, headers=headers).text
+                    else:
+                        status = requests.post(
+                            link, headers=headers, data=data).text
+                    statusCode = status.status_code
+                if statusCode == 401:
                     args[0].sleep_time = 10
-                    return f'{level.capitalize()} Authentication Failed: {token}'
-                args[0].sleep_time = args[0].sleep_time_const
-                return func(token=token,
-                            *args, **kwargs)
+                    return f'{level.capitalize()} Authentication Failed: {statusCode}'
+                elif statusCode != 200:
+                    return f'{level.capitalize()} Authentication Failed: Something went wrong, status code: {statusCode}'
+                return func(token=status, *args, **kwargs)
         return authenticate_and_call
 
     class HardwareID():
