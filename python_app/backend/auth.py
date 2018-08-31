@@ -31,30 +31,41 @@ class Auth():
                       'prime': 'banDetection'}
 
         def authenticate_and_call(*args, **kwargs):
-            def auth_ban_detection():
-                headers = {'User-Agent': 'TMR Bot'}
-                if level == 'prime':
-                    headers.update(
-                        {'Authorization': 'Bearer {}'.format(args[0].apiKey)}
-                        )
-                else:
-                    data = {'username': args[0].getUsername(),
-                            'password': args[0].getPassword()}
+            print('inside authenticate_and_call func')
 
-                link = args[0].links[level_dict[level]]
-                if 'http' in link.lower():
+            def auth_ban_detection():
+                print('inside auth_ban_detection func')
+                try:
+                    headers = {'User-Agent': 'TMR Bot'}
                     if level == 'prime':
-                        status = requests.post(link, headers=headers).text
+                        apiKey = args[0].apiKey()
+                        if 'error' in apiKey.lower():
+                            return f'Authentication Failed API Key Error: {apiKey}'
+                        headers.update(
+                            {'Authorization': 'Bearer {}'.format(apiKey)})
                     else:
-                        status = requests.post(
-                            link, headers=headers, data=data).text
-                    statusCode = status.status_code
-                if statusCode == 401:
-                    args[0].sleep_time = 10
-                    return f'{level.capitalize()} Authentication Failed: {statusCode}'
-                elif statusCode != 200:
-                    return f'{level.capitalize()} Authentication Failed: Something went wrong, status code: {statusCode}'
-                return func(token=status, *args, **kwargs)
+                        data = {'username': args[0].getUsername(),
+                                'password': args[0].getPassword()}
+
+                    link = args[0].links[level_dict[level]]
+                    if 'http' in link.lower():
+                        if level == 'prime':
+                            status = requests.post(link, headers=headers)
+                        else:
+                            status = requests.post(
+                                link, headers=headers, data=data)
+                        statusCode = status.status_code
+                        status = status.text
+                    if statusCode == 401:
+                        args[0].sleep_time = 10
+                        return f'{level.capitalize()} Authentication Failed: {statusCode}'
+                    elif statusCode != 200:
+                        return f'{level.capitalize()} Authentication Failed: Something went wrong, status code: {statusCode}'
+                    return func(token=status, *args, **kwargs)
+                except Exception as ex:
+                    return f'Auth Failed: {ex}'
+
+            return auth_ban_detection()
         return authenticate_and_call
 
     class HardwareID():

@@ -60,6 +60,12 @@ class BanDetectionThread(QThread):
     @Log.log
     def parseBanDetection(self):
         gmStatus = self.__getBanDetection()
+        if not gmStatus:
+            return f'Ban Status Failed Auth: {gmStatus}'
+        if 'error' in gmStatus.lower() or 'fail' in gmStatus.lower():
+            return gmStatus
+
+        print(gmStatus)
         GMLogs = ast.literal_eval(gmStatus)
         if gmStatus.status_code == 401:
             self.banDetectionCheckBox.setEnabled(False)
@@ -70,7 +76,8 @@ class BanDetectionThread(QThread):
                 self.worldCheckBoxes[world].setEnabled(False)
                 self.worldCheckBoxes[world].setToolTip(self.noAccessMessage)
                 self.worldCheckBoxes[world].setState('disabled')
-                self.worldCheckBoxes[world].setStyleSheet(self.checkBoxGreyscale)
+                self.worldCheckBoxes[world].setStyleSheet(
+                    self.checkBoxGreyscale)
             self.banDetectionCheckBox.setStyleSheet(self.checkBoxGreyscale)
             return GMLogs
         if not self.banDetectionCheckBox.isEnabled():
@@ -89,15 +96,16 @@ class BanDetectionThread(QThread):
             for world in GMLogs:
                 if GMLogs[world]['status'] != self.prevBanDetection.get(world):
                     self.worldCheckBoxes[world.lower()].setState(
-                    GMLogs[world])
-
+                        GMLogs[world])
 
         gm_status = []
         for world in GMLogs:
             if GMLogs[world]['status'] != self.prevBanDetection.get(world):
-                self.worldCheckBoxes[world.lower()].setState(GMLogs[world]['status'])
+                self.worldCheckBoxes[world.lower()].setState(
+                    GMLogs[world]['status'])
 
-                gm_status.append('BD Status: {} in {}'.format(GMLogs[world]['status'], GMLogs[world]['name']))
+                gm_status.append('BD Status: {} in {}'.format(
+                    GMLogs[world]['status'], GMLogs[world]['name']))
                 self.prevBanDetection[world] = GMLogs[world]['status']
 
         try:

@@ -10,14 +10,13 @@ from PyQt5.QtWidgets import *
 from backend.auth import Auth
 from backend.banDetection import BanDetectionThread
 from backend.botLogging import BotLoggingThread
-from backend.tmLogging import TMLoggingThread
-from backend.worldCheckboxStatus import WorldCheckBoxThread
+from backend.downloadScripts import downloadUpdates
+from backend.log import Log
 from backend.maintenance import MaintenanceCheckThread
 from backend.profileManager import profileThread
-from backend.downloadScripts import downloadUpdates
 from backend.setStartup import setStartupThread
-
-from backend.log import Log
+from backend.tmLogging import TMLoggingThread
+from backend.worldCheckboxStatus import WorldCheckBoxThread
 
 
 def getCurrentPath():
@@ -35,10 +34,7 @@ class MainThread(QThread):
 
         self.getUsername = username
         self.getPassword = password
-        try:
-            self.apiKey = self.__getApiKey()
-        except:
-            self.apiKey = '0'
+        self.apiKey = self.__getApiKey
 
         self.getProfilesDir = profilesDir
         self.getTmPath = tmPath
@@ -118,22 +114,6 @@ class MainThread(QThread):
                                                  logs=self.logs,
                                                  links=self.links)
 
-    @Log.log
-    def __filePathCheck(self):
-        if self.getTmPath() == None:
-            return 'Terminal Manager path is not defined, please select this in settings'
-        elif self.getProfilesDir() == None:
-            return 'Profiles directory is not defined, please select this in settings'
-        return True
-
-    def __getApiKey(self):
-        headers = {'User-Agent': 'TMR Bot'}
-        data = {'username': self.getUsername(),
-                'password': self.getPassword()}
-        token = ast.literal_eval(requests.post(
-            'https://beta.tmremote.io/api/login', headers=headers, data=data).text)['token']
-        return token
-
     def __del__(self):
         try:
             self.banDetectionThread.quit()
@@ -146,16 +126,36 @@ class MainThread(QThread):
             self.setStartupThread.quit()
         except:
             pass
-        self.wait()
+        finally:
+            self.wait()
+
+    @Log.log
+    def __filePathCheck(self):
+        if not self.getTmPath():
+            return 'Terminal Manager path is not defined, please select this in settings'
+        elif not self.getProfilesDir():
+            return 'Profiles directory is not defined, please select this in settings'
+
+    def __getApiKey(self):
+        headers = {'User-Agent': 'TMR Bot'}
+        try:
+            data = {'username': self.getUsername(),
+                    'password': self.getPassword()}
+        except:
+            return 'API Key Error: No username or password'
+
+        token = ast.literal_eval(requests.post(
+            'https://beta.tmremote.io/api/login', headers=headers, data=data).text)['token']
+        return token
 
     def run(self):
-        if self.__filePathCheck():
+        if not self.__filePathCheck():
             self.sleep_time = 1
             # self.versionCheckThread.start()
             self.banDetectionThread.start()
             # self.botLoggingThread.start()
             # self.tmLoggingThread.start()
-            self.WorldCheckboxThread.start()
+            # self.WorldCheckboxThread.start()
             # self.MaintenanceCheckThread.start()
             self.profileThread.start()
             self.setStartupThread.start()
