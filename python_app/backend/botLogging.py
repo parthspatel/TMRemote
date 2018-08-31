@@ -45,7 +45,7 @@ class BotLoggingThread(QThread):
             try:
                 if not 'disconnect' in logs[index]:
                     if not logs[index]['IGN'] in PostedPreviously:
-                        data = {'key': self.apiKey,
+                        data = {'key': self.apiKey(),
                                 'name': self.getUsername(),
                                 'HWID': self.HWID,
                                 'server': 'GMS',

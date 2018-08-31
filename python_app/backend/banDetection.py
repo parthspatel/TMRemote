@@ -65,9 +65,8 @@ class BanDetectionThread(QThread):
         if 'error' in gmStatus.lower() or 'fail' in gmStatus.lower():
             return gmStatus
 
-        print(gmStatus)
         GMLogs = ast.literal_eval(gmStatus)
-        if gmStatus.status_code == 401:
+        if 'unauthorized' in gmStatus.lower():
             self.banDetectionCheckBox.setEnabled(False)
             self.banDetectionCheckBox.setToolTip(self.noAccessMessage)
             self.allWorldsCheckBox.setEnabled(False)
@@ -93,20 +92,20 @@ class BanDetectionThread(QThread):
                                                                    border-radius: 10px;
                                                                    border: 2px solid grey;} ''')
 
-            for world in GMLogs:
-                if GMLogs[world]['status'] != self.prevBanDetection.get(world):
+            for world in GMLogs['worlds']:
+                if GMLogs['worlds'][world]['status'] != self.prevBanDetection.get(world):
                     self.worldCheckBoxes[world.lower()].setState(
-                        GMLogs[world])
+                        GMLogs['worlds'][world]['status'])
 
         gm_status = []
-        for world in GMLogs:
-            if GMLogs[world]['status'] != self.prevBanDetection.get(world):
+        for world in GMLogs['worlds']:
+            if GMLogs['worlds'][world]['status'] != self.prevBanDetection.get(world):
                 self.worldCheckBoxes[world.lower()].setState(
-                    GMLogs[world]['status'])
+                    GMLogs['worlds'][world]['status'])
 
                 gm_status.append('BD Status: {} in {}'.format(
-                    GMLogs[world]['status'], GMLogs[world]['name']))
-                self.prevBanDetection[world] = GMLogs[world]['status']
+                    GMLogs['worlds'][world]['status'], GMLogs['worlds'][world]['name']))
+                self.prevBanDetection[world] = GMLogs['worlds'][world]['status']
 
         try:
             if self.__getTMRemoteFolder():

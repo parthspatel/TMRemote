@@ -37,7 +37,7 @@ class MaintenanceCheckThread(QThread):
 
     @Auth.authenticate(level='basic')
     def __getMaintenanceStatus(self, token):
-        data = {'key': self.apiKey,
+        data = {'key': self.apiKey(),
                 'name': self.getUsername()}
         maintenanceStatus = requests.post(self.links['MaintenanceCheck'], data=data).text
         return bool(maintenanceStatus)

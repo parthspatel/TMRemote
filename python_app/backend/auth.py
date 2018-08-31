@@ -50,7 +50,7 @@ class Auth():
                     link = args[0].links[level_dict[level]]
                     if 'http' in link.lower():
                         if level == 'prime':
-                            status = requests.post(link, headers=headers)
+                            status = requests.get(link, headers=headers)
                         else:
                             status = requests.post(
                                 link, headers=headers, data=data)

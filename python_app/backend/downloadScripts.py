@@ -30,7 +30,7 @@ class downloadUpdates(QThread):
         self.wait()
 
     def __getCurrentScriptVersion(self):
-        data = {'key': self.apiKey,
+        data = {'key': self.apiKey(),
                 'name': self.getUsername()}
         scriptVersion = int(requests.post(self.links['ScriptVersion'], data=data))
         moduleVersion = int(requests.post(self.links['ModuleVersion'], data=data))
@@ -53,7 +53,7 @@ class downloadUpdates(QThread):
 
 
     def __downloadScript(self):
-        data = {'key': self.apiKey,
+        data = {'key': self.apiKey(),
                 'name': self.getUsername()}
         try:
             urllib.urlretrieve(self.links['ScriptDownload'], scriptsFolder + '/Logger.py')
@@ -62,7 +62,7 @@ class downloadUpdates(QThread):
             return False
 
     def __downloadModule(self):
-        data = {'key': self.apiKey,
+        data = {'key': self.apiKey(),
                 'name': self.getUsername()}
         try:
             urllib.urlretrieve(self.links['ModuleDownload'], scriptsFolder + '/TMRLogger.pyc')

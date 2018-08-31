@@ -17,6 +17,7 @@ from backend.profileManager import profileThread
 from backend.setStartup import setStartupThread
 from backend.tmLogging import TMLoggingThread
 from backend.worldCheckboxStatus import WorldCheckBoxThread
+from backend.apiKey import apiKeyThread
 
 
 def getCurrentPath():
@@ -34,7 +35,8 @@ class MainThread(QThread):
 
         self.getUsername = username
         self.getPassword = password
-        self.apiKey = self.__getApiKey
+        self.token = 'None'
+        self.getApiKey = self.__getApiKey
 
         self.getProfilesDir = profilesDir
         self.getTmPath = tmPath
@@ -59,9 +61,12 @@ class MainThread(QThread):
                       'ScriptVersion': '',
                       'ModuleVersion': ''}
 
+        self.apiKeyThread = apiKeyThread(username=self.getUsername,
+                                         password=self.getPassword)
+
         self.banDetectionThread = BanDetectionThread(username=self.getUsername,
                                                      password=self.getPassword,
-                                                     apikey=self.apiKey,
+                                                     apikey=self.getApiKey,
                                                      tmPath=self.getTmPath,
                                                      banDetectionWidget=self.banDetectionWidget,
                                                      logs=self.logs,
@@ -69,14 +74,14 @@ class MainThread(QThread):
 
         self.botLoggingThread = BotLoggingThread(username=self.getUsername,
                                                  password=self.getPassword,
-                                                 apikey=self.apiKey,
+                                                 apikey=self.getApiKey,
                                                  tmPath=self.getTmPath,
                                                  logs=self.logs,
                                                  links=self.links)
 
         self.tmLoggingThread = TMLoggingThread(username=self.getUsername,
                                                password=self.getPassword,
-                                               apikey=self.apiKey,
+                                               apikey=self.getApiKey,
                                                tmPath=self.getTmPath,
                                                logs=self.logs,
                                                links=self.links)
@@ -86,7 +91,7 @@ class MainThread(QThread):
 
         self.MaintenanceCheckThread = MaintenanceCheckThread(username=self.getUsername,
                                                              password=self.getPassword,
-                                                             apikey=self.apiKey,
+                                                             apikey=self.getApiKey,
                                                              maintenanceWidget=self.maintenanceWidget,
                                                              tmPath=self.getTmPath,
                                                              logs=self.logs,
@@ -94,7 +99,7 @@ class MainThread(QThread):
 
         self.profileThread = profileThread(username=self.getUsername,
                                            password=self.getPassword,
-                                           apikey=self.apiKey,
+                                           apikey=self.getApiKey,
                                            profilesDir=self.getProfilesDir,
                                            tmPath=self.getTmPath,
                                            links=self.links,
@@ -102,14 +107,14 @@ class MainThread(QThread):
 
         self.versionCheckThread = downloadUpdates(username=self.getUsername,
                                                   password=self.getPassword,
-                                                  apikey=self.apiKey,
+                                                  apikey=self.getApiKey,
                                                   tmPath=self.getTmPath,
                                                   logs=self.logs,
                                                   links=self.links)
 
         self.setStartupThread = setStartupThread(username=self.getUsername,
                                                  password=self.getPassword,
-                                                 apikey=self.apiKey,
+                                                 apikey=self.getApiKey,
                                                  tmPath=self.getTmPath,
                                                  logs=self.logs,
                                                  links=self.links)
@@ -117,6 +122,7 @@ class MainThread(QThread):
     def __del__(self):
         try:
             self.banDetectionThread.quit()
+            self.apiKeyThread.quit()
             self.botLoggingThread.quit()
             self.tmLoggingThread.quit()
             self.WorldCheckboxThread.quit()
@@ -129,6 +135,9 @@ class MainThread(QThread):
         finally:
             self.wait()
 
+    def __getApiKey(self):
+        return 'token'
+
     @Log.log
     def __filePathCheck(self):
         if not self.getTmPath():
@@ -136,21 +145,10 @@ class MainThread(QThread):
         elif not self.getProfilesDir():
             return 'Profiles directory is not defined, please select this in settings'
 
-    def __getApiKey(self):
-        headers = {'User-Agent': 'TMR Bot'}
-        try:
-            data = {'username': self.getUsername(),
-                    'password': self.getPassword()}
-        except:
-            return 'API Key Error: No username or password'
-
-        token = ast.literal_eval(requests.post(
-            'https://beta.tmremote.io/api/login', headers=headers, data=data).text)['token']
-        return token
-
     def run(self):
         if not self.__filePathCheck():
             self.sleep_time = 1
+            self.apiKeyThread.start()
             # self.versionCheckThread.start()
             self.banDetectionThread.start()
             # self.botLoggingThread.start()

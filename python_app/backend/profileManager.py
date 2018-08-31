@@ -38,12 +38,11 @@ class profileThread(QThread):
     @Auth.authenticate(level='basic')
     def __getProfiles(self, token):
         rootdir = self.getProfilesDir()
-        print(rootdir)
         for folder, subs, files in os.walk(rootdir):
-            print(folder)
             for filename in files:
                 filepath = os.path.join(folder, filename)
                 if filepath.endswith('.xml'):
+                    print(filepath)
                     yield filepath
 
     @Log.log
