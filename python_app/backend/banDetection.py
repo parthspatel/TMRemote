@@ -130,4 +130,4 @@ class BanDetectionThread(QThread):
             if self.__isEnabled():
                 self.parseBanDetection()
 
-            # self.sleep(self.sleep_time)
+            self.sleep(self.sleep_time)
