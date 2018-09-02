@@ -68,8 +68,8 @@ class Settings(QMainWindow):
     def getPassword(self):
         return self.loginWidget.getPassword()
 
-    def getAPIKey(self):
-        return self.loginWidget.getAPIKey()
+    # def getAPIKey(self):
+    #     return self.loginWidget.getAPIKey()
 
     def getProfileDir(self):
         return self.fileDirWidget.getProfileDir()
@@ -85,9 +85,9 @@ class Settings(QMainWindow):
         self.loginWidget.setPassword(password)
         self.update()
 
-    def setAPIKey(self, ApiKey):
-        self.loginWidget.setAPIKey(ApiKey)
-        self.update()
+    # def setAPIKey(self, ApiKey):
+    #     self.loginWidget.setAPIKey(ApiKey)
+    #     self.update()
 
     def setProfileDir(self, dir):
         self.fileDirWidget.setProfileDir(dir)
@@ -122,14 +122,14 @@ class _LoginWidget(QWidget):
         self.__password.setEchoMode(QLineEdit.Password)
         self.__password.setFixedHeight(Magic.HEIGHT)
 
-        # APIKey
-        APIKeyLabel = QLabel(self)
-        APIKeyLabel.setText('API Key:')
-
-        self.__APIKey = QLineEdit(self)
-        self.__APIKey.setPlaceholderText('Enter API Key')
-        self.__APIKey.setEchoMode(QLineEdit.Password)
-        self.__APIKey.setFixedHeight(Magic.HEIGHT)
+        # # APIKey
+        # APIKeyLabel = QLabel(self)
+        # APIKeyLabel.setText('API Key:')
+        #
+        # self.__APIKey = QLineEdit(self)
+        # self.__APIKey.setPlaceholderText('Enter API Key')
+        # self.__APIKey.setEchoMode(QLineEdit.Password)
+        # self.__APIKey.setFixedHeight(Magic.HEIGHT)
 
         grid = QGridLayout()
         grid.setSpacing(Magic.GRID_SPACE)
@@ -140,8 +140,8 @@ class _LoginWidget(QWidget):
         grid.addWidget(passwordLabel, 2, 0)
         grid.addWidget(self.__password, 2, 1)
 
-        grid.addWidget(APIKeyLabel, 3, 0)
-        grid.addWidget(self.__APIKey, 3, 1)
+        # grid.addWidget(APIKeyLabel, 3, 0)
+        # grid.addWidget(self.__APIKey, 3, 1)
 
         self.setLayout(grid)
 
@@ -151,8 +151,8 @@ class _LoginWidget(QWidget):
     def getPassword(self):
         return self.__password.text()
 
-    def getAPIKey(self):
-        return self.__APIKey.text()
+    # def getAPIKey(self):
+    #     return self.__APIKey.text()
 
     def setUsername(self, username):
         self.__username.setText(username)
@@ -162,9 +162,9 @@ class _LoginWidget(QWidget):
         self.__password.setText(password)
         self.update()
 
-    def setAPIKey(self, ApiKey):
-        self.__APIKey.setText(ApiKey)
-        self.update()
+    # def setAPIKey(self, ApiKey):
+    #     self.__APIKey.setText(ApiKey)
+    #     self.update()
 
 
 class _FileDirWidget(QWidget):

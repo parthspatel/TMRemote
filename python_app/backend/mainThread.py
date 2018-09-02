@@ -7,6 +7,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
+from backend.apiKey import apiKeyThread
 from backend.auth import Auth
 from backend.banDetection import BanDetectionThread
 from backend.botLogging import BotLoggingThread
@@ -17,7 +18,6 @@ from backend.profileManager import profileThread
 from backend.setStartup import setStartupThread
 from backend.tmLogging import TMLoggingThread
 from backend.worldCheckboxStatus import WorldCheckBoxThread
-from backend.apiKey import apiKeyThread
 
 
 def getCurrentPath():
@@ -35,8 +35,7 @@ class MainThread(QThread):
 
         self.getUsername = username
         self.getPassword = password
-        self.token = 'None'
-        self.getApiKey = self.__getApiKey
+        self.getApiKey = apikey
 
         self.getProfilesDir = profilesDir
         self.getTmPath = tmPath
@@ -148,7 +147,7 @@ class MainThread(QThread):
     def run(self):
         if not self.__filePathCheck():
             self.sleep_time = 1
-            self.apiKeyThread.start()
+            # self.apiKeyThread.start()
             # self.versionCheckThread.start()
             self.banDetectionThread.start()
             # self.botLoggingThread.start()

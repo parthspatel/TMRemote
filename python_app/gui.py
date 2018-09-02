@@ -28,7 +28,7 @@ class TMRemote(QMainWindow):
 
         self.thread = MainThread(username=self.settingsWindow.getUsername,
                                  password=self.settingsWindow.getPassword,
-                                 apikey=self.settingsWindow.getAPIKey,
+                                 apikey=self.getAPIKey,
                                  profilesDir=self.settingsWindow.getProfileDir,
                                  tmPath=self.settingsWindow.getTMPath,
                                  banDetectionWidget=self.banDetectionWidget,
@@ -63,6 +63,8 @@ class TMRemote(QMainWindow):
         self.maintenanceWidget = Widgets.Maintenance()
         self.banDetectionWidget = Widgets.BanDetection()
         self.tmrLoggingWidget = Widgets.TMRLogging()
+
+        self.setAPIKey()
 
         self.__initTabs()
 
@@ -154,6 +156,13 @@ class TMRemote(QMainWindow):
         mainBox.addWidget(tabWidget)
         centralWidget.setLayout(mainBox)
 
+    def setAPIKey(self, key=''):
+        self.apiKey = key
+        self.update()
+
+    def getAPIKey(self):
+        return self.apiKey
+
     def startEvent(self):
         self.__readAndApplySettings()
         # self.__startTerminalManager()
@@ -199,10 +208,10 @@ class TMRemote(QMainWindow):
             settings.value('username'))
         self.settingsWindow.setPassword(
             settings.value('password'))
-        self.settingsWindow.setAPIKey(settings.value('apikey'))
         self.settingsWindow.setProfileDir(settings.value('profileDir'))
-
         self.settingsWindow.setTMPath(settings.value('tmPath'))
+
+        self.setAPIKey(settings.value('apikey'))
 
         for world in Magic.WORLDS:
             checked = False if None is settings.value(
@@ -238,7 +247,7 @@ class TMRemote(QMainWindow):
 
         vars = {'username': self.settingsWindow.getUsername(),
                 'password': self.settingsWindow.getPassword(),
-                'apikey': self.settingsWindow.getAPIKey(),
+                'apikey': self.getAPIKey(),
                 'profileDir': self.settingsWindow.getProfileDir(),
                 'tmPath': self.settingsWindow.getTMPath(),
                 'banDetection': bool(self.banDetectionWidget.banDetectionCheckBox.isChecked()),

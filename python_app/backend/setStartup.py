@@ -1,18 +1,16 @@
+import os
+import subprocess
+import sys
+from winreg import *
+
+import psutil
+import requests
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
 from backend.auth import Auth
 from backend.log import Log
-
-import requests
-import os
-import sys
-import subprocess
-
-from winreg import *
-
-import psutil
 
 
 class setStartupThread(QThread):
@@ -27,7 +25,7 @@ class setStartupThread(QThread):
         self.logs = logs
         self.links = links
 
-        self.setStartup = False
+        self.setStartup = True
 
         self.processName = 'terminalmanager.exe'
 

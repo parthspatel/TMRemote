@@ -30,9 +30,9 @@ class apiKeyThread(QThread):
         try:
             token = ast.literal_eval(requests.post(
                 'https://beta.tmremote.io/api/login', headers=headers, data=data).text)['token']
+            return token
         except:
-            pass
-        return token
+            return 'API Key Error: Could not get token'
 
     def run(self):
         while True:
