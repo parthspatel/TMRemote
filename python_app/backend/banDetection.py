@@ -84,13 +84,14 @@ class BanDetectionThread(QThread):
             self.allWorldsCheckBox.setEnabled(True)
             self.banDetectionCheckBox.setStyleSheet('''
                                    QCheckBox:indicator {width: 20px; height: 20px;}
-                                   QCheckBox:indicator:checked { background-color: #EB5202;
+                                   QCheckBox:indicator:checked { background-color: #2ecc71;
                                                                  border-color: black;
                                                                  border-radius: 10px;
                                                                  border: 2px solid black;}
                                    QCheckBox:indicator:unchecked { background-color: #DEE2E6;
                                                                    border-radius: 10px;
                                                                    border: 2px solid grey;} ''')
+            # background-color: #EB5202;
 
             for world in GMLogs['worlds']:
                 if GMLogs['worlds'][world]['status'] != self.prevBanDetection.get(world):
@@ -125,7 +126,8 @@ class BanDetectionThread(QThread):
 
     def run(self):
         while True:
+            # print(self.apiKey())
             if self.__isEnabled():
                 self.parseBanDetection()
 
-            self.sleep(self.sleep_time)
+            # self.sleep(self.sleep_time)

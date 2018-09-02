@@ -35,7 +35,10 @@ class MainThread(QThread):
 
         self.getUsername = username
         self.getPassword = password
-        self.getApiKey = apikey
+        self.getApiKey = apikey['get']
+        self.setApiKey = apikey['set']
+
+        self.setApiKey(self.__getApiKey())
 
         self.getProfilesDir = profilesDir
         self.getTmPath = tmPath
@@ -61,7 +64,9 @@ class MainThread(QThread):
                       'ModuleVersion': ''}
 
         self.apiKeyThread = apiKeyThread(username=self.getUsername,
-                                         password=self.getPassword)
+                                         password=self.getPassword,
+                                         setApiKey=self.setApiKey,
+                                         getApiKey=self.getApiKey)
 
         self.banDetectionThread = BanDetectionThread(username=self.getUsername,
                                                      password=self.getPassword,
@@ -134,9 +139,6 @@ class MainThread(QThread):
         finally:
             self.wait()
 
-    def __getApiKey(self):
-        return 'token'
-
     @Log.log
     def __filePathCheck(self):
         if not self.getTmPath():
@@ -144,10 +146,24 @@ class MainThread(QThread):
         elif not self.getProfilesDir():
             return 'Profiles directory is not defined, please select this in settings'
 
+    def __getApiKey(self):
+        headers = {'User-Agent': 'TMR Bot'}
+        try:
+            data = {'username': self.getUsername(),
+                    'password': self.getPassword()}
+        except:
+            return 'API Key Error: No username or password'
+        try:
+            token = ast.literal_eval(requests.post(
+                'https://beta.tmremote.io/api/login', headers=headers, data=data).text)['token']
+            return token
+        except Exception as ex:
+            return f'API Key Error: Token request failed with {ex}'
+
     def run(self):
         if not self.__filePathCheck():
             self.sleep_time = 1
-            # self.apiKeyThread.start()
+            self.apiKeyThread.start()
             # self.versionCheckThread.start()
             self.banDetectionThread.start()
             # self.botLoggingThread.start()

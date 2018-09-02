@@ -31,16 +31,14 @@ class Auth():
                       'prime': 'banDetection'}
 
         def authenticate_and_call(*args, **kwargs):
-            print('inside authenticate_and_call func')
 
             def auth_ban_detection():
-                print('inside auth_ban_detection func')
                 try:
                     headers = {'User-Agent': 'TMR Bot'}
                     if level == 'prime':
                         apiKey = args[0].apiKey()
                         if 'error' in apiKey.lower():
-                            return f'Authentication Failed API Key Error: {apiKey}'
+                            return f'Authentication Failed: {apiKey}'
                         headers.update(
                             {'Authorization': 'Bearer {}'.format(apiKey)})
                     else:
@@ -57,7 +55,7 @@ class Auth():
                         statusCode = status.status_code
                         status = status.text
                     if statusCode == 401:
-                        args[0].sleep_time = 10
+                        args[0].sleep_time = 60
                         return f'{level.capitalize()} Authentication Failed: {statusCode}'
                     elif statusCode != 200:
                         return f'{level.capitalize()} Authentication Failed: Something went wrong, status code: {statusCode}'

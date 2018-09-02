@@ -28,7 +28,8 @@ class TMRemote(QMainWindow):
 
         self.thread = MainThread(username=self.settingsWindow.getUsername,
                                  password=self.settingsWindow.getPassword,
-                                 apikey=self.getAPIKey,
+                                 apikey={'get': self.getAPIKey,
+                                         'set': self.setAPIKey},
                                  profilesDir=self.settingsWindow.getProfileDir,
                                  tmPath=self.settingsWindow.getTMPath,
                                  banDetectionWidget=self.banDetectionWidget,

@@ -36,7 +36,8 @@ class Widgets(object):
             self.restartCheckBox = QCheckBox('Restart PC', self)
 
             self.startBotsCheckBox = QCheckBox('Start bots', self)
-            self.startBotsCheckBox.setToolTip('''Requires auto restart checkbox to be ticked in TerminalManager, starts bots with checkbox ticked after maintenance, restart PC cannot be ticked.''')
+            self.startBotsCheckBox.setToolTip(
+                '''Requires auto restart checkbox to be ticked in TerminalManager, starts bots with checkbox ticked after maintenance, restart PC cannot be ticked.''')
 
             grid = QGridLayout()
             grid.setSpacing(1)
@@ -63,11 +64,15 @@ class Widgets(object):
                 if 'off' in state:
                     self.setStyleSheet('''
                         QCheckBox:indicator { width: 20px; height: 20px; }
-                        QCheckBox:indicator:checked { background-color: #E64C3C;
+                        QCheckBox:indicator:checked { background: qlineargradient(x1:1, y1:0, x2:0, y2:1,
+                                                                  stop:0 rgba(220, 220, 220, 100),
+                                                                  stop:1 rgba(69.8, 75.3, 80, 100));
                                                       border-color: black;
                                                       border-radius: 10px;
                                                       border: 2px solid black; }
-                        QCheckBox:indicator:unchecked { background-color: #E64C3C;
+                        QCheckBox:indicator:unchecked { background: qlineargradient(x1:0, y1:0, x2:1, y2:1,
+                                                                  stop:0 rgba(220, 220, 220, 50),
+                                                                  stop:1 rgba(69.8, 75.3, 80, 50));
                                                         border-radius: 10px;
                                                         border: 2px solid grey;
                                                         opacity: 127 } ''')
@@ -75,11 +80,16 @@ class Widgets(object):
                 elif 'on' in state:
                     self.setStyleSheet('''
                         QCheckBox:indicator { width: 20px; height: 20px; }
-                        QCheckBox:indicator:checked { background-color: #EFE4F2;
+                        QCheckBox:indicator:checked { background: qlineargradient(x1:1, y1:0, x2:0, y2:1,
+                                                                  stop:1 rgb(237, 56, 42),
+                                                                  stop:0 rgb(255, 153, 0));
+
                                                       border-color: black;
                                                       border-radius: 10px;
                                                       border: 2px solid black; }
-                        QCheckBox:indicator:unchecked { background-color: #EFE4F2;
+                        QCheckBox:indicator:unchecked { background: qlineargradient(x1:0, y1:0, x2:1, y2:1,
+                                                                  stop:1 rgba(237, 56, 42, 100),
+                                                                  stop:0 rgba(255, 153, 0, 100));
                                                         border-radius: 10px;
                                                         border: 2px solid grey;
                                                         opacity: 127 } ''')
@@ -87,11 +97,15 @@ class Widgets(object):
                 elif 'maint' in state:
                     self.setStyleSheet('''
                         QCheckBox:indicator { width: 20px; height: 20px; }
-                        QCheckBox:indicator:checked { background-color: #F0C419;
+                        QCheckBox:indicator:checked { background: qlineargradient(x1:1, y1:0, x2:0, y2:1,
+                                                                  stop:0 rgba(255, 240, 36, 225),
+                                                                  stop:1 rgba(235, 164, 164, 225));
                                                       border-color: black;
                                                       border-radius: 10px;
                                                       border: 2px solid black; }
-                        QCheckBox:indicator:unchecked { background-color: #F0C419;
+                        QCheckBox:indicator:unchecked { background: qlineargradient(x1:1, y1:0, x2:0, y2:1,
+                                                                  stop:0 rgba(255, 240, 36, 100),
+                                                                  stop:1 rgba(235, 164, 164, 100));
                                                         border-radius: 10px;
                                                         border: 2px solid grey;
                                                         opacity: 127 } ''')
