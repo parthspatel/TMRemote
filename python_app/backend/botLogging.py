@@ -22,7 +22,7 @@ class BotLoggingThread(QThread):
         self.logs = logs
         self.links = links
 
-        self.sleep_time = 30
+        self.sleep_time = 60
         self.sleep_time_const = self.sleep_time
 
         self.HWID = Auth.HardwareID().asStr()  # Error

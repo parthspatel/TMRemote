@@ -1,13 +1,16 @@
+import os
+
+import requests
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
 from backend.auth import Auth
 from backend.log import Log
+
 # from backend.clientLauncher import ClientLauncher
 
-import requests
-import os
+
 
 class MaintenanceCheckThread(QThread):
     def __init__(self, username, password, apikey, tmPath, maintenanceWidget, logs, links):
@@ -29,7 +32,7 @@ class MaintenanceCheckThread(QThread):
         self.notified = False
         self.maintenance = False
 
-        self.sleep_time= 5
+        self.sleep_time = 60
         self.sleep_time_const = self.sleep_time
 
     def __del__(self):
@@ -39,7 +42,8 @@ class MaintenanceCheckThread(QThread):
     def __getMaintenanceStatus(self, token):
         data = {'key': self.apiKey(),
                 'name': self.getUsername()}
-        maintenanceStatus = requests.post(self.links['MaintenanceCheck'], data=data).text
+        maintenanceStatus = requests.post(
+            self.links['MaintenanceCheck'], data=data).text
         return bool(maintenanceStatus)
 
     @Log.log
@@ -48,11 +52,11 @@ class MaintenanceCheckThread(QThread):
             self.maintenance = True
             if self.restartCheckBox.isChecked():
                 # os.system('shutdown -r -f -t 0') uncommen in live version
-                return 'Restarting pc' #remove in live version
+                return 'Restarting pc'  # remove in live version
             elif self.crashCheckBox.isChecked():
                 # os.system('Taskkill -IM TerminalManager.exe -F') uncomment in live
                 # os.system('Taskkill -IM Maplestory.exe -F')
-                return 'Killing maple' #remove in live version
+                return 'Killing maple'  # remove in live version
                 return 'Terminated Manager and Maplestory instances'
             else:
                 if not self.notified:

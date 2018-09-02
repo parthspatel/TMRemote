@@ -29,7 +29,7 @@ class profileThread(QThread):
 
         self.logs = logs
 
-        self.sleep_time = 30
+        self.sleep_time = 60
         self.sleep_time_const = self.sleep_time
 
     def __del__(self):

@@ -11,6 +11,7 @@ from PyQt5.QtWidgets import *
 from backend.auth import Auth
 from backend.log import Log
 
+
 class downloadUpdates(QThread):
     def __init__(self, username, password, apikey, tmPath, logs, links):
         QThread.__init__(self)
@@ -24,7 +25,7 @@ class downloadUpdates(QThread):
         self.links = links
 
         self.sleep_time = 600
-        self.sleep_time_const = 30
+        self.sleep_time_const = 60
 
     def __del__(self):
         self.wait()
@@ -32,8 +33,10 @@ class downloadUpdates(QThread):
     def __getCurrentScriptVersion(self):
         data = {'key': self.apiKey(),
                 'name': self.getUsername()}
-        scriptVersion = int(requests.post(self.links['ScriptVersion'], data=data))
-        moduleVersion = int(requests.post(self.links['ModuleVersion'], data=data))
+        scriptVersion = int(requests.post(
+            self.links['ScriptVersion'], data=data))
+        moduleVersion = int(requests.post(
+            self.links['ModuleVersion'], data=data))
         versionDict = {'scriptVersion': scriptVersion,
                        'moduleVersion': moduleVersion}
         return versionDict
@@ -51,12 +54,12 @@ class downloadUpdates(QThread):
         self.__downloadScript(path=scriptsFolder)
         self.__downloadModule(path=scriptsFolder)
 
-
     def __downloadScript(self):
         data = {'key': self.apiKey(),
                 'name': self.getUsername()}
         try:
-            urllib.urlretrieve(self.links['ScriptDownload'], scriptsFolder + '/Logger.py')
+            urllib.urlretrieve(
+                self.links['ScriptDownload'], scriptsFolder + '/Logger.py')
             return True
         except:
             return False
@@ -65,11 +68,11 @@ class downloadUpdates(QThread):
         data = {'key': self.apiKey(),
                 'name': self.getUsername()}
         try:
-            urllib.urlretrieve(self.links['ModuleDownload'], scriptsFolder + '/TMRLogger.pyc')
+            urllib.urlretrieve(
+                self.links['ModuleDownload'], scriptsFolder + '/TMRLogger.pyc')
             return True
         except:
             return False
-
 
     def run(self):
         while True:
