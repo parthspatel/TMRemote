@@ -10,8 +10,8 @@ from PyQt5.QtWidgets import *
 
 from backend.auth import Auth
 from backend.log import Log
+from backend.profileParser import ProfileManager as ProfileFixer
 
-from backend.profileParser import ProfileManager as ProfileFixer # Because this file is called profileManager
 
 class profileThread(QThread):
 
@@ -29,7 +29,7 @@ class profileThread(QThread):
 
         self.logs = logs
 
-        self.sleep_time = 10
+        self.sleep_time = 60
         self.sleep_time_const = self.sleep_time
 
     def __del__(self):
@@ -47,7 +47,8 @@ class profileThread(QThread):
 
     @Log.log
     def __modifyProfiles(self):
-        script_path = self.getTmPath().replace('TerminalManager.exe','TMRemote/Scripts/Logger.py')
+        script_path = self.getTmPath().replace(
+            'TerminalManager.exe', 'TMRemote/Scripts/Logger.py')
         count = 0
         if os.path.isfile(script_path):
             profiles = self.__getProfiles()
@@ -59,7 +60,6 @@ class profileThread(QThread):
                     count += 1
             if count > 0:
                 return f'Enabled script in {count} XML files'
-
 
     def run(self):
         while True:
