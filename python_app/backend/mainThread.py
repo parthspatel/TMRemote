@@ -56,12 +56,12 @@ class MainThread(QThread):
                       'banPost': '',
                       'tmLog': '',
                       'ExeDownload': '',
-                      'VersionCheck': '',
+                      'VersionCheck': 'https://mehodin.com/execVersion.html',
                       'MaintenanceCheck': '',
                       'ScriptDownload': '',
                       'ModuleDownload': '',
-                      'ScriptVersion': '',
-                      'ModuleVersion': ''}
+                      'ScriptVersion': 'https://mehodin.com/scriptVersion.html',
+                      'ModuleVersion': 'https://mehodin.com/moduleVersion.html'}
 
         self.apiKeyThread = apiKeyThread(username=self.getUsername,
                                          password=self.getPassword,
