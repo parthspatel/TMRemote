@@ -30,8 +30,9 @@ class ProfileManager():
                 enabled_profile = self.__check_profile(profile_path=profilePath,
                                                        script_path=script_path)
                 if type(enabled_profile) is bool:
-                    if enabled_profile:
-                        return enabled_profile
+                    if enabled_profile == 'enabled':
+                        return 'enabled'
+                    return True
                 else:
                     return self.__replace_profile(path=profilePath,
                                                   data=enabled_profile)
@@ -150,7 +151,7 @@ class ProfileManager():
                 q = re.compile('.*<auto>0</auto>.*\n')
                 s2 = q.sub('            <auto>1</auto>\n', s.group())
                 xml_fixed = p.sub(s2, xml_file)
-                return xml_fixed
+                return 'enabled'
             else:
                 p = re.compile(regex_enabled)
                 s = p.search(xml_file)

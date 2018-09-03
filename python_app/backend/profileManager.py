@@ -42,7 +42,6 @@ class profileThread(QThread):
             for filename in files:
                 filepath = os.path.join(folder, filename)
                 if filepath.endswith('.xml'):
-                    print(filepath)
                     yield filepath
 
     @Log.log
@@ -56,7 +55,7 @@ class profileThread(QThread):
                 return 'Could not find profiles'
             for file in profiles:
                 if ProfileFixer().enableScript(profilePath=file,
-                                               script_path=script_path):
+                                               script_path=script_path) == 'enabled':
                     count += 1
             if count > 0:
                 return f'Enabled script in {count} XML files'
