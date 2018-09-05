@@ -1,7 +1,7 @@
 import os
 import pickle
 import sys
-import urllib
+import re
 
 import requests
 from PyQt5.QtCore import *
@@ -22,10 +22,12 @@ class downloadUpdates(QThread):
         self.getTmPath = tmPath
         self.logs = logs
 
+        self.versions = {}
+
         self.links = links
 
-        self.sleep_time = 600
-        self.sleep_time_const = 60
+        self.sleep_time = 10
+        self.sleep_time_const = 10
 
     def __del__(self):
         self.wait()
@@ -33,45 +35,78 @@ class downloadUpdates(QThread):
     def __getCurrentScriptVersion(self):
         data = {'key': self.apiKey(),
                 'name': self.getUsername()}
-        scriptVersion = int(requests.post(
-            self.links['ScriptVersion'], data=data))
-        moduleVersion = int(requests.post(
-            self.links['ModuleVersion'], data=data))
+        scriptVersion = requests.get(
+            self.links['ScriptVersion']).text
+        moduleVersion = requests.get(
+            self.links['ModuleVersion']).text
+        scriptVersion = re.search('<p>(.*)</p>', scriptVersion).group(1)
+        moduleVersion = re.search('<p>(.*)</p>', moduleVersion).group(1)
         versionDict = {'scriptVersion': scriptVersion,
                        'moduleVersion': moduleVersion}
+        self.versions = versionDict
         return versionDict
 
     @Log.log
-    @Auth.authenticate(level='basic')
     def __checkTerminalScripts(self, token):
-        tmPath = self.getTmPath()
-        scriptsFolder = tmPath + '/TMRemote/Scripts'
-        tmRemoteFolder = tmPath + '/TMRemote'
+        tmPath = self.getTmPath().split('TerminalManager.exe')[0]
+        scriptsFolder = tmPath + 'TMRemote/Scripts'
+        tmRemoteFolder = tmPath + 'TMRemote'
         if not os.path.isdir(tmRemoteFolder):
             os.mkdir(tmRemoteFolder)
         if not os.path.isdir(scriptsFolder):
             os.mkdir(scriptsFolder)
-        self.__downloadScript(path=scriptsFolder)
-        self.__downloadModule(path=scriptsFolder)
-
-    def __downloadScript(self):
-        data = {'key': self.apiKey(),
-                'name': self.getUsername()}
+        if not scriptsFolder in sys.path:
+            sys.path.append(scriptsFolder)
         try:
-            urllib.urlretrieve(
-                self.links['ScriptDownload'], scriptsFolder + '/Logger.py')
+            import TMRLogger
+            moduleVersion = TMRLogger.versionCheck().version
+        except ModuleNotFoundError as E:
+            self.__downloadModule()
+            return f'Downloaded Module to folder: {scriptsFolder}'
+        try:
+            import Logger
+            scriptVersion = TMRLogger.versionCheck().version
+        except ModuleNotFoundError:
+            self.__downloadScript()
+            return f'Downloaded Script to folder: {scriptsFolder}'
+        newVersions = {'scriptVersion':1.0, 'moduleVersion':1.0}#self.__getCurrentScriptVersion()
+        if scriptVersion != str(newVersions['scriptVersion']):
+            self.__downloadScript()
+            return f'Downloaded Script to folder: {scriptsFolder}'
+        if moduleVersion != str(newVersions['moduleVersion']):
+            self.__downloadModule()
+            return f'Downloaded Module to folder: {scriptsFolder}'
+
+    @Auth.authenticate(level='basic')
+    def __downloadScript(self):
+        tmPath = self.getTmPath()
+        scriptPath = tmPath.replace('TerminalManager.exe','TMRemote/Scripts/Logger.py')
+        try:
+            scriptContent = requests.get(self.links['ScriptDownload']).text
+            try:
+                os.remove(scriptPath)
+            except FileNotFoundError:
+                pass
+            with open(scriptPath, 'w') as script:
+                script.write(scriptContent)
             return True
-        except:
+        except Exception as e:
             return False
 
+    @Auth.authenticate(level='basic')
     def __downloadModule(self):
-        data = {'key': self.apiKey(),
-                'name': self.getUsername()}
+        tmPath = self.getTmPath()
+        modulePath = tmPath.replace('TerminalManager.exe','TMRemote/Scripts/TMRLogger.pyc')
         try:
-            urllib.urlretrieve(
-                self.links['ModuleDownload'], scriptsFolder + '/TMRLogger.pyc')
+            moduleContent = requests.get(self.links['ModuleDownload']).content
+            try:
+                os.remove(modulePath)
+            except FileNotFoundError:
+                pass
+            with open(modulePath, 'wb+') as moduleFile:
+                moduleFile.write(moduleContent)
             return True
-        except:
+        except Exception as e:
             return False
 
     def run(self):

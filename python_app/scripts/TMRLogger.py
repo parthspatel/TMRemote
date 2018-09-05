@@ -13,7 +13,7 @@ except:
     pass
 class versionCheck():
     def __init__(self):
-        self.version = 1.0
+        self.version = '0.1.1'
 
 class Log(object):
     def __init__(self):

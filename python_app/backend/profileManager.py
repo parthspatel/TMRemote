@@ -44,7 +44,6 @@ class profileThread(QThread):
                 if filepath.endswith('.xml'):
                     yield filepath
 
-    @Log.log
     def __modifyProfiles(self):
         script_path = self.getTmPath().replace(
             'TerminalManager.exe', 'TMRemote/Scripts/Logger.py')

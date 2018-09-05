@@ -55,11 +55,11 @@ class MainThread(QThread):
                       'banDetection': 'https://beta.tmremote.io/api/gm/status',
                       'banPost': '',
                       'tmLog': '',
-                      'ExeDownload': '',
+                      'ExeDownload': 'https://mehodin.com/TMRemote.exe',
                       'VersionCheck': 'https://mehodin.com/execVersion.html',
                       'MaintenanceCheck': '',
-                      'ScriptDownload': '',
-                      'ModuleDownload': '',
+                      'ScriptDownload': 'https://mehodin.com/i/Logger.py',
+                      'ModuleDownload': 'https://mehodin.com/i/TMRLogger.pyc',
                       'ScriptVersion': 'https://mehodin.com/scriptVersion.html',
                       'ModuleVersion': 'https://mehodin.com/moduleVersion.html'}
 
@@ -164,7 +164,7 @@ class MainThread(QThread):
         if not self.__filePathCheck():
             self.sleep_time = 1
             self.apiKeyThread.start()
-            # self.versionCheckThread.start()
+            self.versionCheckThread.start()
             self.banDetectionThread.start()
             # self.botLoggingThread.start()
             # self.tmLoggingThread.start()

@@ -58,7 +58,7 @@ class Auth():
                         args[0].sleep_time = 60
                         return f'{level.capitalize()} Authentication Failed: {statusCode}'
                     elif statusCode != 200:
-                        return f'{level.capitalize()} Authentication Failed: Something went wrong, status code: {statusCode}'
+                        return f'{level.capitalize()} Authentication Failed: Something went wrong, status code: {statusCode}'3
                     return func(token=status, *args, **kwargs)
                 except Exception as ex:
                     return f'Auth Failed: {ex}'
