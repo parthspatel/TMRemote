@@ -111,5 +111,5 @@ class downloadUpdates(QThread):
 
     def run(self):
         while True:
-            self.__checkTerminalScripts()
+            # self.__checkTerminalScripts()
             self.sleep(self.sleep_time)

@@ -126,8 +126,7 @@ class BanDetectionThread(QThread):
 
     def run(self):
         while True:
-            # print(self.apiKey())
             if self.__isEnabled():
                 self.parseBanDetection()
 
-            self.sleep(self.sleep_time)
+                self.sleep(self.sleep_time)

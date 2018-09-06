@@ -2,6 +2,7 @@ import ctypes
 import os
 import sys
 from multiprocessing import Queue
+import requests, re
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -17,6 +18,7 @@ def main():
             None, "runas", sys.executable, getCurrentPath(), None, 1)
 
     app = runApp(TMRemote)
+    exeUpdate(ui)
     # anything after runApp will occur AFTER the application is closed
     closeApp(app)
 
@@ -37,7 +39,24 @@ def isUserAdmin():
         raise AdminStateUnknownError
 
 
+def exeUpdate(application):
+    #                  'ExeDownload': 'https://mehodin.com/TMRemote.exe',
+    version = '0.1'
+    execVersion = requests.get('https://mehodin.com/execVersion.html').text
+    execVersion = re.search('<p>(.*)</p>', execVersion).group(1)
+    if version == execVersion:
+        return
+    application.destroy()
+    execContent = requests.get('https://mehodin.com/i/TMRemote.exe').content
+    print(getCurrentPath() + '\TMRemote.exe')
+    with open(getCurrentPath() + '\TMRemote.exe', 'wb') as file:
+        file.seek(0)
+        file.truncate()
+        file.write(execContent)
+
+
 def runApp(application):
+    global ui
     app = QApplication(sys.argv)
     ui = application()
     ui.show()
@@ -45,11 +64,11 @@ def runApp(application):
 
 
 def closeApp(app):
-    sys.exit(app)
+    pass
 
 
 def setAppUserModel(app_id='TMRemote'):
-      # arbitrary string
+    # arbitrary string
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(app_id)
 
 

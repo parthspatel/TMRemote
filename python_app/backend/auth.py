@@ -41,7 +41,7 @@ class Auth():
                             return f'Authentication Failed: {apiKey}'
                         headers.update(
                             {'Authorization': 'Bearer {}'.format(apiKey)})
-                    else:
+                    elif level == 'basic':
                         data = {'username': args[0].getUsername(),
                                 'password': args[0].getPassword()}
 
@@ -49,7 +49,7 @@ class Auth():
                     if 'http' in link.lower():
                         if level == 'prime':
                             status = requests.get(link, headers=headers)
-                        else:
+                        elif level == 'basic':
                             status = requests.post(
                                 link, headers=headers, data=data)
                         statusCode = status.status_code
@@ -58,7 +58,7 @@ class Auth():
                         args[0].sleep_time = 60
                         return f'{level.capitalize()} Authentication Failed: {statusCode}'
                     elif statusCode != 200:
-                        return f'{level.capitalize()} Authentication Failed: Something went wrong, status code: {statusCode}'3
+                        return f'{level.capitalize()} Authentication Failed: Something went wrong, status code: {statusCode}'
                     return func(token=status, *args, **kwargs)
                 except Exception as ex:
                     return f'Auth Failed: {ex}'
