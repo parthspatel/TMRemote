@@ -55,8 +55,6 @@ class MainThread(QThread):
                       'banDetection': 'https://beta.tmremote.io/api/gm/status',
                       'banPost': '',
                       'tmLog': '',
-                      'ExeDownload': 'https://mehodin.com/TMRemote.exe',
-                      'VersionCheck': 'https://mehodin.com/execVersion.html',
                       'MaintenanceCheck': '',
                       'ScriptDownload': 'https://mehodin.com/i/Logger.py',
                       'ModuleDownload': 'https://mehodin.com/i/TMRLogger.pyc',
