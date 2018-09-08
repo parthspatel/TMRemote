@@ -120,13 +120,17 @@ class Splash(QMainWindow):
         }""")
         self.setWindowFlags(Qt.FramelessWindowHint)
         installPath = QFileDialog.getExistingDirectory(self,"Please select where you would like to install TMRemote")
+        if len(installPath) is 0:
+            sys.exit()
         terminalManager = QFileDialog.getExistingDirectory(self,"Please select where your Terminal Manager folder is")
+        if len(terminalManager) is 0:
+            sys.exit()
         self.progressThread = ThreadProgress(terminalManager, installPath)
         self.progressThread.mysignal.connect(self.progress)
         self.progressThread.start()
 
     def __del__(self):
-        self.progressThread.quit()
+        pass
 
     @pyqtSlot(int)
     def progress(self, i):
