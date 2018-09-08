@@ -7,6 +7,7 @@ import sys
 import time
 import requests
 import zipfile
+from multiprocessing import Queue
 
 screen_size = QApplication(sys.argv)
 screen = screen_size.primaryScreen().availableGeometry()
@@ -153,7 +154,7 @@ def main():
     # window.setAttribute(Qt.WA_TranslucentBackground, True)
 
     # Create image
-    logo = QPixmap('icon.png')
+    logo = QPixmap('icons\icon.png')
 
     # Create label
     label = QLabel(window)
