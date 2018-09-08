@@ -25,7 +25,7 @@ def main():
 
     version = requests.get('https://mehodin.com/execVersion.html').text
     version = re.search('<p>(.*)</p>', version).group(1)
-    if version != '0.1.1':
+    if version != '0.1':
         exeUpdate(app)
     closeApp(app)
 
@@ -108,8 +108,7 @@ class ThreadProgress(QThread):
             f.truncate()
             response = requests.get('http://www.mehodin.com/i/TMRemote.exe', stream=True)
             total_length = response.headers.get('content-length')
-
-            if total_length is None: # no content length header
+            if total_length is None:
                 f.write(response.content)
             else:
                 dl = 0
