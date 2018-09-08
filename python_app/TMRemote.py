@@ -25,7 +25,7 @@ def main():
 
     version = requests.get('https://mehodin.com/execVersion.html').text
     version = re.search('<p>(.*)</p>', version).group(1)
-    if version != '0.0.1':
+    if version != '0.1.1':
         exeUpdate(app)
     closeApp(app)
 
@@ -60,7 +60,7 @@ def exeUpdate(application):
     window.setAttribute(Qt.WA_TranslucentBackground, True)
 
     # Create image
-    logo = QPixmap('icon.png')
+    logo = QPixmap('icons/icon.png')
 
     # Create label
     label = QLabel(window)
@@ -93,7 +93,6 @@ def runApp(application):
 def closeApp(app):
     pass
 
-
 def setAppUserModel(app_id='TMRemote'):
     # arbitrary string
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(app_id)
@@ -103,11 +102,11 @@ class ThreadProgress(QThread):
     def __init__(self, parent=None):
         QThread.__init__(self, parent)
     def run(self):
-        file_name = getCurrentPath() + '\TMRemote.rar'
+        file_name = getCurrentPath() + '\TMRemote.exe'
         with open(file_name, "wb") as f:
             f.seek(0)
             f.truncate()
-            response = requests.get('http://www.mehodin.com/i/source.rar', stream=True)
+            response = requests.get('http://www.mehodin.com/i/TMRemote.exe', stream=True)
             total_length = response.headers.get('content-length')
 
             if total_length is None: # no content length header
@@ -147,11 +146,10 @@ class Splash(QMainWindow):
 
     @pyqtSlot(int)
     def progress(self, i):
-        file_name = getCurrentPath() + '\TMRemote.rar'
+        file_name = getCurrentPath() + '\TMRemote.exe'
         self.progressBar.setValue(i)
         if i >= 100:
-            self.hide()
-            os.startfile(file_name)
+            sys.exit(self)
 
 
 

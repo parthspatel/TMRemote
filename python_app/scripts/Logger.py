@@ -13,5 +13,3 @@ if os.path.isdir(moduleFolder):
 		Log().main()
 	except ImportError as error:
 		pass
-else:
-	os.mkdir(moduleFolder)

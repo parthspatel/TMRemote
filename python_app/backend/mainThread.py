@@ -166,7 +166,7 @@ class MainThread(QThread):
             self.banDetectionThread.start()
             # self.botLoggingThread.start()
             # self.tmLoggingThread.start()
-            # self.WorldCheckboxThread.start()
+            self.WorldCheckboxThread.start()
             # self.MaintenanceCheckThread.start()
             self.profileThread.start()
             self.setStartupThread.start()

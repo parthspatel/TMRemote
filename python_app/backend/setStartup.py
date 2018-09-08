@@ -77,10 +77,8 @@ class setStartupThread(QThread):
             return 'Started Terminal Manager'
 
     def run(self):
-        while True:
-            try:
-                self.__WriteRegistry()
-                self.__startTerminalManager()
-            except:
-                pass
-            self.sleep(self.sleep_time)
+        try:
+            # self.__WriteRegistry()
+            self.__startTerminalManager()
+        except:
+            pass

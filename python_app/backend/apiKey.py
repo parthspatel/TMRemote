@@ -40,5 +40,9 @@ class apiKeyThread(QThread):
     def run(self):
         while True:
             apiKey = self.__getApiKey()
+            if 'failed' in apiKey:
+                self.sleep_time = 60
+            else:
+                self.sleep_time = 3600
             self.setApiKey(apiKey)
             self.sleep(self.sleep_time)

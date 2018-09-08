@@ -26,7 +26,7 @@ class downloadUpdates(QThread):
 
         self.links = links
 
-        self.sleep_time = 10
+        self.sleep_time = 60
         self.sleep_time_const = 10
 
     def __del__(self):
@@ -46,9 +46,10 @@ class downloadUpdates(QThread):
         self.versions = versionDict
         return versionDict
 
-    @Log.log
-    def __checkTerminalScripts(self, token):
+    def __checkTerminalScripts(self):
         tmPath = self.getTmPath().split('TerminalManager.exe')[0]
+        if self.getTmPath() is None:
+            return 'Error: Terminal Manager folder is not selected'
         scriptsFolder = tmPath + 'TMRemote/Scripts'
         tmRemoteFolder = tmPath + 'TMRemote'
         if not os.path.isdir(tmRemoteFolder):
@@ -57,28 +58,28 @@ class downloadUpdates(QThread):
             os.mkdir(scriptsFolder)
         if not scriptsFolder in sys.path:
             sys.path.append(scriptsFolder)
+        moduleChecked = False
+        scriptChecked = False
         try:
             import TMRLogger
             moduleVersion = TMRLogger.versionCheck().version
+            moduleChecked = True
         except ModuleNotFoundError as E:
             self.__downloadModule()
-            return f'Downloaded Module to folder: {scriptsFolder}'
         try:
             import Logger
-            scriptVersion = TMRLogger.versionCheck().version
+            scriptVersion = Logger.versionCheck().version
+            scriptChecked = True
         except ModuleNotFoundError:
             self.__downloadScript()
-            return f'Downloaded Script to folder: {scriptsFolder}'
-        newVersions = {'scriptVersion':1.0, 'moduleVersion':1.0}#self.__getCurrentScriptVersion()
-        if scriptVersion != str(newVersions['scriptVersion']):
+        newVersions = self.__getCurrentScriptVersion()
+        if scriptChecked and scriptVersion != newVersions['scriptVersion']:
             self.__downloadScript()
-            return f'Downloaded Script to folder: {scriptsFolder}'
-        if moduleVersion != str(newVersions['moduleVersion']):
+        if moduleChecked and moduleVersion != newVersions['moduleVersion']:
             self.__downloadModule()
-            return f'Downloaded Module to folder: {scriptsFolder}'
 
     @Auth.authenticate(level='basic')
-    def __downloadScript(self):
+    def __downloadScript(self, token=None):
         tmPath = self.getTmPath()
         scriptPath = tmPath.replace('TerminalManager.exe','TMRemote/Scripts/Logger.py')
         try:
@@ -111,5 +112,5 @@ class downloadUpdates(QThread):
 
     def run(self):
         while True:
-            # self.__checkTerminalScripts()
+            self.__checkTerminalScripts()
             self.sleep(self.sleep_time)

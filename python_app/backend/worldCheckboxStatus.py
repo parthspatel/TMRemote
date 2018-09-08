@@ -12,7 +12,7 @@ class WorldCheckBoxThread(QThread):
         QThread.__init__(self)
         self.worldCheckBoxes = banDetectionWidget.worldCheckBoxes
         self.tmPath = tmPath
-        self.sleep_time = 1
+        self.sleep_time = 10
 
     def __getStatus(self):
         status = {}
@@ -30,6 +30,17 @@ class WorldCheckBoxThread(QThread):
             pass
         except PermissionError:
             pass
+        tmPath = self.tmPath().split('TerminalManager.exe')[0]
+        if self.tmPath() is None:
+            return
+        scriptsFolder = tmPath + 'TMRemote/Scripts'
+        tmRemoteFolder = tmPath + 'TMRemote'
+        if not os.path.isdir(tmRemoteFolder):
+            os.mkdir(tmRemoteFolder)
+        if not os.path.isdir(scriptsFolder):
+            os.mkdir(scriptsFolder)
+        if not os.path.isdir(tmRemoteFolder + '/temp'):
+            os.mkdir(tmRemoteFolder + '/temp')
         with open(self.__getToCheckPath(), 'wb') as toCheckFile:
             pickle.dump(self.__getStatus(), toCheckFile)
 
