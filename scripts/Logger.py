@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, GameState
 
 class versionCheck():
 	def __init__(self):
@@ -10,6 +10,7 @@ if os.path.isdir(moduleFolder):
 		sys.path.append(moduleFolder)
 	try:
 		from TMRLogger import Log
-		Log().main()
+		if GameState.IsInGame():
+			Log().main()
 	except ImportError as error:
 		pass

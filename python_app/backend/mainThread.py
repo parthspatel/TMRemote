@@ -139,9 +139,9 @@ class MainThread(QThread):
 
     @Log.log
     def __filePathCheck(self):
-        if not self.getTmPath():
+        if self.getTmPath() is None:
             return 'Terminal Manager path is not defined, please select this in settings'
-        elif not self.getProfilesDir():
+        elif self.getProfilesDir() is None:
             return 'Profiles directory is not defined, please select this in settings'
 
     def __getApiKey(self):
@@ -159,7 +159,7 @@ class MainThread(QThread):
             return f'API Key Error: Token request failed with {ex}'
 
     def run(self):
-        if not self.__filePathCheck():
+        if self.__filePathCheck() is None:
             self.sleep_time = 1
             self.apiKeyThread.start()
             self.versionCheckThread.start()
