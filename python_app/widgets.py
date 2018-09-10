@@ -8,20 +8,21 @@ from resources.magicNumbers import MagicNumbers as Magic
 
 class Widgets(object):
 
-    class BotLogging(QWidget):
+    class generalSettings(QWidget):
         def __init__(self):
 
             super().__init__()
             self.__initElements()
 
         def __initElements(self):
-            self.botLoggingCheckBox = QCheckBox('Bot Logging', self)
-            self.botLoggingCheckBox.setChecked(True)
+            self.startManagerCheckBox = QCheckBox('Start Manager', self)
+            self.startManagerCheckBox.setToolTip(
+            '''Starts Terminal Manager when TMRemote starts''')
 
             grid = QGridLayout()
             grid.setSpacing(1)
 
-            grid.addWidget(self.botLoggingCheckBox, 0, 0)
+            grid.addWidget(self.startManagerCheckBox, 0, 0)
 
             self.setLayout(grid)
 
