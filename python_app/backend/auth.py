@@ -113,3 +113,31 @@ class Auth():
                 self.__getGpuID2() + self.__getBaseID()
             self.trueHWID = self.trueHWID.replace(' ', '').replace('\r', '')
             return self.__encrypt(self.trueHWID)
+
+class encryption():
+    def __init__(self):
+        pass
+
+    def encrypt(self, key, value):
+        encryptionValue = 0
+        for character in key:
+            encryptionValue += ord(character)
+        encoded = ''
+        for character in string:
+            encryptedCharacter = int(ord(character)) * encryptionValue
+            encoded += str(len(str(encryptedCharacter)))
+            encoded += str(encryptedCharacter)
+        return encoded
+
+    def decrypt(self, key, value):
+        encryptionValue = 0
+        for character in key:
+            encryptionValue += ord(character)
+        unencrypted = ''
+        while len(string) > 0:
+            lenFirst = int(string[0])
+            string = string[int(len(str(lenFirst))):]
+            charToDecrypt = string[slice(0, lenFirst)]
+            string = string[len(charToDecrypt):]
+            unencrypted += chr(int(int(charToDecrypt) // encryptionValue))
+        return unencrypted
