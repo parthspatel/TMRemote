@@ -2,7 +2,7 @@ from discord.ext.commands import Bot
 from discord.ext import commands
 import datetime, asyncio, discord
 
-TOKEN = "NDY5NDkxMDk4OTIyNzc4NjI0.DjIfKw.fSOmMhP22ywX10_3uGdw9YnD7U8"
+TOKEN = "NDg4Nzc4MzU1NDUwMzE0NzUz.DnhJ-w.GxjOCnyQvJhILyYouLc_ebq5Jo8"
 
 bot = commands.Bot(command_prefix = '.',
                    case_insensitive = True)
