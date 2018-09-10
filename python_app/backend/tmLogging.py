@@ -71,7 +71,7 @@ class TMLoggingThread(QThread):
         except Exception as ex:
             raise ex
 
-    @Auth.authenticate(level='basic')
+    @Auth.authenticate(level='tManagerLogs')
     @Log.log
     def __postManagerLogs(self, token):
         try:

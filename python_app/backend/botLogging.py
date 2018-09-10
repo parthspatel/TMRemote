@@ -33,10 +33,11 @@ class BotLoggingThread(QThread):
     def __getTMRemoteFolder(self):
         return self.getTmPath().split('TerminalManager.exe')[0] + 'TMRemote'
 
-    @Auth.authenticate(level='basic')
     @Log.log
-    def __PostLogs(self, logs, token):
-        PostedPreviously = []
+    def __PostLogs(self, logs, token=None):
+        postedPreviously = []
+        headers = {'User-Agent': 'TMR Bot',
+                   'Authorization':'Bearer {}'.format(self.apiKey())}
         if type(logs) is not list:
             return logs
         toPost = {}
@@ -44,21 +45,19 @@ class BotLoggingThread(QThread):
         for index in range(len(logs)):
             try:
                 if not 'disconnect' in logs[index]:
-                    if not logs[index]['IGN'] in PostedPreviously:
-                        data = {'key': self.apiKey(),
-                                'name': self.getUsername(),
-                                'HWID': self.HWID,
-                                'server': 'GMS',
-                                'world_id': logs[index]['World'],
-                                'channel': logs[index]['Channel'],
-                                'character_id': logs[index]['CharID'],
-                                'character': logs[index]['IGN'],
-                                'level': logs[index]['Level'],
-                                'mesos': logs[index]['Meso'],
-                                'nodes': logs[index]['UntradableNodes'] + logs[index]['TradableNodes']}
+                    if not logs[index]['IGN'] in postedPreviously:
+                        data = {'user_id':self.getUsername(),
+                        		'char_id':logs[index]['CharID'],
+                        		'char_name':logs[index]['IGN'],
+                        		'world_id':logs[index]['World'],
+                        		'channel':logs[index]['Channel'],
+                        		'level':logs[index]['Level'],
+                        		'mesos':logs[index]['Meso'],
+                        		'map_id':logs[index]['mapID']}
                         count += 1
                         toPost[str(count)] = data
-                        PreviouslyPosted.append(logs[index]['IGN'])
+                        requests.post(self.links['botLogs'], data = data, headers = headers)
+                        postedPreviously.append(logs[index]['IGN'])
                 else:
                     continue
                     data = {'key': self.apiKey,
@@ -68,14 +67,13 @@ class BotLoggingThread(QThread):
                             'disconnect': logs[index]['disconnect']}
             except Exception as e:
                 return e
+        return #remove if brandon makes it recursive
         if count > 0:
             try:
                 response = requests.post(self.links['botLogs'], data=toPost)
             except Exception as ex:
                 return f'No Internet: {ex}'
-            return f'Posted logs of {count} bots'
 
-    # Get the log values and returns data
     def __getLogs(self):
         try:
             if self.__getTMRemoteFolder():
@@ -85,15 +83,15 @@ class BotLoggingThread(QThread):
                         try:
                             data.append(pickle.load(file))
                         except Exception as ex:
-                            return ex
+                            break
                 os.remove(self.__getTMRemoteFolder() + '/temp/logs')
                 return data
             else:
                 return
         except FileNotFoundError:
-            return 'No logs found'
+            pass
         except PermissionError:
-            return 'TMRemote does not have permissions to read logs'
+            pass
 
     def run(self):
         while True:

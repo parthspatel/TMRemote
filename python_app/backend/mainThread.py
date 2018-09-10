@@ -51,7 +51,7 @@ class MainThread(QThread):
         self.logs = logs
 
         self.links = {'logIn': 'https://beta.tmremote.io/api/login',
-                      'botLogs': 'https://tmremote.io/api/v1/activity',
+                      'botLogs': 'https://beta.tmremote.io/api/bots/log',
                       'banDetection': 'https://beta.tmremote.io/api/gm/status',
                       'banPost': '',
                       'tmLog': '',
@@ -164,7 +164,7 @@ class MainThread(QThread):
             self.apiKeyThread.start()
             self.versionCheckThread.start()
             self.banDetectionThread.start()
-            # self.botLoggingThread.start()
+            self.botLoggingThread.start()
             # self.tmLoggingThread.start()
             self.WorldCheckboxThread.start()
             # self.MaintenanceCheckThread.start()

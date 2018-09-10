@@ -25,7 +25,7 @@ def main():
 
     version = requests.get('https://mehodin.com/execVersion.html').text
     version = re.search('<p>(.*)</p>', version).group(1)
-    if version != '0.1':
+    if version != '0.1.1':
         exeUpdate(app)
     closeApp(app)
 

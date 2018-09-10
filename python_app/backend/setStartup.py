@@ -69,7 +69,6 @@ class setStartupThread(QThread):
         return False
 
     @Log.log
-    @Auth.authenticate(level='basic')
     def __startTerminalManager(self, token):
         if not self.__terminalIsActive():
             process = subprocess.Popen(
