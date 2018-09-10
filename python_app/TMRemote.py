@@ -16,7 +16,6 @@ screen = screen_size.primaryScreen().availableGeometry()
 
 def main():
     if not isUserAdmin():
-        print("> User account does not have admin controls, rerunning with admin controls")
         ctypes.windll.shell32.ShellExecuteW(
             None, "runas", sys.executable, getCurrentPath(), None, 1)
 
@@ -159,6 +158,5 @@ def getCurrentPath():
         dir = os.path.dirname(os.path.realpath(__file__))
     return dir
 
-
-if __name__ == '__main__':
+if __name__.endswith('__main__'):
     main()
