@@ -68,6 +68,9 @@ class Settings(QMainWindow):
     def getPassword(self):
         return self.loginWidget.getPassword()
 
+    def getTextEdits(self):
+        return {'loginWidget': self.loginWidget.getTextEdits()}
+
     # def getAPIKey(self):
     #     return self.loginWidget.getAPIKey()
 
@@ -150,6 +153,10 @@ class _LoginWidget(QWidget):
 
     def getPassword(self):
         return self.__password.text()
+
+    def getTextEdits(self):
+        return {'username': self.__username,
+                'password': self.__password}
 
     # def getAPIKey(self):
     #     return self.__APIKey.text()

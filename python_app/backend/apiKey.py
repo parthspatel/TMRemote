@@ -13,13 +13,15 @@ from backend.log import Log
 
 
 class apiKeyThread(QThread):
-    def __init__(self, username, password, setApiKey, getApiKey):
+    def __init__(self, username, password, setApiKey, getApiKey, textEdits):
         QThread.__init__(self)
         self.getUsername = username
         self.getPassword = password
 
         self.setApiKey = setApiKey
         self.getApiKey = getApiKey
+
+        self.textEdits = textEdits
 
         self.sleep_time = 60
         self.sleep_time_const = self.sleep_time
@@ -41,9 +43,16 @@ class apiKeyThread(QThread):
     def run(self):
         num_failed = 0
         apiKey = self.getApiKey()
+        # apiKey = self.__getApiKey()
         while True:
 
-            if apiKey is '':
+            def getKey(self):
+                apiKey = self.__getApiKey()
+
+            self.textEdits['loginWidget']['username'].connect(
+                self.getKey)
+
+            if not bool(apiKey):
                 apiKey = self.__getApiKey()
 
             if 'error' in apiKey.lower():

@@ -30,7 +30,9 @@ def getCurrentPath():
 
 class MainThread(QThread):
 
-    def __init__(self, username, password, apikey, profilesDir, tmPath, banDetectionWidget, maintenanceWidget, logs, generalSettingsWidget):
+    def __init__(self, username, password, apikey, profilesDir, tmPath,
+                 banDetectionWidget, maintenanceWidget, logs,
+                 generalSettingsWidget, settingsTextEdits):
         QThread.__init__(self)
 
         self.getUsername = username
@@ -66,7 +68,8 @@ class MainThread(QThread):
         self.apiKeyThread = apiKeyThread(username=self.getUsername,
                                          password=self.getPassword,
                                          setApiKey=self.setApiKey,
-                                         getApiKey=self.getApiKey)
+                                         getApiKey=self.getApiKey,
+                                         textEdits=settingsTextEdits)
 
         self.banDetectionThread = BanDetectionThread(username=self.getUsername,
                                                      password=self.getPassword,
