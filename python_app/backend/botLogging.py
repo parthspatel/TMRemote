@@ -55,7 +55,6 @@ class BotLoggingThread(QThread):
                         		'level':logs[index]['Level'],
                         		'mesos':logs[index]['Meso'],
                         		'map_id':logs[index]['mapID']}
-                        print(data)
                         count += 1
                         toPost.append(data)
                         postedPreviously.append(logs[index]['IGN'])

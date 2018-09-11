@@ -32,10 +32,14 @@ class BanDetectionThread(QThread):
 
         self.noAccessMessage = 'Please upgrade your license to gain access to ban detection'
         self.checkBoxGreyscale = '''
-        QCheckBox:indicator { background-color: #DEE2E6;
-                                      border-color: #DEE2E6;
-                                      border-radius: 10px;
-                                      border: 2px solid grey;}'''
+                                   QCheckBox:indicator {width: 20px; height: 20px;}
+                                   QCheckBox:indicator:checked { background-color: #2ecc71;
+                                                                 border-color: black;
+                                                                 border-radius: 10px;
+                                                                 border: 2px solid black;}
+                                   QCheckBox:indicator:unchecked { background-color: #DEE2E6;
+                                                                   border-radius: 10px;
+                                                                   border: 2px solid grey;} '''
 
     def __del__(self):
         self.wait()
@@ -62,11 +66,11 @@ class BanDetectionThread(QThread):
         gmStatus = self.__getBanDetection()
         if not gmStatus:
             return f'Ban Status Failed Auth: {gmStatus}'
-        if 'error' in gmStatus.lower() or 'fail' in gmStatus.lower():
-            return gmStatus
-
-        GMLogs = ast.literal_eval(gmStatus)
-        if 'unauthorized' in gmStatus.lower():
+        try:
+            GMLogs = ast.literal_eval(gmStatus)
+        except SyntaxError:
+            pass
+        if 'fail' in gmStatus.lower():
             self.banDetectionCheckBox.setEnabled(False)
             self.banDetectionCheckBox.setToolTip(self.noAccessMessage)
             self.allWorldsCheckBox.setEnabled(False)
@@ -78,17 +82,17 @@ class BanDetectionThread(QThread):
                 self.worldCheckBoxes[world].setStyleSheet(
                     self.checkBoxGreyscale)
             self.banDetectionCheckBox.setStyleSheet(self.checkBoxGreyscale)
-            return GMLogs
+            return gmStatus
         if not self.banDetectionCheckBox.isEnabled():
             self.banDetectionCheckBox.setEnabled(True)
             self.allWorldsCheckBox.setEnabled(True)
             self.banDetectionCheckBox.setStyleSheet('''
-                                   QCheckBox:indicator {width: 20px; height: 20px;}
-                                   QCheckBox:indicator:checked { background-color: #2ecc71;
+                                   QCheckBox: indicator {width: 20px; height: 20px; }
+                                   QCheckBox: indicator: checked {background-color:  # 2ecc71;
                                                                  border-color: black;
                                                                  border-radius: 10px;
                                                                  border: 2px solid black;}
-                                   QCheckBox:indicator:unchecked { background-color: #DEE2E6;
+                                   QCheckBox: indicator: unchecked {background-color:  # DEE2E6;
                                                                    border-radius: 10px;
                                                                    border: 2px solid grey;} ''')
             # background-color: #EB5202;
