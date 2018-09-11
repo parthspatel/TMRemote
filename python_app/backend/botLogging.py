@@ -1,6 +1,7 @@
 import os
 import pickle
 
+import json
 import requests
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -22,7 +23,7 @@ class BotLoggingThread(QThread):
         self.logs = logs
         self.links = links
 
-        self.sleep_time = 60
+        self.sleep_time = 10
         self.sleep_time_const = self.sleep_time
 
         self.HWID = Auth.HardwareID().asStr()  # Error
@@ -40,7 +41,7 @@ class BotLoggingThread(QThread):
                    'Authorization':'Bearer {}'.format(self.apiKey())}
         if type(logs) is not list:
             return logs
-        toPost = {}
+        toPost = []
         count = 0
         for index in range(len(logs)):
             try:
@@ -54,10 +55,11 @@ class BotLoggingThread(QThread):
                         		'level':logs[index]['Level'],
                         		'mesos':logs[index]['Meso'],
                         		'map_id':logs[index]['mapID']}
+                        print(data)
                         count += 1
-                        toPost[str(count)] = data
-                        requests.post(self.links['botLogs'], data = data, headers = headers)
+                        toPost.append(data)
                         postedPreviously.append(logs[index]['IGN'])
+                        print(toPost)
                 else:
                     continue
                     data = {'key': self.apiKey,
@@ -67,12 +69,11 @@ class BotLoggingThread(QThread):
                             'disconnect': logs[index]['disconnect']}
             except Exception as e:
                 return e
-        return #remove if brandon makes it recursive
         if count > 0:
-            try:
-                response = requests.post(self.links['botLogs'], data=toPost)
-            except Exception as ex:
-                return f'No Internet: {ex}'
+            # try:
+            response = requests.post(self.links['botLogs'], headers=headers,data=toPost)
+            # except Exception as ex:
+            #     return f'No Internet: {ex}'
 
     def __getLogs(self):
         try:
@@ -91,6 +92,8 @@ class BotLoggingThread(QThread):
         except FileNotFoundError:
             pass
         except PermissionError:
+            pass
+        except ValueError:
             pass
 
     def run(self):
