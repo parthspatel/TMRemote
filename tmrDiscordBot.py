@@ -18,7 +18,7 @@ async def on_ready():
 
 @bot.event
 async def on_member_join(member):
-	WelcomeChannel = bot.get_channel("469488895449366530")
+	WelcomeChannel = bot.get_channel(469488895449366530)
 	await welcomeChannel.send_message("Welcome to Terminal Manager Remote. " + member.mention)
 
 @commands.has_permissions(administrator=True)
