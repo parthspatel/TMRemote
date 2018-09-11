@@ -38,11 +38,9 @@ class apiKeyThread(QThread):
             return f'API Key Error: Token request failed with {ex}'
 
     def run(self):
+        apiKey = self.__getApiKey()
         while True:
-            apiKey = self.__getApiKey()
-            if 'failed' in apiKey:
-                self.sleep_time = 60
-            else:
-                self.sleep_time = 3600
-            self.setApiKey(apiKey)
+            if not bool(self.getApiKey()):
+                apiKey = self.__getApiKey()
+                self.sleep_time = 600 if 'error' in apiKey.lower() else 3600
             self.sleep(self.sleep_time)

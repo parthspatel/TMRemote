@@ -1,7 +1,7 @@
 import os
 import pickle
-import sys
 import re
+import sys
 
 import requests
 from PyQt5.QtCore import *
@@ -61,13 +61,13 @@ class downloadUpdates(QThread):
         moduleChecked = False
         scriptChecked = False
         try:
-            import TMRLogger
+            from scripts import TMRLogger
             moduleVersion = TMRLogger.versionCheck().version
             moduleChecked = True
         except ModuleNotFoundError as E:
             self.__downloadModule()
         try:
-            import Logger
+            from scripts import Logger
             scriptVersion = Logger.versionCheck().version
             scriptChecked = True
         except ModuleNotFoundError:
@@ -81,7 +81,8 @@ class downloadUpdates(QThread):
     @Auth.authenticate(level='basic')
     def __downloadScript(self, token=None):
         tmPath = self.getTmPath()
-        scriptPath = tmPath.replace('TerminalManager.exe','TMRemote/Scripts/Logger.py')
+        scriptPath = tmPath.replace(
+            'TerminalManager.exe', 'TMRemote/Scripts/Logger.py')
         try:
             scriptContent = requests.get(self.links['ScriptDownload']).text
             try:
@@ -97,7 +98,8 @@ class downloadUpdates(QThread):
     @Auth.authenticate(level='basic')
     def __downloadModule(self):
         tmPath = self.getTmPath()
-        modulePath = tmPath.replace('TerminalManager.exe','TMRemote/Scripts/TMRLogger.pyc')
+        modulePath = tmPath.replace(
+            'TerminalManager.exe', 'TMRemote/Scripts/TMRLogger.pyc')
         try:
             moduleContent = requests.get(self.links['ModuleDownload']).content
             try:

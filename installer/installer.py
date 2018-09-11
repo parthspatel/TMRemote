@@ -1,18 +1,21 @@
-from PyQt5.QtCore import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.uic import loadUiType
 import os
 import sys
 import time
-import requests
 import zipfile
+
+import requests
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+from PyQt5.uic import loadUiType
 
 screen_size = QApplication(sys.argv)
 screen = screen_size.primaryScreen().availableGeometry()
 
+
 class ThreadProgress(QThread):
     mysignal = pyqtSignal(int)
+
     def __init__(self, terminalManager, installPath, parent=None):
         QThread.__init__(self)
         self.terminalManager = terminalManager
@@ -32,12 +35,12 @@ class ThreadProgress(QThread):
         self.__createFolder(scriptsFolder)
         self.__createFolder(tempFolder)
 
-
     def __downloadScript(self):
         tmPath = self.terminalManager
         scriptPath = tmPath + '/TMRemote/Scripts/Logger.py'
         try:
-            scriptContent = requests.get('https://mehodin.com/i/Logger.py').text
+            scriptContent = requests.get(
+                'https://mehodin.com/i/Logger.py').text
             try:
                 os.remove(scriptPath)
             except FileNotFoundError:
@@ -52,7 +55,8 @@ class ThreadProgress(QThread):
         tmPath = self.terminalManager
         modulePath = tmPath + '/TMRemote/Scripts/TMRLogger.pyc'
         try:
-            moduleContent = requests.get('https://mehodin.com/i/TMRLogger.pyc').content
+            moduleContent = requests.get(
+                'https://mehodin.com/i/TMRLogger.pyc').content
             try:
                 os.remove(modulePath)
             except FileNotFoundError:
@@ -62,7 +66,6 @@ class ThreadProgress(QThread):
             return True
         except Exception as e:
             return False
-
 
     def run(self):
         self.__folderCheck()
@@ -98,31 +101,36 @@ class ThreadProgress(QThread):
         self.mysignal.emit(done)
 
 
-
 class Splash(QMainWindow):
-    def __init__(self, parent = None):
+    def __init__(self, parent=None):
         super(Splash, self).__init__(parent)
         QMainWindow.__init__(self)
+
+        self.setWindowOpacity(0.1)
+        self.setStyleSheet("QWidget{background: #fff}")
+
         self.progressBar = QProgressBar(self)
         size = self.geometry()
         posX = (screen.width()/3) - (screen.width()/4)
         posY = (size.height()/100) * 70
-        self.progressBar.setGeometry(posX,posY,screen.width()/3,30)
+        self.progressBar.setGeometry(posX, posY, screen.width()/3, 30)
         self.progressBar.setStyleSheet("""QProgressBar{
             border: 1px solid #76797C;
             border-radius: 5px;
             text-align: center;
         }
         QProgressBar::chunk {
-            background: qlineargradient(x1:1, y1:0, x2:0, y2:1,
+            background: qlineargradient(x1:0, y1:1, x2:1, y2:0,
                                         stop:1 rgb(237, 56, 42),
                                         stop:0 rgb(255, 153, 0));
         }""")
         self.setWindowFlags(Qt.FramelessWindowHint)
-        installPath = QFileDialog.getExistingDirectory(self,"Please select where you would like to install TMRemote")
+        installPath = QFileDialog.getExistingDirectory(
+            self, "Please select where you would like to install TMRemote")
         if len(installPath) is 0:
             sys.exit()
-        terminalManager = QFileDialog.getExistingDirectory(self,"Please select where your Terminal Manager folder is")
+        terminalManager = QFileDialog.getExistingDirectory(
+            self, "Please select where your Terminal Manager folder is")
         if len(terminalManager) is 0:
             sys.exit()
         self.progressThread = ThreadProgress(terminalManager, installPath)
@@ -149,21 +157,21 @@ def main():
     screen = app.primaryScreen().availableGeometry()
 
     # Make transparent
-    # window.setAttribute(Qt.WA_NoSystemBackground, True)
-    # window.setAttribute(Qt.WA_TranslucentBackground, True)
+    window.setAttribute(Qt.WA_NoSystemBackground, True)
+    window.setAttribute(Qt.WA_TranslucentBackground, True)
 
     # Create image
-    logo = QPixmap('icon.png')
+    logo = QPixmap('icon.svg')
 
     # Create label
     label = QLabel(window)
     progressBarPos = window.progressBar.pos()
     barSize = (progressBarPos.x() + (screen.width()/3))
-    middleOfBar = ((barSize / 2) + progressBarPos.x()) /2
+    middleOfBar = ((barSize / 2) + progressBarPos.x()) / 2
     xPos = middleOfBar
     yPos = progressBarPos.y() - (screen.height() / 2.5)
 
-    label.setGeometry(xPos,yPos,256,256)
+    label.setGeometry(xPos, yPos, 256, 256)
     label.setPixmap(logo)
 
     # CHange window size
@@ -173,6 +181,7 @@ def main():
 
     # exec
     sys.exit(app.exec_())
+
 
 if __name__ == '__main__':
     main()

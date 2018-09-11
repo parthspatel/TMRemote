@@ -157,7 +157,7 @@ class TMRemote(QMainWindow):
         mainBox.addWidget(tabWidget)
         centralWidget.setLayout(mainBox)
 
-    def setAPIKey(self, key=''):
+    def setAPIKey(self, key=None):
         self.apiKey = key
         self.update()
 
