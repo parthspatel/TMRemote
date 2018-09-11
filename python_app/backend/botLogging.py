@@ -59,7 +59,6 @@ class BotLoggingThread(QThread):
                         count += 1
                         toPost.append(data)
                         postedPreviously.append(logs[index]['IGN'])
-                        print(toPost)
                 else:
                     continue
                     data = {'key': self.apiKey,
@@ -70,10 +69,11 @@ class BotLoggingThread(QThread):
             except Exception as e:
                 return e
         if count > 0:
-            # try:
-            response = requests.post(self.links['botLogs'], headers=headers,data=toPost)
-            # except Exception as ex:
-            #     return f'No Internet: {ex}'
+            data = {'bot_logs':toPost}
+            try:
+                response = requests.post(self.links['botLogs'], headers=headers,json=data)
+            except Exception as ex:
+                return f'No Internet: {ex}'
 
     def __getLogs(self):
         try:
