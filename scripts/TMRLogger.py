@@ -9,8 +9,9 @@ try:
     import Character
     import Inventory
     import Terminal
+    import Field
 except:
-    pass
+	pass
 class versionCheck():
     def __init__(self):
         self.version = '0.1.1'
@@ -84,8 +85,9 @@ class Log(object):
         Channel = GameState.GetChannel()
         World = GameState.GetWorldID()
         Level = Character.GetLevel()
+        mapID = Field.GetID()
         CharID = Character.GetID()
-        PercentageExp = GetPercentage()
+        PercentageExp = self.__GetPercentage()
         VJSymbol = Inventory.GetItemCount(1712001)
         ChuSymbol = Inventory.GetItemCount(1712002)
         LachSymbol = Inventory.GetItemCount(1712003)
@@ -110,6 +112,7 @@ class Log(object):
                  'CharID': CharID,
                  'Channel': Channel,
                  'Level': Level,
+                 'mapID': mapID,
                  'EXP': PercentageExp,
                  'VJSymbols': VJSymbol,
                  'ChuChuSymbols': ChuSymbol,
@@ -178,7 +181,4 @@ class Log(object):
             pickle.dump(data, PickleFile)
 
     def main(self):
-        try:
-            self.__LogClient()
-        except:
-            pass
+        self.__LogClient()

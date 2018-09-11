@@ -14,13 +14,15 @@ from backend.log import Log
 
 
 class setStartupThread(QThread):
-    def __init__(self, username, password, apikey, tmPath, logs, links):
+    def __init__(self, username, password, apikey, tmPath, logs, links, generalSettings):
         QThread.__init__(self)
         self.getUsername = username
         self.getPassword = password
         self.apiKey = apikey
 
         self.tmPath = tmPath
+
+        self.generalSettings = generalSettings
 
         self.logs = logs
         self.links = links
@@ -69,16 +71,15 @@ class setStartupThread(QThread):
         return False
 
     @Log.log
-    @Auth.authenticate(level='basic')
-    def __startTerminalManager(self, token):
-        if not self.__terminalIsActive():
-            process = subprocess.Popen(
-                self.tmPath(), cwd=self.tmPath().split('TerminalManager.exe')[0])
-            return 'Started Terminal Manager'
+    def __startTerminalManager(self, token=None):
+        if self.generalSettings.startManagerCheckBox.isChecked():
+            if not self.__terminalIsActive():
+                process = subprocess.Popen(
+                    self.tmPath(), cwd=self.tmPath().split('TerminalManager.exe')[0])
+                return 'Started Terminal Manager'
 
     def run(self):
-        try:
+        while True:
             # self.__WriteRegistry()
             self.__startTerminalManager()
-        except:
-            pass
+            self.sleep(self.sleep_time)

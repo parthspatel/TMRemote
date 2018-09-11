@@ -28,6 +28,7 @@ class Auth():
     @parametrized
     def authenticate(func, level='basic'):
         level_dict = {'basic': 'logIn',
+                      'botLogs':'botLogs',
                       'prime': 'banDetection'}
 
         def authenticate_and_call(*args, **kwargs):
@@ -35,25 +36,25 @@ class Auth():
             def auth_ban_detection():
                 try:
                     headers = {'User-Agent': 'TMR Bot'}
-                    if level == 'prime':
+                    if level == 'basic':
+                        data = {'username': args[0].getUsername(),
+                                'password': args[0].getPassword()}
+                    else:
                         apiKey = args[0].apiKey()
                         if 'error' in apiKey.lower():
                             return f'Authentication Failed: {apiKey}'
                         headers.update(
-                            {'Authorization': 'Bearer {}'.format(apiKey)})
-                    elif level == 'basic':
-                        data = {'username': args[0].getUsername(),
-                                'password': args[0].getPassword()}
+                        {'Authorization': 'Bearer {}'.format(apiKey)})
 
                     link = args[0].links[level_dict[level]]
-                    if 'http' in link.lower():
-                        if level == 'prime':
-                            status = requests.get(link, headers=headers)
-                        elif level == 'basic':
-                            status = requests.post(
-                                link, headers=headers, data=data)
-                        statusCode = status.status_code
-                        status = status.text
+                    if not 'http' in link.lower():
+                        return 'Authentication failed: Not a valid link'
+                    elif level == 'basic':
+                        status = requests.post(link, headers=headers, data=data)
+                    else:
+                        status = requests.get(link, headers=headers)
+                    statusCode = status.status_code
+                    status = status.text
                     if statusCode == 401:
                         args[0].sleep_time = 60
                         return f'{level.capitalize()} Authentication Failed: {statusCode}'
@@ -113,3 +114,31 @@ class Auth():
                 self.__getGpuID2() + self.__getBaseID()
             self.trueHWID = self.trueHWID.replace(' ', '').replace('\r', '')
             return self.__encrypt(self.trueHWID)
+
+class encryption():
+    def __init__(self):
+        pass
+
+    def encrypt(self, string, key):
+        encryptionValue = 0
+        for character in key:
+            encryptionValue += ord(character)
+        encoded = ''
+        for character in string:
+            encryptedCharacter = int(ord(character)) * encryptionValue
+            encoded += str(len(str(encryptedCharacter)))
+            encoded += str(encryptedCharacter)
+        return encoded
+
+    def decrypt(self, string, key):
+        encryptionValue = 0
+        for character in key:
+            encryptionValue += ord(character)
+        unencrypted = ''
+        while len(string) > 0:
+            lenFirst = int(string[0])
+            string = string[int(len(str(lenFirst))):]
+            charToDecrypt = string[slice(0, lenFirst)]
+            string = string[len(charToDecrypt):]
+            unencrypted += chr(int(int(charToDecrypt) // encryptionValue))
+        return unencrypted

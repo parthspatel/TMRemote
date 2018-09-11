@@ -2,6 +2,7 @@ import os
 import sys
 import time
 import zipfile
+from multiprocessing import Queue
 
 import requests
 from PyQt5.QtCore import *
@@ -156,18 +157,16 @@ def main():
     # Get screen size and change window size
     screen = app.primaryScreen().availableGeometry()
 
-    # Make transparent
-    window.setAttribute(Qt.WA_NoSystemBackground, True)
-    window.setAttribute(Qt.WA_TranslucentBackground, True)
-
     # Create image
-    logo = QPixmap('icon.svg')
+    logo = QPixmap('icons\icon.svg')
 
     # Create label
     label = QLabel(window)
     progressBarPos = window.progressBar.pos()
     barSize = (progressBarPos.x() + (screen.width()/3))
-    middleOfBar = ((barSize / 2) + progressBarPos.x()) / 2
+
+    middleOfBar = (barSize - 256 + progressBarPos.x()) / 2
+
     xPos = middleOfBar
     yPos = progressBarPos.y() - (screen.height() / 2.5)
 

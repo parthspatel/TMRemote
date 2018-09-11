@@ -1,3 +1,4 @@
+
 import ast
 import os
 import pickle
@@ -38,9 +39,26 @@ class apiKeyThread(QThread):
             return f'API Key Error: Token request failed with {ex}'
 
     def run(self):
-        apiKey = self.__getApiKey()
+        num_failed = 0
+        apiKey = self.getApiKey()
         while True:
-            if not bool(self.getApiKey()):
+
+            if not bool(apiKey):
                 apiKey = self.__getApiKey()
-                self.sleep_time = 600 if 'error' in apiKey.lower() else 3600
+
+            if 'error' in apiKey.lower():
+                self.sleep_time = 600  # 10mins
+                num_failed += 1
+
+                if 5 < num_failed:
+                    self.sleep_time = 3600  # 1 hour
+
+                elif 10 < num_failed:
+                    num_failed = 0
+
+                apiKey = self.__getApiKey()
+            else:
+                self.sleep_time = 3600
+                self.setApiKey(apiKey)
+
             self.sleep(self.sleep_time)

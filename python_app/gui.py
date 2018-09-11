@@ -34,7 +34,8 @@ class TMRemote(QMainWindow):
                                  tmPath=self.settingsWindow.getTMPath,
                                  banDetectionWidget=self.banDetectionWidget,
                                  maintenanceWidget=self.maintenanceWidget,
-                                 logs=self.tmrLoggingWidget)
+                                 logs=self.tmrLoggingWidget,
+                                 generalSettingsWidget=self.generalSettingsWidget)
         self.thread.start()
 
     def __initProperties(self):
@@ -60,7 +61,7 @@ class TMRemote(QMainWindow):
 
         self.__initMenuBar()
 
-        self.botLogggingWidget = Widgets.BotLogging()
+        self.generalSettingsWidget = Widgets.generalSettings()
         self.maintenanceWidget = Widgets.Maintenance()
         self.banDetectionWidget = Widgets.BanDetection()
         self.tmrLoggingWidget = Widgets.TMRLogging()
@@ -113,14 +114,14 @@ class TMRemote(QMainWindow):
         mainBox = QVBoxLayout()
         tabWidget = QTabWidget()
 
-        botLoggingBox = QGroupBox('Bot Logging Settings')
+        generalSettingBox = QGroupBox('General Settings')
         maintenanceBox = QGroupBox('Game Maintenance Settings')
         banDetectionBox = QGroupBox('Ban Detection Settings')
         tmrLoggingBox = QGroupBox('TMRemote Logs')
 
         hbox_temp = QHBoxLayout()
-        hbox_temp.addWidget(self.botLogggingWidget)
-        botLoggingBox.setLayout(hbox_temp)
+        hbox_temp.addWidget(self.generalSettingsWidget)
+        generalSettingBox.setLayout(hbox_temp)
 
         hbox_temp = QHBoxLayout()
         hbox_temp.addWidget(self.maintenanceWidget)
@@ -152,6 +153,7 @@ class TMRemote(QMainWindow):
 
         settingsTab.layout = QVBoxLayout()
         settingsTab.layout.addWidget(maintenanceBox)
+        settingsTab.layout.addWidget(generalSettingBox)
         settingsTab.setLayout(settingsTab.layout)
 
         mainBox.addWidget(tabWidget)
@@ -227,6 +229,9 @@ class TMRemote(QMainWindow):
             'crashMaint') or 'false' in settings.value('crashMaint').lower() else True)
         self.maintenanceWidget.restartCheckBox.setChecked(False if None is settings.value(
             'restartMaint') or 'false' in settings.value('restartMaint').lower() else True)
+        self.generalSettingsWidget.startManagerCheckBox.setChecked(False if None is settings.value(
+            'startManager') or 'false' in settings.value('startManager').lower() else True)
+
 
         settings.endGroup()
 
@@ -253,7 +258,8 @@ class TMRemote(QMainWindow):
                 'tmPath': self.settingsWindow.getTMPath(),
                 'banDetection': bool(self.banDetectionWidget.banDetectionCheckBox.isChecked()),
                 'crashMaint': bool(self.maintenanceWidget.crashCheckBox.isChecked()),
-                'restartMaint': bool(self.maintenanceWidget.restartCheckBox.isChecked())}
+                'restartMaint': bool(self.maintenanceWidget.restartCheckBox.isChecked()),
+                'startManager':bool(self.generalSettingsWidget.startManagerCheckBox.isChecked())}
 
         for key, value in vars.items():
             settings.setValue(key, value)

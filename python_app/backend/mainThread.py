@@ -30,7 +30,7 @@ def getCurrentPath():
 
 class MainThread(QThread):
 
-    def __init__(self, username, password, apikey, profilesDir, tmPath, banDetectionWidget, maintenanceWidget, logs):
+    def __init__(self, username, password, apikey, profilesDir, tmPath, banDetectionWidget, maintenanceWidget, logs, generalSettingsWidget):
         QThread.__init__(self)
 
         self.getUsername = username
@@ -46,12 +46,14 @@ class MainThread(QThread):
         self.banDetectionWidget = banDetectionWidget
         self.worldCheckBoxes = self.banDetectionWidget.worldCheckBoxes
 
+        self.generalSettings = generalSettingsWidget
+
         self.maintenanceWidget = maintenanceWidget
 
         self.logs = logs
 
         self.links = {'logIn': 'https://beta.tmremote.io/api/login',
-                      'botLogs': 'https://tmremote.io/api/v1/activity',
+                      'botLogs': 'https://beta.tmremote.io/api/bots/log',
                       'banDetection': 'https://beta.tmremote.io/api/gm/status',
                       'banPost': '',
                       'tmLog': '',
@@ -119,7 +121,8 @@ class MainThread(QThread):
                                                  apikey=self.getApiKey,
                                                  tmPath=self.getTmPath,
                                                  logs=self.logs,
-                                                 links=self.links)
+                                                 links=self.links,
+                                                 generalSettings=self.generalSettings)
 
     def __del__(self):
         try:
@@ -139,9 +142,9 @@ class MainThread(QThread):
 
     @Log.log
     def __filePathCheck(self):
-        if not self.getTmPath():
+        if self.getTmPath() is None:
             return 'Terminal Manager path is not defined, please select this in settings'
-        elif not self.getProfilesDir():
+        elif self.getProfilesDir() is None:
             return 'Profiles directory is not defined, please select this in settings'
 
     def __getApiKey(self):
@@ -159,12 +162,12 @@ class MainThread(QThread):
             return f'API Key Error: Token request failed with {ex}'
 
     def run(self):
-        if not self.__filePathCheck():
+        if self.__filePathCheck() is None:
             self.sleep_time = 1
             self.apiKeyThread.start()
             self.versionCheckThread.start()
             self.banDetectionThread.start()
-            # self.botLoggingThread.start()
+            self.botLoggingThread.start()
             # self.tmLoggingThread.start()
             self.WorldCheckboxThread.start()
             # self.MaintenanceCheckThread.start()

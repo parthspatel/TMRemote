@@ -35,7 +35,6 @@ class profileThread(QThread):
     def __del__(self):
         self.wait()
 
-    @Auth.authenticate(level='basic')
     def __getProfiles(self, token=None):
         rootdir = self.getProfilesDir()
         for folder, subs, files in os.walk(rootdir):

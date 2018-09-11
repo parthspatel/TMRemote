@@ -22,8 +22,6 @@ class downloadUpdates(QThread):
         self.getTmPath = tmPath
         self.logs = logs
 
-        self.versions = {}
-
         self.links = links
 
         self.sleep_time = 60
@@ -31,20 +29,6 @@ class downloadUpdates(QThread):
 
     def __del__(self):
         self.wait()
-
-    def __getCurrentScriptVersion(self):
-        data = {'key': self.apiKey(),
-                'name': self.getUsername()}
-        scriptVersion = requests.get(
-            self.links['ScriptVersion']).text
-        moduleVersion = requests.get(
-            self.links['ModuleVersion']).text
-        scriptVersion = re.search('<p>(.*)</p>', scriptVersion).group(1)
-        moduleVersion = re.search('<p>(.*)</p>', moduleVersion).group(1)
-        versionDict = {'scriptVersion': scriptVersion,
-                       'moduleVersion': moduleVersion}
-        self.versions = versionDict
-        return versionDict
 
     def __checkTerminalScripts(self):
         tmPath = self.getTmPath().split('TerminalManager.exe')[0]
@@ -58,27 +42,9 @@ class downloadUpdates(QThread):
             os.mkdir(scriptsFolder)
         if not scriptsFolder in sys.path:
             sys.path.append(scriptsFolder)
-        moduleChecked = False
-        scriptChecked = False
-        try:
-            from scripts import TMRLogger
-            moduleVersion = TMRLogger.versionCheck().version
-            moduleChecked = True
-        except ModuleNotFoundError as E:
-            self.__downloadModule()
-        try:
-            from scripts import Logger
-            scriptVersion = Logger.versionCheck().version
-            scriptChecked = True
-        except ModuleNotFoundError:
-            self.__downloadScript()
-        newVersions = self.__getCurrentScriptVersion()
-        if scriptChecked and scriptVersion != newVersions['scriptVersion']:
-            self.__downloadScript()
-        if moduleChecked and moduleVersion != newVersions['moduleVersion']:
-            self.__downloadModule()
+        self.__downloadModule()
+        self.__downloadScript()
 
-    @Auth.authenticate(level='basic')
     def __downloadScript(self, token=None):
         tmPath = self.getTmPath()
         scriptPath = tmPath.replace(
@@ -95,7 +61,6 @@ class downloadUpdates(QThread):
         except Exception as e:
             return False
 
-    @Auth.authenticate(level='basic')
     def __downloadModule(self):
         tmPath = self.getTmPath()
         modulePath = tmPath.replace(
