@@ -35,7 +35,8 @@ class TMRemote(QMainWindow):
                                  banDetectionWidget=self.banDetectionWidget,
                                  maintenanceWidget=self.maintenanceWidget,
                                  logs=self.tmrLoggingWidget,
-                                 generalSettingsWidget=self.generalSettingsWidget)
+                                 generalSettingsWidget=self.generalSettingsWidget,
+                                 settingsTextEdits=self.settingsWindow.getTextEdits())
         self.thread.start()
 
     def __initProperties(self):
@@ -232,7 +233,6 @@ class TMRemote(QMainWindow):
         self.generalSettingsWidget.startManagerCheckBox.setChecked(False if None is settings.value(
             'startManager') or 'false' in settings.value('startManager').lower() else True)
 
-
         settings.endGroup()
 
     def __writeSettings(self):
@@ -259,7 +259,7 @@ class TMRemote(QMainWindow):
                 'banDetection': bool(self.banDetectionWidget.banDetectionCheckBox.isChecked()),
                 'crashMaint': bool(self.maintenanceWidget.crashCheckBox.isChecked()),
                 'restartMaint': bool(self.maintenanceWidget.restartCheckBox.isChecked()),
-                'startManager':bool(self.generalSettingsWidget.startManagerCheckBox.isChecked())}
+                'startManager': bool(self.generalSettingsWidget.startManagerCheckBox.isChecked())}
 
         for key, value in vars.items():
             settings.setValue(key, value)
