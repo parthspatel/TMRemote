@@ -47,5 +47,6 @@ class WorldCheckBoxThread(QThread):
     def run(self):
 
         while True:
-            self.__writeStatus()
+            if not self.tmPath() in [None, 'None']:
+                self.__writeStatus()
             self.sleep(self.sleep_time)
