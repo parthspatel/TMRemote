@@ -45,7 +45,6 @@ class WorldCheckBoxThread(QThread):
             pickle.dump(self.__getStatus(), toCheckFile)
 
     def run(self):
-
         while True:
             if not self.tmPath() in [None, 'None']:
                 self.__writeStatus()
