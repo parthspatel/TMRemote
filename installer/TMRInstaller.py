@@ -10,6 +10,8 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.uic import loadUiType
 
+import webbrowser
+
 screen_size = QApplication(sys.argv)
 screen = screen_size.primaryScreen().availableGeometry()
 
@@ -107,8 +109,8 @@ class Splash(QMainWindow):
         super(Splash, self).__init__(parent)
         QMainWindow.__init__(self)
 
-        self.setWindowOpacity(0.1)
-        self.setStyleSheet("QWidget{background: #fff}")
+        # self.setWindowOpacity(0.1)
+        # self.setStyleSheet("QWidget{background: #fff}")
 
         self.progressBar = QProgressBar(self)
         size = self.geometry()
@@ -134,6 +136,9 @@ class Splash(QMainWindow):
             self, "Please select where your Terminal Manager folder is")
         if len(terminalManager) is 0:
             sys.exit()
+        self.messageBox = QMessageBox.about(self, 'Disclaimer', 'Please read our disclaimer.')
+        webbrowser.open('https://beta.tmremote.io/legal/disclaimer')
+        self.messageBox = QMessageBox.about(self, 'Disclaimer', 'Please click OK if you read and agreed to the disclaimer.')
         self.progressThread = ThreadProgress(terminalManager, installPath)
         self.progressThread.mysignal.connect(self.progress)
         self.progressThread.start()
@@ -157,6 +162,9 @@ def main():
     # Get screen size and change window size
     screen = app.primaryScreen().availableGeometry()
 
+    # window.setAttribute(Qt.WA_NoSystemBackground, False)
+    # window.setAttribute(Qt.WA_TranslucentBackground, False)
+
     # Create image
     logo = QPixmap('icons\icon.svg')
 
@@ -171,9 +179,9 @@ def main():
     yPos = progressBarPos.y() - (screen.height() / 2.5)
 
     label.setGeometry(xPos, yPos, 256, 256)
-    label.setPixmap(logo)
+    label.setPixmap(logo.scaled(label.width(), label.height()))
 
-    # CHange window size
+    # Change window size
     window.setFixedHeight(screen.height()/2)
     window.setFixedWidth(screen.width()/2)
     window.show()
