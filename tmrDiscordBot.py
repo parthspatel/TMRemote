@@ -18,8 +18,9 @@ async def on_ready():
 
 @bot.event
 async def on_member_join(member):
-	WelcomeChannel = bot.get_channel(469488895449366530)
-	await welcomeChannel.send_message("Welcome to Terminal Manager Remote. " + member.mention)
+	welcomeChannel = bot.get_channel(488746967619338240)
+	await welcomeChannel.send("Welcome to Terminal Manager Remote. " + member.mention)
+	await member.add_roles(discord.utils.get(member.guild.roles, name = 'Member'))
 
 @commands.has_permissions(administrator=True)
 @bot.command()

@@ -31,17 +31,6 @@ class downloadUpdates(QThread):
         self.wait()
 
     def __checkTerminalScripts(self):
-        tmPath = self.getTmPath().split('TerminalManager.exe')[0]
-        if self.getTmPath() is None:
-            return 'Error: Terminal Manager folder is not selected'
-        scriptsFolder = tmPath + 'TMRemote/Scripts'
-        tmRemoteFolder = tmPath + 'TMRemote'
-        if not os.path.isdir(tmRemoteFolder):
-            os.mkdir(tmRemoteFolder)
-        if not os.path.isdir(scriptsFolder):
-            os.mkdir(scriptsFolder)
-        if not scriptsFolder in sys.path:
-            sys.path.append(scriptsFolder)
         self.__downloadModule()
         self.__downloadScript()
 
