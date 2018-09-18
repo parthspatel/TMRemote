@@ -4,14 +4,10 @@ import os
 import pickle
 import sys
 import time
-
-try:
-    import GameState
-    import Character
-    import Inventory
-    import Terminal
-except:
-    pass
+import GameState
+import Character
+import Inventory
+import Terminal
 
 
 class versionCheck():
@@ -176,7 +172,7 @@ class Log(object):
         try:
             with open('TMRemote/temp/WorldToCheck', 'rb') as file:
                 WorldsToCheck = pickle.load(file)
-            return GMStatus
+            return WorldToCheck
         except FileNotFoundError:
             pass
 
