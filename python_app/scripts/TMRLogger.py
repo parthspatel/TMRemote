@@ -8,6 +8,7 @@ import GameState
 import Character
 import Inventory
 import Terminal
+import Field
 
 
 class versionCheck():
@@ -48,25 +49,22 @@ class Log(object):
                         15: 'Khroa',
                         16: 'Bera',
                         17: 'Scania'}
-            return IDToName[LineEditID]
+            return IDToName[LineEditID].lower()
         elif Terminal.GetComboBox('LoginServer') == 2:
             IDToName = {0: 'Luna',
                         1: 'RebootEU'}
-            return IDToName[LineEditID]
+            return IDToName[LineEditID].lower()
 
     def __LogGM(self):
-        try:
-            worldStatus = ast.literal_eval(self.__ReadGMLogs())[
-                                           self.__GetWorld(Terminal.GetComboBox('LoginWorld'))]
-            worldsToCheck = ast.literal_eval(self.__ReadWorldsToLogOut())[
-                                             self.__GetWorld(Terminal.GetComboBox('LoginWorld'))]
-            if worldStatus == 'online' and bool(worldsToCheck):
-                Terminal.SetCheckBox('Auto Login', False)
-                Terminal.Logout()
-            if worldStatus == 'offline' and bool(worldsToCheck):
-                Terminal.SetCheckBox("Auto Login", True)
-        except:
-            pass
+        GMLogs = self.__ReadGMLogs()
+        world = Terminal.GetComboBox('LoginWorld')
+        worldStatus = ast.literal_eval(GMLogs)['worlds'][self.__GetWorld(world)]['status']
+        worldsToCheck = self.__ReadWorldsToLogOut()[self.__GetWorld(world)]
+        if worldStatus == 'online' and bool(worldsToCheck):
+            Terminal.SetCheckBox('Auto Login', False)
+            Terminal.Logout()
+        if worldStatus == 'offline' and bool(worldsToCheck):
+            Terminal.SetCheckBox("Auto Login", True)
 
     def __LogClient(self):
         if GameState.IsInGame():
@@ -88,7 +86,7 @@ class Log(object):
         World = GameState.GetWorldID()
         Level = Character.GetLevel()
         CharID = Character.GetID()
-        PercentageExp = GetPercentage()
+        PercentageExp = self.__GetPercentage()
         VJSymbol = Inventory.GetItemCount(1712001)
         ChuSymbol = Inventory.GetItemCount(1712002)
         LachSymbol = Inventory.GetItemCount(1712003)
@@ -127,6 +125,7 @@ class Log(object):
                  'Meso': MesoCount,
                  'Droplets': DropletCount,
                  'EsferaDroplets': EsferaDropletCount,
+                 'mapID':Field.GetID(),
                  'ProtectionScrolls': ProtAmount,
                  'CleanSlate': CssAmount,
                  'PotentialScrolls': PotentialScrolls}
@@ -162,20 +161,19 @@ class Log(object):
 
     def __ReadGMLogs(self):
         try:
-            with open('TMRemote/temp/GMStatus', 'rb') as file:
+            with open(os.getcwd() + '\\TMRemote\\temp\\banDetectStatus', 'rb') as file:
                 GMStatus = pickle.load(file)
             return GMStatus
-        except FileNotFoundError:
+        except FileNotFoundError as e:
             pass
 
     def __ReadWorldsToLogOut(self):
         try:
             with open('TMRemote/temp/WorldToCheck', 'rb') as file:
                 WorldsToCheck = pickle.load(file)
-            return WorldToCheck
-        except FileNotFoundError:
+            return WorldsToCheck
+        except FileNotFoundError as e:
             pass
-
     def __toFile(self, filename, mode, data):
         with open(filename, mode) as PickleFile:
             pickle.dump(data, PickleFile)
