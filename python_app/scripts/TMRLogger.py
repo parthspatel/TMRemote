@@ -62,7 +62,8 @@ class Log(object):
         worldsToCheck = self.__ReadWorldsToLogOut()[self.__GetWorld(world)]
         if worldStatus == 'online' and bool(worldsToCheck):
             Terminal.SetCheckBox('Auto Login', False)
-            Terminal.Logout()
+            if GameState.IsInGame():
+                Terminal.Logout()
         if worldStatus == 'offline' and bool(worldsToCheck):
             Terminal.SetCheckBox("Auto Login", True)
 
