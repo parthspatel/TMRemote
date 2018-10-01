@@ -16,8 +16,9 @@ screen = screen_size.primaryScreen().availableGeometry()
 
 def main():
     if not isUserAdmin():
-        ctypes.windll.shell32.ShellExecuteW(
-            None, "runas", sys.executable, getCurrentPath(), None, 1)
+        pass
+        #ctypes.windll.shell32.ShellExecuteW(
+        #None, "runas", sys.executable, getCurrentPath(), None, 1)
 
     app = runApp(TMRemote)
     # anything after runApp will occur AFTER the application is closed
@@ -159,4 +160,8 @@ def getCurrentPath():
     return dir
 
 if __name__.endswith('__main__'):
-    main()
+    try:
+        main()
+	except Exception as E:
+        with open('test.txt','a') as file:
+            file.write(E)
