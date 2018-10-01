@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['tmremote.py'],
-             pathex=['C:\\Users\\yuhan\\Documents\\GitHub\\TMRemote\\python_app'],
+             pathex=['C:\\Users\\yuhan\\Documents\\GitHub\\TMRemote\\python_app\\backend', 'C:\\Users\\yuhan\\Documents\\GitHub\\TMRemote\\python_app'],
              binaries=[],
              datas=[],
              hiddenimports=[],
@@ -29,4 +29,4 @@ exe = EXE(pyz,
           strip=False,
           upx=True,
           runtime_tmpdir=None,
-          console=False )
+          console=True )
