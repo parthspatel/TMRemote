@@ -278,7 +278,7 @@ class TMRemote(QMainWindow):
             try:
                 os.remove(os.path.join(tempDir, file))
             except Exception as ex:
-                print(f'Error Remove File {file}: {ex}')
+                pass
 
 
 def getCurrentPath():

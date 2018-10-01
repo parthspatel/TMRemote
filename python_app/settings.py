@@ -22,13 +22,13 @@ class Settings(QMainWindow):
         self.top = 100
         self.width = 600
         self.height = 600
-        # print(self.left, self.top)
+        
         if parent:
             parent.update()
             self.left = (parent.width - self.width) / 2 + parent.x()
             self.top = (parent.height - self.height) / 2 + \
                 parent.y() + Magic.WINDOW_SPACER_TOP
-            # print(self.left, self.top)
+            
 
         # Initialize UI
         self.__initUI()
@@ -233,10 +233,10 @@ class _FileDirWidget(QWidget):
                 self.TerminalManager.setText(path + '/TerminalManager.exe')
             else:
                 err = 'TerminalManager.exe not found in {}'.format(path)
-                print(err)
+                
         else:
             err = 'Path selected is not a Directory: {}'.format(path)
-            print(err)
+            
 
     def getProfileDir(self):
         return self.profiles.text()
