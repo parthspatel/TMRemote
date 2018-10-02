@@ -75,28 +75,29 @@ class Auth():
             self.GpuCommand2 = 'WMIC path win32_VideoController get AdapterRAM'
             self.shell = False
             self.hashed = None
+            self.PIPE = subprocess.PIPE
 
         def __getBaseID(self):
             BaseID = subprocess.check_output(
-                self.HWIDCommand, shell=self.shell, stdin=PIPE, stdout=PIPE, stderr=PIPE, creationflags=0x08000000))
+                self.HWIDCommand, shell=self.shell, stdin=self.PIPE, stderr=self.PIPE, creationflags=0x08000000)
             BaseID = ''.join(BaseID.decode('utf-8').split('\n')[-3].split('-'))
             return BaseID
 
         def __getCpuID(self):
             CpuID = subprocess.check_output(
-                self.CpuCommand, shell=self.shell, stdin=PIPE, stdout=PIPE, stderr=PIPE, creationflags=0x08000000))
+                self.CpuCommand, shell=self.shell, stdin=self.PIPE, stderr=self.PIPE, creationflags=0x08000000)
             CpuID = CpuID.decode('utf-8').split('\n')[1]
             return CpuID
 
         def __getGpuID(self):
             GpuID = subprocess.check_output(
-                self.GpuCommand, shell=self.shell, stdin=PIPE, stdout=PIPE, stderr=PIPE, creationflags=0x08000000))
+                self.GpuCommand, shell=self.shell, stdin=self.PIPE, stderr=self.PIPE, creationflags=0x08000000)
             GpuID = int(GpuID.decode('utf-8').split('\n')[1])
             return str(GpuID)
 
         def __getGpuID2(self):
             GpuID2 = subprocess.check_output(
-                self.GpuCommand2, shell=self.shell, stdin=PIPE, stdout=PIPE, stderr=PIPE, creationflags=0x08000000))
+                self.GpuCommand2, shell=self.shell, stdin=self.PIPE, stderr=self.PIPE, creationflags=0x08000000)
             return GpuID2.decode().replace('\n', '')
 
         def __hash(self, id):

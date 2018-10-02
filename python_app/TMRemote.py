@@ -13,10 +13,8 @@ from gui import TMRemote
 screen_size = QApplication(sys.argv)
 screen = screen_size.primaryScreen().availableGeometry()
 
-file = open('test.txt','a')
 
 def main():
-    file.write('2')
     if not isUserAdmin():
         pass
         #ctypes.windll.shell32.ShellExecuteW(
@@ -30,10 +28,8 @@ def main():
     if version != '0.1.2':
         exeUpdate(app)
     closeApp(app)
-file.write('1')
 
 def isUserAdmin():
-    file.write('3')
     '''
     Return True if user has admin privilege
     Raises:
@@ -50,7 +46,6 @@ def isUserAdmin():
 
 
 def exeUpdate(application):
-    file.write('4')
     app = QApplication(sys.argv)
 
     # Create Splash
@@ -83,7 +78,6 @@ def exeUpdate(application):
     window.show()
 
     # exec
-    file.write('5')
     app.exec_()
 
 
@@ -93,7 +87,6 @@ def runApp(application):
     ui = application()
     ui.show()
     return app.exec_()
-    file.write('6')
 
 
 
@@ -160,19 +153,16 @@ class Splash(QMainWindow):
 
 
 def getCurrentPath():
-    file.write('8')
     if getattr(sys, 'frozen', False):  # frozen
         dir = os.path.dirname(sys.executable)
     else:  # unfrozen
         dir = os.path.dirname(os.path.realpath(__file__))
     return dir
 
-if __name__.endswith('__main__'):
-    try:
-        main()
-    except Exception as E:
-        file.write('9')
-        file.close()
-        
-
-input()
+# if __name__.endswith('__main__'):
+#     try:
+#         main()
+#     except Exception as E:
+#         pass
+		
+main()

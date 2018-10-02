@@ -75,7 +75,7 @@ class setStartupThread(QThread):
         if self.generalSettings.startManagerCheckBox.isChecked():
             if not self.__terminalIsActive():
                 process = subprocess.Popen(
-                    self.tmPath(), cwd=self.tmPath().split('TerminalManager.exe')[0], stdin=PIPE, stdout=PIPE, stderr=PIPE, shell=False, creationflags=0x08000000))
+                    self.tmPath(), cwd=self.tmPath().split('TerminalManager.exe')[0], stdin=subprocess.PIPE, stderr=subprocess.PIPE, shell=False, creationflags=0x08000000)
                 return 'Started Terminal Manager'
 
     def run(self):
