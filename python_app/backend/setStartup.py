@@ -73,9 +73,11 @@ class setStartupThread(QThread):
     @Log.log
     def __startTerminalManager(self, token=None):
         if self.generalSettings.startManagerCheckBox.isChecked():
+            # self.generalSettings.startManagerCheckBox.setEnabled(False)
+            # self.generalSettings.startManagerCheckBox.setChecked(False)
+            # return 'Start Manager is bugged, disabling.'
             if not self.__terminalIsActive():
-                process = subprocess.Popen(
-                    self.tmPath(), cwd=self.tmPath().split('TerminalManager.exe')[0], stdin=subprocess.PIPE, stderr=subprocess.PIPE, shell=False, creationflags=0x08000000)
+                process = subprocess.call(self.tmPath(), cwd=self.tmPath().split('TerminalManager.exe')[0], shell = True)
                 return 'Started Terminal Manager'
 
     def run(self):
