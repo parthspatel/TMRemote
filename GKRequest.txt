@@ -1,0 +1,61 @@
+req headers = 
+
+Host: www.gamekiller.net
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:62.0) Gecko/20100101 Firefox/62.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Referer: https://www.gamekiller.net/threads/does-having-your-ass-ate-out-feel-good.3267997/
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+X-Ajax-Referer: https://www.gamekiller.net/threads/does-having-your-ass-ate-out-feel-good.3267997/
+X-Requested-With: XMLHttpRequest
+Content-Length: 563
+Cookie: __cfduid=daed5dcf0d374e0f44e38919cd4bd89a51526281857; xf_session=2658f3a62dd00fee3029c76e147cd6a2; xf_user=1028033%2C7c7c0b7de39077938308b57ce5913194a2556261
+Connection: keep-alive
+TE: Trailers
+Pragma: no-cache
+Cache-Control: no-cache
+
+req cookies = 
+
+__cfduid	daed5dcf0d374e0f44e38919cd4bd89a51526281857
+xf_session	2658f3a62dd00fee3029c76e147cd6a2
+xf_user	1028033,7c7c0b7de39077938308b57ce5913194a2556261
+
+data = 
+
+_xfNoRedirect	1
+_xfRelativeResolver	https://www.gamekiller.net/threads/does-having-your-ass-ate-out-feel-good.3267997/
+_xfRequestUri	/threads/does-having-your-ass-ate-out-feel-good.3267997/
+_xfResponseType	json
+_xfToken	[¡¦]
+0	1028033,1539166234,caf64a93153733319886138e85b7bfd3e393cf2f
+1	1028033,1539166234,caf64a93153733319886138e85b7bfd3e393cf2f
+attachment_hash	f4e23a6aabda164ddd3de765026cc318
+last_date	1539019477
+last_known_date	1539019477
+message_html	<p>feels+great+bro+but+keep+your+socks+on+otherwise+gay.<br></p>
+
+resp headers = 
+
+cache-control	private, max-age=0
+cf-ray	467850dd4cf72c18-AMS
+content-encoding	br
+content-type	application/json; charset=UTF-8
+date	Wed, 10 Oct 2018 10:13:42 GMT
+expect-ct	max-age=604800, report-uri="ht¡¦.com/cdn-cgi/beacon/expect-ct"
+expires	Thu, 19 Nov 1981 08:52:00 GMT
+last-modified	Wed, 10 Oct 2018 10:13:42 GMT
+server	cloudflare
+X-Firefox-Spdy	h2
+x-frame-options	SAMEORIGIN
+x-turbo-charged-by	LiteSpeed
+x-xss-protection	1
+
+req link = 
+
+https://www.gamekiller.net/threads/does-having-your-ass-ate-out-feel-good.3267997/add-reply
+
+message body = 
+
+message_html=%3Cp%3Efeels+great+bro+but+keep+your+socks+on+otherwise+gay.%3Cbr%3E%3C%2Fp%3E&_xfRelativeResolver=https%3A%2F%2Fwww.gamekiller.net%2Fthreads%2Fdoes-having-your-ass-ate-out-feel-good.3267997%2F&attachment_hash=f4e23a6aabda164ddd3de765026cc318&last_date=1539019477&last_known_date=1539019477&_xfToken=1028033%2C1539166234%2Ccaf64a93153733319886138e85b7bfd3e393cf2f&_xfRequestUri=%2Fthreads%2Fdoes-having-your-ass-ate-out-feel-good.3267997%2F&_xfNoRedirect=1&_xfToken=1028033%2C1539166234%2Ccaf64a93153733319886138e85b7bfd3e393cf2f&_xfResponseType=json

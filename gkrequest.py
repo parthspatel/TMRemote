@@ -43,7 +43,7 @@ class GKRequest():
             req.add_header("Connection", "keep-alive")
             req.add_header("Accept", "application/json, text/javascript, */*; q=0.01")
             req.add_header(
-                "X-Ajax-Referer", url + "/#post-3557882")
+                "X-Ajax-Referer", url + "/#post-3267997")
             req.add_header("X-Requested-With", "XMLHttpRequest")
             req.add_header(
                 "User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36")
@@ -54,7 +54,7 @@ class GKRequest():
                 "Referer", url + "/")
             req.add_header("Accept-Encoding", "gzip, deflate, br")
             req.add_header("Accept-Language", "en-US,en;q=0.9")
-            req.add_header("Cookie", "__cfduid=d92bdd0ce2855671fa2021592fb7b51951508418065; _lscache_vary=1; lsc_active=1; xf_user=881308%2Cf79dfd7d47f8469fb12d6b5703e1bda3e5af5699; xf_session=8e0997e090f808c6d706fea0750b1b8f")
+            req.add_header("Cookie", "__cfduid=daed5dcf0d374e0f44e38919cd4bd89a51526281857; xf_session=2658f3a62dd00fee3029c76e147cd6a2; xf_user=1028033%2C7c7c0b7de39077938308b57ce5913194a2556261")
 
             thread = url[url.rfind('/')+1:]
             msg = msg.replace(' ', '+')
