@@ -7,6 +7,8 @@ TOKEN = "NDg4Nzc4MzU1NDUwMzE0NzUz.DnhJ-w.GxjOCnyQvJhILyYouLc_ebq5Jo8"
 bot = commands.Bot(command_prefix = '.',
                    case_insensitive = True)
 
+bannedWordList = ['yuh', 'yuhanun', 'citgez', 'cit', 'yuh4nun', 'c1tg3z']
+
 @bot.event
 async def on_ready():
 	print('Logged in as')
@@ -16,9 +18,24 @@ async def on_ready():
 	print(discord.utils.oauth_url(bot.user.id))
 
 
+def checkIfBanned(string):
+    for item in bannedWordList:
+        if item in string:
+            return True
+    return False
+
+@bot.event
+async def on_message(message):
+	if checkIfBanned(message.content):
+		await message.delete()
+	await bot.process_commands(message)
+
 @bot.event
 async def on_member_join(member):
 	welcomeChannel = bot.get_channel(488746967619338240)
+	if checkIfBanned(message.content):
+		await member.ban()
+		return
 	await welcomeChannel.send("Welcome to Terminal Manager Remote. " + member.mention)
 	await member.add_roles(discord.utils.get(member.guild.roles, name = 'Member'))
 
