@@ -19,7 +19,8 @@ TMRemote::TMRemote(QWidget *parent)
 	: QMainWindow(parent)
 {
 	allocateConsole();
-	requests().get(QUrl("https://doc.qt.io/qt-5/qnetworkaccessmanager.html#details"));
+	QString buffer;
+	requests().get(QUrl("http://facebook.com"), buffer);
 	ui.setupUi(this);
 }
 

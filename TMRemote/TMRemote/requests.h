@@ -13,15 +13,21 @@
 
 class requests {
 public:
-	auto get(QUrl url)
+	QString get(QUrl url, QString &buffer)
 	{
-		QNetworkAccessManager nm;
-		QNetworkReply* nr = nm.get(QNetworkRequest(url));
-		while (!nr->isFinished()){
-			qDebug() << nr->isFinished() << nr->error();
-			Sleep(500);
-		}
-		qDebug() << (nr->request()).url();
+		QNetworkAccessManager* nm = new QNetworkAccessManager();
+		QNetworkReply* nr = nm->get(QNetworkRequest(url));
+		QObject::connect(nm, &QNetworkAccessManager::finished, [&] (QNetworkReply *response)mutable -> int
+		{
+			if (response->error()) { }
+			else {
+				qDebug() << response->readAll();
+				return 1;
+				//buffer = (QString)response->readAll();
+			}
+			return 0;
+		});
+		return QString("Failed...");
 	}
 
 private:
