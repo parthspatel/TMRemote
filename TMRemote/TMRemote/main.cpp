@@ -3,8 +3,8 @@
 
 int main(int argc, char *argv[])
 {
-	QApplication a(argc, argv);
-	TMRemote w;
-	w.show();
-	return a.exec();
+	QApplication TMRemoteApp(argc, argv);
+	TMRemote TMRemoteWindow;
+	TMRemoteWindow.show();
+	return TMRemoteApp.exec();
 }
