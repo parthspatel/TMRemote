@@ -4,18 +4,16 @@ from discord.ext import commands
 import asyncio
 import server, text
 
-TOKEN = "NTA4MjI4OTIxODMwMTQ2MDcy.Dr8Mng.fFHkNwMm2fOsogp5pwRU0jhbR4E"
-
 bot = commands.Bot(command_prefix='.', case_insensitive=True)
 serverObj = None
-serverInvites = ["one", "two"]
+serverInvites = ["RJcZbv"]
 
 sentMessage = []
 
 @bot.event
 async def on_ready():
     global serverObj
-    serverObj = server.Server(TOKEN)
+    serverObj = server.Server(text.TOKEN)
     print('Logged in as')
     print(bot.user.name)
     print(bot.user.id)
@@ -47,7 +45,7 @@ async def on_ready():
                 sentMessage.append(member.id)
             except Exception as E:
                 if 'cannot send messages to this user' in str(E).lower():
-                    print(f"Cannot PM {member.name}")
+                    print(f"Cannot PM {member.name}, {E}")
             await asyncio.sleep(5)
     print("Finished iterations...")
 
@@ -67,5 +65,5 @@ with open('sentMessage.txt', 'r+') as file:
 for line in content:
     sentMessage.append(int(line))
 
-bot.run(TOKEN)
+bot.run(text.TOKEN, bot = False)
 

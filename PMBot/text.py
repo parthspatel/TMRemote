@@ -18,3 +18,5 @@ You can also check it out on discord, at:\n
 """
 
 INVITE = 'https://discord.gg/up8qnHz'
+
+TOKEN = 'NTA4Njk4NDE3NjQwMjQzMjAx.DsDCcg.a8LE-HezPTiw7h24JgNZJ7y173A'
