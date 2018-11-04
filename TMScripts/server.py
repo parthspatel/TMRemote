@@ -10,7 +10,7 @@ def main():
 
 def start_server():
     host = "127.0.0.1"
-    port = 8888         # arbitrary non-privileged port
+    port = 33139         # arbitrary non-privileged port
 
     soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     # SO_REUSEADDR flag tells the kernel to reuse a local socket in TIME_WAIT state, without waiting for its natural timeout to expire

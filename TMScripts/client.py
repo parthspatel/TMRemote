@@ -5,7 +5,7 @@ import sys
 def main():
     soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     host = "127.0.0.1"
-    port = 8888
+    port = 33139
 
     try:
         soc.connect((host, port))
