@@ -22,7 +22,7 @@ class ClientLauncher(object):
             win32gui.SetForegroundWindow(i[0])
             return
         
-    def __GetInCurrentWindow(self):
+    def __get_in_current_window(self):
         self.__GetTerminalManagerWindow()
         checkboxArray = list(pyautogui.locateAllOnScreen(
             'checkbox.png'))
@@ -35,9 +35,9 @@ class ClientLauncher(object):
         pyautogui.click()
         pyautogui.keyUp('ctrl')
 
-    def launchClients(self):
+    def launch_clients(self):
         if self.repeatCount < 1:
             self.repeatCount = 1
         for _ in range(self.repeatCount):
-            self.__GetInCurrentWindow()
+            self.__get_in_current_window()
             pyautogui.scroll(-pyautogui.size()[1])
