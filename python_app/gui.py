@@ -26,12 +26,12 @@ class TMRemote(QMainWindow):
 
         self.startEvent()
 
-        self.thread = MainThread(username=self.settingsWindow.getUsername,
-                                 password=self.settingsWindow.getPassword,
-                                 apikey={'get': self.getAPIKey,
-                                         'set': self.setAPIKey},
+        self.thread = MainThread(username=self.settingsWindow.get_username,
+                                 password=self.settingsWindow.get_password,
+                                 api_key={'get': self.get_api_key,
+                                         'set': self.set_api_key},
                                  profilesDir=self.settingsWindow.getProfileDir,
-                                 tmPath=self.settingsWindow.getTMPath,
+                                 tm_path=self.settingsWindow.get_tm_path,
                                  banDetectionWidget=self.banDetectionWidget,
                                  maintenanceWidget=self.maintenanceWidget,
                                  logs=self.tmrLoggingWidget,
@@ -67,7 +67,7 @@ class TMRemote(QMainWindow):
         self.banDetectionWidget = Widgets.BanDetection()
         self.tmrLoggingWidget = Widgets.TMRLogging()
 
-        self.setAPIKey()
+        self.set_api_key()
 
         self.__initTabs()
 
@@ -160,12 +160,12 @@ class TMRemote(QMainWindow):
         mainBox.addWidget(tabWidget)
         centralWidget.setLayout(mainBox)
 
-    def setAPIKey(self, key=None):
-        self.apiKey = key
+    def set_api_key(self, key=None):
+        self.api_key = key
         self.update()
 
-    def getAPIKey(self):
-        return self.apiKey
+    def get_api_key(self):
+        return self.api_key
 
     def startEvent(self):
         self.__readAndApplySettings()
@@ -179,7 +179,7 @@ class TMRemote(QMainWindow):
 
     def __startTerminalManager(self):
         try:
-            if self.settingsWindow.getTMPath() and self.settingsWindow.getTMPath().strip():
+            if self.settingsWindow.get_tm_path() and self.settingsWindow.get_tm_path().strip():
                 if not self.__processExists('TerminalManager'):
                     # Get TMR current path
                     tmr_dir = os.path.dirname(
@@ -187,9 +187,9 @@ class TMRemote(QMainWindow):
 
                     # Let TMR load, then start Terminal Manager
                     time.sleep(0.3)
-                    os.chdir(self.settingsWindow.getTMPath().split(
+                    os.chdir(self.settingsWindow.get_tm_path().split(
                         'TerminalManager.exe')[0])
-                    os.startfile(self.settingsWindow.getTMPath())
+                    os.startfile(self.settingsWindow.get_tm_path())
                     time.sleep(0.1)
                     os.chdir(tmr_dir)
         except:
@@ -213,9 +213,9 @@ class TMRemote(QMainWindow):
         self.settingsWindow.setPassword(
             settings.value('password'))
         self.settingsWindow.setProfileDir(settings.value('profileDir'))
-        self.settingsWindow.setTMPath(settings.value('tmPath'))
+        self.settingsWindow.settm_path(settings.value('tm_path'))
 
-        self.setAPIKey(settings.value('apikey'))
+        self.set_api_key(settings.value('api_key'))
 
         for world in Magic.WORLDS:
             checked = False if None is settings.value(
@@ -251,11 +251,11 @@ class TMRemote(QMainWindow):
                 self.banDetectionWidget.worldCheckBoxes[world.lower()].isChecked())
             settings.setValue(world.lower(), value)
 
-        vars = {'username': self.settingsWindow.getUsername(),
-                'password': self.settingsWindow.getPassword(),
-                'apikey': self.getAPIKey(),
+        vars = {'username': self.settingsWindow.get_username(),
+                'password': self.settingsWindow.get_password(),
+                'api_key': self.get_api_key(),
                 'profileDir': self.settingsWindow.getProfileDir(),
-                'tmPath': self.settingsWindow.getTMPath(),
+                'tm_path': self.settingsWindow.get_tm_path(),
                 'banDetection': bool(self.banDetectionWidget.banDetectionCheckBox.isChecked()),
                 'crashMaint': bool(self.maintenanceWidget.crashCheckBox.isChecked()),
                 'restartMaint': bool(self.maintenanceWidget.restartCheckBox.isChecked()),
@@ -270,7 +270,7 @@ class TMRemote(QMainWindow):
         self.thread.quit()
 
     def __getTMRemoteDir(self):
-        return self.settingsWindow.getTMPath().split('TerminalManager.exe')[0] + 'TMRemote'
+        return self.settingsWindow.get_tm_path().split('TerminalManager.exe')[0] + 'TMRemote'
 
     def __removeTempFiles(self):
         tempDir = self.__getTMRemoteDir() + '/temp'

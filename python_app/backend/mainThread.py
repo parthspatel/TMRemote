@@ -7,7 +7,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
-from backend.apiKey import apiKeyThread
+from backend.api_key import api_keyThread
 from backend.auth import Auth
 from backend.banDetection import BanDetectionThread
 from backend.botLogging import BotLoggingThread
@@ -30,20 +30,20 @@ def getCurrentPath():
 
 class MainThread(QThread):
 
-    def __init__(self, username, password, apikey, profilesDir, tmPath,
+    def __init__(self, username, password, api_key, profilesDir, tm_path,
                  banDetectionWidget, maintenanceWidget, logs,
                  generalSettingsWidget, settingsTextEdits):
         QThread.__init__(self)
 
-        self.getUsername = username
-        self.getPassword = password
-        self.getApiKey = apikey['get']
-        self.setApiKey = apikey['set']
+        self.get_username = username
+        self.get_password = password
+        self.get_api_key = api_key['get']
+        self.set_api_key = api_key['set']
 
-        self.setApiKey(self.__getApiKey())
+        self.set_api_key(self.__get_api_key())
 
         self.getProfilesDir = profilesDir
-        self.getTmPath = tmPath
+        self.get_tm_path = tm_path
 
         self.banDetectionWidget = banDetectionWidget
         self.worldCheckBoxes = self.banDetectionWidget.worldCheckBoxes
@@ -65,64 +65,64 @@ class MainThread(QThread):
                       'ScriptVersion': 'https://mehodin.com/scriptVersion.html',
                       'ModuleVersion': 'https://mehodin.com/moduleVersion.html'}
 
-        self.apiKeyThread = apiKeyThread(username=self.getUsername,
-                                         password=self.getPassword,
-                                         setApiKey=self.setApiKey,
-                                         getApiKey=self.getApiKey,
+        self.api_keyThread = api_keyThread(username=self.get_username,
+                                         password=self.get_password,
+                                         set_api_key=self.set_api_key,
+                                         get_api_key=self.get_api_key,
                                          textEdits=settingsTextEdits)
 
-        self.banDetectionThread = BanDetectionThread(username=self.getUsername,
-                                                     password=self.getPassword,
-                                                     apikey=self.getApiKey,
-                                                     tmPath=self.getTmPath,
+        self.banDetectionThread = BanDetectionThread(username=self.get_username,
+                                                     password=self.get_password,
+                                                     api_key=self.get_api_key,
+                                                     tm_path=self.get_tm_path,
                                                      banDetectionWidget=self.banDetectionWidget,
                                                      logs=self.logs,
                                                      links=self.links)
 
-        self.botLoggingThread = BotLoggingThread(username=self.getUsername,
-                                                 password=self.getPassword,
-                                                 apikey=self.getApiKey,
-                                                 tmPath=self.getTmPath,
+        self.botLoggingThread = BotLoggingThread(username=self.get_username,
+                                                 password=self.get_password,
+                                                 api_key=self.get_api_key,
+                                                 tm_path=self.get_tm_path,
                                                  logs=self.logs,
                                                  links=self.links)
 
-        self.tmLoggingThread = TMLoggingThread(username=self.getUsername,
-                                               password=self.getPassword,
-                                               apikey=self.getApiKey,
-                                               tmPath=self.getTmPath,
+        self.tmLoggingThread = TMLoggingThread(username=self.get_username,
+                                               password=self.get_password,
+                                               api_key=self.get_api_key,
+                                               tm_path=self.get_tm_path,
                                                logs=self.logs,
                                                links=self.links)
 
         self.WorldCheckboxThread = WorldCheckBoxThread(banDetectionWidget=self.banDetectionWidget,
-                                                       tmPath=self.getTmPath)
+                                                       tm_path=self.get_tm_path)
 
-        self.MaintenanceCheckThread = MaintenanceCheckThread(username=self.getUsername,
-                                                             password=self.getPassword,
-                                                             apikey=self.getApiKey,
+        self.MaintenanceCheckThread = MaintenanceCheckThread(username=self.get_username,
+                                                             password=self.get_password,
+                                                             api_key=self.get_api_key,
                                                              maintenanceWidget=self.maintenanceWidget,
-                                                             tmPath=self.getTmPath,
+                                                             tm_path=self.get_tm_path,
                                                              logs=self.logs,
                                                              links=self.links)
 
-        self.profileThread = profileThread(username=self.getUsername,
-                                           password=self.getPassword,
-                                           apikey=self.getApiKey,
+        self.profileThread = profileThread(username=self.get_username,
+                                           password=self.get_password,
+                                           api_key=self.get_api_key,
                                            profilesDir=self.getProfilesDir,
-                                           tmPath=self.getTmPath,
+                                           tm_path=self.get_tm_path,
                                            links=self.links,
                                            logs=self.logs)
 
-        self.versionCheckThread = downloadUpdates(username=self.getUsername,
-                                                  password=self.getPassword,
-                                                  apikey=self.getApiKey,
-                                                  tmPath=self.getTmPath,
+        self.versionCheckThread = downloadUpdates(username=self.get_username,
+                                                  password=self.get_password,
+                                                  api_key=self.get_api_key,
+                                                  tm_path=self.get_tm_path,
                                                   logs=self.logs,
                                                   links=self.links)
 
-        self.setStartupThread = setStartupThread(username=self.getUsername,
-                                                 password=self.getPassword,
-                                                 apikey=self.getApiKey,
-                                                 tmPath=self.getTmPath,
+        self.setStartupThread = setStartupThread(username=self.get_username,
+                                                 password=self.get_password,
+                                                 api_key=self.get_api_key,
+                                                 tm_path=self.get_tm_path,
                                                  logs=self.logs,
                                                  links=self.links,
                                                  generalSettings=self.generalSettings)
@@ -130,7 +130,7 @@ class MainThread(QThread):
     def __del__(self):
         try:
             self.banDetectionThread.quit()
-            self.apiKeyThread.quit()
+            self.api_keyThread.quit()
             self.botLoggingThread.quit()
             self.tmLoggingThread.quit()
             self.WorldCheckboxThread.quit()
@@ -145,21 +145,20 @@ class MainThread(QThread):
 
     @Log.log
     def __filePathCheck(self):
-        if self.getTmPath() is None:
+        if self.get_tm_path() is None:
             return 'Terminal Manager path is not defined, please select this in settings'
         elif self.getProfilesDir() is None:
             return 'Profiles directory is not defined, please select this in settings'
 
-    def __getApiKey(self):
+    def __get_api_key(self):
         headers = {'User-Agent': 'TMR Bot'}
         try:
-            data = {'username': self.getUsername(),
-                    'password': self.getPassword()}
+            data = {'username': self.get_username(),
+                    'password': self.get_password()}
         except:
             return 'API Key Error: No username or password'
         try:
-            token = ast.literal_eval(requests.post(
-                'https://beta.tmremote.io/api/login', headers=headers, data=data).text)['token']
+            token = requests.post('https://beta.tmremote.io/api/login', headers=headers, data=data).json()["token"]
             return token
         except Exception as ex:
             return f'API Key Error: Token request failed with {ex}'
@@ -167,7 +166,7 @@ class MainThread(QThread):
     def run(self):
         if self.__filePathCheck() is None:
             self.sleep_time = 1
-            self.apiKeyThread.start()
+            self.api_keyThread.start()
             self.versionCheckThread.start()
             self.banDetectionThread.start()
             self.botLoggingThread.start()

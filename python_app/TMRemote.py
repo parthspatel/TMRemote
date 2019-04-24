@@ -145,7 +145,6 @@ class Splash(QMainWindow):
 
     @pyqtSlot(int)
     def progress(self, i):
-        file_name = getCurrentPath() + '\TMRemote.exe'
         self.progressBar.setValue(i)
         if i >= 100:
             sys.exit(self)

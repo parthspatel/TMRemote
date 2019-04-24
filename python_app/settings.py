@@ -62,23 +62,20 @@ class Settings(QMainWindow):
 
         self.centralWidget.setLayout(self.mainBox)
 
-    def getUsername(self):
-        return self.loginWidget.getUsername()
+    def get_username(self):
+        return self.loginWidget.get_username()
 
-    def getPassword(self):
-        return self.loginWidget.getPassword()
+    def get_password(self):
+        return self.loginWidget.get_password()
 
     def getTextEdits(self):
         return {'loginWidget': self.loginWidget.getTextEdits()}
 
-    # def getAPIKey(self):
-    #     return self.loginWidget.getAPIKey()
-
     def getProfileDir(self):
         return self.fileDirWidget.getProfileDir()
 
-    def getTMPath(self):
-        return self.fileDirWidget.getTMPath()
+    def get_tm_path(self):
+        return self.fileDirWidget.get_tm_path()
 
     def setUsername(self, username):
         self.loginWidget.setUsername(username)
@@ -88,16 +85,12 @@ class Settings(QMainWindow):
         self.loginWidget.setPassword(password)
         self.update()
 
-    # def setAPIKey(self, ApiKey):
-    #     self.loginWidget.setAPIKey(ApiKey)
-    #     self.update()
-
     def setProfileDir(self, dir):
         self.fileDirWidget.setProfileDir(dir)
         self.update()
 
-    def setTMPath(self, path):
-        self.fileDirWidget.setTMPath(path)
+    def settm_path(self, path):
+        self.fileDirWidget.settm_path(path)
         self.update()
 
 
@@ -125,14 +118,14 @@ class _LoginWidget(QWidget):
         self.__password.setEchoMode(QLineEdit.Password)
         self.__password.setFixedHeight(Magic.HEIGHT)
 
-        # # APIKey
-        # APIKeyLabel = QLabel(self)
-        # APIKeyLabel.setText('API Key:')
+        # # api_key
+        # api_keyLabel = QLabel(self)
+        # api_keyLabel.setText('API Key:')
         #
-        # self.__APIKey = QLineEdit(self)
-        # self.__APIKey.setPlaceholderText('Enter API Key')
-        # self.__APIKey.setEchoMode(QLineEdit.Password)
-        # self.__APIKey.setFixedHeight(Magic.HEIGHT)
+        # self.__api_key = QLineEdit(self)
+        # self.__api_key.setPlaceholderText('Enter API Key')
+        # self.__api_key.setEchoMode(QLineEdit.Password)
+        # self.__api_key.setFixedHeight(Magic.HEIGHT)
 
         grid = QGridLayout()
         grid.setSpacing(Magic.GRID_SPACE)
@@ -143,23 +136,23 @@ class _LoginWidget(QWidget):
         grid.addWidget(passwordLabel, 2, 0)
         grid.addWidget(self.__password, 2, 1)
 
-        # grid.addWidget(APIKeyLabel, 3, 0)
-        # grid.addWidget(self.__APIKey, 3, 1)
+        # grid.addWidget(api_keyLabel, 3, 0)
+        # grid.addWidget(self.__api_key, 3, 1)
 
         self.setLayout(grid)
 
-    def getUsername(self):
+    def get_username(self):
         return self.__username.text()
 
-    def getPassword(self):
+    def get_password(self):
         return self.__password.text()
 
     def getTextEdits(self):
         return {'username': self.__username,
                 'password': self.__password}
 
-    # def getAPIKey(self):
-    #     return self.__APIKey.text()
+    # def get_api_key(self):
+    #     return self.__api_key.text()
 
     def setUsername(self, username):
         self.__username.setText(username)
@@ -169,8 +162,8 @@ class _LoginWidget(QWidget):
         self.__password.setText(password)
         self.update()
 
-    # def setAPIKey(self, ApiKey):
-    #     self.__APIKey.setText(ApiKey)
+    # def set_api_key(self, api_key):
+    #     self.__api_key.setText(api_key)
     #     self.update()
 
 
@@ -207,7 +200,7 @@ class _FileDirWidget(QWidget):
         terminalButton = QPushButton(self)
         terminalButton.setIcon(QIcon('icons\open.svg'))
         terminalButton.setFixedWidth(Magic.HEIGHT)
-        terminalButton.clicked.connect(self.__onPushGetTMPath)
+        terminalButton.clicked.connect(self.__onPushget_tm_path)
 
         grid = QGridLayout()
         grid.setSpacing(Magic.GRID_SPACE)
@@ -226,7 +219,7 @@ class _FileDirWidget(QWidget):
         path = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
         self.profiles.setText(path)
 
-    def __onPushGetTMPath(self):
+    def __onPushget_tm_path(self):
         path = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
         if Path(path).is_dir():
             if Path(path + '/TerminalManager.exe').is_file():
@@ -241,14 +234,14 @@ class _FileDirWidget(QWidget):
     def getProfileDir(self):
         return self.profiles.text()
 
-    def getTMPath(self):
+    def get_tm_path(self):
         return self.TerminalManager.text()
 
     def setProfileDir(self, dir):
         self.profiles.setText(str(dir))
         self.update()
 
-    def setTMPath(self, path):
+    def settm_path(self, path):
         self.TerminalManager.setText(str(path))
         self.update()
 

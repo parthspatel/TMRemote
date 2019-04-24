@@ -2,22 +2,20 @@ import ast
 import os
 import pickle
 
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from PyQt5.QtCore import QThread
 
 from backend.auth import Auth
 from backend.log import Log
 
 
 class BanDetectionThread(QThread):
-    def __init__(self, username, password, apikey, tmPath, banDetectionWidget, logs, links):
+    def __init__(self, username, password, api_key, tm_path, banDetectionWidget, logs, links):
         QThread.__init__(self)
-        self.getUsername = username
-        self.getPassword = password
-        self.apiKey = apikey
+        self.get_username = username
+        self.get_password = password
+        self.api_key = api_key
 
-        self.getTmPath = tmPath
+        self.get_tm_path = tm_path
 
         self.banDetectionCheckBox = banDetectionWidget.banDetectionCheckBox
         self.allWorldsCheckBox = banDetectionWidget.allWorldsCheckBox
@@ -44,13 +42,13 @@ class BanDetectionThread(QThread):
     def __del__(self):
         self.wait()
 
-    def __getTMRemoteFolder(self):
-        return self.getTmPath().split('TerminalManager.exe')[0] + 'TMRemote'
+    def get_tmremote_folder(self):
+        return self.get_tm_path().split('TerminalManager.exe')[0] + 'TMRemote'
 
     def __isEnabled(self):
         if not self.banDetectionCheckBox.isChecked():
             try:
-                os.remove(self.__getTMRemoteFolder() + '/temp/banDetectStatus')
+                os.remove(self.get_tmremote_folder() + '/temp/banDetectStatus')
             except:
                 pass
             return False
@@ -67,7 +65,7 @@ class BanDetectionThread(QThread):
         if not gmStatus:
             return f'Ban Status Failed Auth: {gmStatus}'
         try:
-            GMLogs = ast.literal_eval(gmStatus)
+            GMLogs = gmStatus.json()
         except SyntaxError:
             pass
         if 'fail' in gmStatus.lower():
@@ -98,25 +96,27 @@ class BanDetectionThread(QThread):
             # background-color: #EB5202;
 
             for world in GMLogs['worlds']:
-                if GMLogs['worlds'][world]['status'] != self.prevBanDetection.get(world):
-                    self.worldCheckBoxes[world.lower()].setState(
-                        GMLogs['worlds'][world]['status'])
-
-        gm_status = []
-        for world in GMLogs['worlds']:
-            if GMLogs['worlds'][world]['status'] != self.prevBanDetection.get(world):
+                if GMLogs['worlds'][world]['status'] == self.prevBanDetection.get(world):
+                    continue
                 self.worldCheckBoxes[world.lower()].setState(
                     GMLogs['worlds'][world]['status'])
 
-                gm_status.append('BD Status: {} in {}'.format(
-                    GMLogs['worlds'][world]['status'], GMLogs['worlds'][world]['name']))
-                self.prevBanDetection[world] = GMLogs['worlds'][world]['status']
+        gm_status = []
+        for world in GMLogs['worlds']:
+            if GMLogs['worlds'][world]['status'] == self.prevBanDetection.get(world):
+                continue
+            self.worldCheckBoxes[world.lower()].setState(
+                GMLogs['worlds'][world]['status'])
+
+            gm_status.append('BD Status: {} in {}'.format(
+                GMLogs['worlds'][world]['status'], GMLogs['worlds'][world]['name']))
+            self.prevBanDetection[world] = GMLogs['worlds'][world]['status']
 
         try:
-            if self.__getTMRemoteFolder():
-                if not os.path.exists(self.__getTMRemoteFolder() + '/temp'):
-                    os.makedirs(self.__getTMRemoteFolder() + '/temp')
-                with open(self.__getTMRemoteFolder() + '/temp/banDetectStatus', 'wb+') as file:
+            if self.get_tmremote_folder():
+                if not os.path.exists(self.get_tmremote_folder() + '/temp'):
+                    os.makedirs(self.get_tmremote_folder() + '/temp')
+                with open(self.get_tmremote_folder() + '/temp/banDetectStatus', 'wb+') as file:
                     pickle.dump(str(GMLogs), file)
             else:
                 return
@@ -133,3 +133,4 @@ class BanDetectionThread(QThread):
             if self.__isEnabled():
                 self.parseBanDetection()
                 self.sleep(self.sleep_time)
+            self.sleep(1)

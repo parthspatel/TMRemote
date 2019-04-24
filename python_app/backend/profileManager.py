@@ -4,9 +4,7 @@ import os
 import sys
 
 import requests
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from PyQt5.QtCore import QThread
 
 from backend.auth import Auth
 from backend.log import Log
@@ -15,17 +13,17 @@ from backend.profileParser import ProfileManager as ProfileFixer
 
 class profileThread(QThread):
 
-    def __init__(self, username, password, apikey, profilesDir, tmPath, links, logs):
+    def __init__(self, username, password, api_key, profilesDir, tm_path, links, logs):
         QThread.__init__(self)
 
-        self.getUsername = username
-        self.getPassword = password
-        self.apiKey = apikey
+        self.get_username = username
+        self.get_password = password
+        self.api_key = api_key
 
         self.links = links
 
         self.getProfilesDir = profilesDir
-        self.getTmPath = tmPath
+        self.get_tm_path = tm_path
 
         self.logs = logs
 
@@ -44,7 +42,7 @@ class profileThread(QThread):
                     yield filepath
 
     def __modifyProfiles(self):
-        script_path = self.getTmPath().replace(
+        script_path = self.get_tm_path().replace(
             'TerminalManager.exe', 'TMRemote/Scripts/Logger.py')
         count = 0
         if os.path.isfile(script_path):

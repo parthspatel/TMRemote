@@ -6,6 +6,7 @@ import requests
 
 
 class Auth():
+    @classmethod
     def connected(func):
         def is_network_connection(host="1.1.1.1", port=53, timeout=3, *args, **kwargs):
             try:
@@ -18,6 +19,7 @@ class Auth():
 
         return is_network_connection
 
+    @classmethod
     def parametrized(dec):
         def layer(*args, **kwargs):
             def repl(f):
@@ -26,9 +28,10 @@ class Auth():
         return layer
 
     @parametrized
+    @classmethod
     def authenticate(func, level='basic'):
         level_dict = {'basic': 'logIn',
-                      'botLogs':'botLogs',
+                      'botLogs': 'botLogs',
                       'prime': 'banDetection'}
 
         def authenticate_and_call(*args, **kwargs):
@@ -37,20 +40,21 @@ class Auth():
                 try:
                     headers = {'User-Agent': 'TMR Bot'}
                     if level == 'basic':
-                        data = {'username': args[0].getUsername(),
-                                'password': args[0].getPassword()}
+                        data = {'username': args[0].get_username(),
+                                'password': args[0].get_password()}
                     else:
-                        apiKey = args[0].apiKey()
-                        if 'error' in apiKey.lower():
-                            return f'Authentication Failed: {apiKey}'
+                        api_key = args[0].api_key()
+                        if 'error' in api_key.lower():
+                            return f'Authentication Failed: {api_key}'
                         headers.update(
-                        {'Authorization': 'Bearer {}'.format(apiKey)})
+                            {'Authorization': 'Bearer {}'.format(api_key)})
 
                     link = args[0].links[level_dict[level]]
-                    if not 'http' in link.lower():
+                    if 'http' not in link.lower():
                         return 'Authentication failed: Not a valid link'
                     elif level == 'basic':
-                        status = requests.post(link, headers=headers, data=data)
+                        status = requests.post(
+                            link, headers=headers, data=data)
                     else:
                         status = requests.get(link, headers=headers)
                     statusCode = status.status_code
@@ -79,25 +83,41 @@ class Auth():
 
         def __getBaseID(self):
             BaseID = subprocess.check_output(
-                self.HWIDCommand, shell=self.shell, stdin=self.PIPE, stderr=self.PIPE, creationflags=0x08000000)
+                self.HWIDCommand,
+                shell=self.shell,
+                stdin=self.PIPE,
+                stderr=self.PIPE,
+                creationflags=0x08000000)
             BaseID = ''.join(BaseID.decode('utf-8').split('\n')[-3].split('-'))
             return BaseID
 
         def __getCpuID(self):
             CpuID = subprocess.check_output(
-                self.CpuCommand, shell=self.shell, stdin=self.PIPE, stderr=self.PIPE, creationflags=0x08000000)
+                self.CpuCommand,
+                shell=self.shell,
+                stdin=self.PIPE,
+                stderr=self.PIPE,
+                creationflags=0x08000000)
             CpuID = CpuID.decode('utf-8').split('\n')[1]
             return CpuID
 
         def __getGpuID(self):
             GpuID = subprocess.check_output(
-                self.GpuCommand, shell=self.shell, stdin=self.PIPE, stderr=self.PIPE, creationflags=0x08000000)
+                self.GpuCommand,
+                shell=self.shell,
+                stdin=self.PIPE,
+                stderr=self.PIPE,
+                creationflags=0x08000000)
             GpuID = int(GpuID.decode('utf-8').split('\n')[1])
             return str(GpuID)
 
         def __getGpuID2(self):
             GpuID2 = subprocess.check_output(
-                self.GpuCommand2, shell=self.shell, stdin=self.PIPE, stderr=self.PIPE, creationflags=0x08000000)
+                self.GpuCommand2,
+                shell=self.shell,
+                stdin=self.PIPE,
+                stderr=self.PIPE,
+                creationflags=0x08000000)
             return GpuID2.decode().replace('\n', '')
 
         def __hash(self, id):
@@ -115,31 +135,3 @@ class Auth():
                 self.__getGpuID2() + self.__getBaseID()
             self.trueHWID = self.trueHWID.replace(' ', '').replace('\r', '')
             return self.__encrypt(self.trueHWID)
-
-class encryption():
-    def __init__(self):
-        pass
-
-    def encrypt(self, string, key):
-        encryptionValue = 0
-        for character in key:
-            encryptionValue += ord(character)
-        encoded = ''
-        for character in string:
-            encryptedCharacter = int(ord(character)) * encryptionValue
-            encoded += str(len(str(encryptedCharacter)))
-            encoded += str(encryptedCharacter)
-        return encoded
-
-    def decrypt(self, string, key):
-        encryptionValue = 0
-        for character in key:
-            encryptionValue += ord(character)
-        unencrypted = ''
-        while len(string) > 0:
-            lenFirst = int(string[0])
-            string = string[int(len(str(lenFirst))):]
-            charToDecrypt = string[slice(0, lenFirst)]
-            string = string[len(charToDecrypt):]
-            unencrypted += chr(int(int(charToDecrypt) // encryptionValue))
-        return unencrypted

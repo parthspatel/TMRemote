@@ -1,4 +1,9 @@
 {
-    "python.linting.enabled": false,
-    "python.pythonPath": "C:\\Users\\yuhan\\AppData\\Local\\Programs\\Python\\Python36\\python.exe"
+    "python.pythonPath": "/sbin/python",
+    "python.formatting.provider": "autopep8",
+    "python.linting.enabled": true,
+    "python.linting.pylintArgs": [
+        "--extension-pkg-whitelist=PyQt5",
+        "--disable=blacklisted-name"
+    ]
 }

@@ -2,16 +2,13 @@ import datetime
 import os
 import pickle
 
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-
+from PyQt5.QtCore import QThread
 
 class WorldCheckBoxThread(QThread):
-    def __init__(self, banDetectionWidget, tmPath):
+    def __init__(self, banDetectionWidget, tm_path):
         QThread.__init__(self)
         self.worldCheckBoxes = banDetectionWidget.worldCheckBoxes
-        self.tmPath = tmPath
+        self.tm_path = tm_path
         self.sleep_time = 10
 
     def __getStatus(self):
@@ -21,20 +18,20 @@ class WorldCheckBoxThread(QThread):
         return status
 
     def __getToCheckPath(self):
-        return self.tmPath().replace('TerminalManager.exe', 'TMRemote/temp/WorldToCheck')
+        return self.tm_path().replace('TerminalManager.exe', 'TMRemote/temp/WorldToCheck')
 
-    def __writeStatus(self):
+    def __write_status(self):
         try:
             os.remove(self.__getToCheckPath())
         except FileNotFoundError:
             pass
         except PermissionError:
             pass
-        tmPath = self.tmPath().split('TerminalManager.exe')[0]
-        if self.tmPath() is None:
+        tm_path = self.tm_path().split('TerminalManager.exe')[0]
+        if self.tm_path() is None:
             return
-        scriptsFolder = tmPath + 'TMRemote/Scripts'
-        tmRemoteFolder = tmPath + 'TMRemote'
+        scriptsFolder = tm_path + 'TMRemote/Scripts'
+        tmRemoteFolder = tm_path + 'TMRemote'
         if not os.path.isdir(tmRemoteFolder):
             os.mkdir(tmRemoteFolder)
         if not os.path.isdir(scriptsFolder):
@@ -46,6 +43,6 @@ class WorldCheckBoxThread(QThread):
 
     def run(self):
         while True:
-            if not self.tmPath() in [None, 'None']:
-                self.__writeStatus()
+            if not self.tm_path() in [None, 'None']:
+                self.__write_status()
             self.sleep(self.sleep_time)

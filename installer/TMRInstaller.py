@@ -39,8 +39,8 @@ class ThreadProgress(QThread):
         self.__createFolder(tempFolder)
 
     def __downloadScript(self):
-        tmPath = self.terminalManager
-        scriptPath = tmPath + '/TMRemote/Scripts/Logger.py'
+        tm_path = self.terminalManager
+        scriptPath = tm_path + '/TMRemote/Scripts/Logger.py'
         try:
             scriptContent = requests.get(
                 'https://mehodin.com/i/Logger.py').text
@@ -55,8 +55,8 @@ class ThreadProgress(QThread):
             return False
 
     def __downloadModule(self):
-        tmPath = self.terminalManager
-        modulePath = tmPath + '/TMRemote/Scripts/TMRLogger.pyc'
+        tm_path = self.terminalManager
+        modulePath = tm_path + '/TMRemote/Scripts/TMRLogger.pyc'
         try:
             moduleContent = requests.get(
                 'https://mehodin.com/i/TMRLogger.pyc').content
@@ -161,9 +161,6 @@ def main():
 
     # Get screen size and change window size
     screen = app.primaryScreen().availableGeometry()
-
-    # window.setAttribute(Qt.WA_NoSystemBackground, False)
-    # window.setAttribute(Qt.WA_TranslucentBackground, False)
 
     # Create image
     logo = QPixmap('icons\icon.svg')

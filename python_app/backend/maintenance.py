@@ -1,25 +1,19 @@
 import os
 
 import requests
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from PyQt5.QtCore import QThread
 
 from backend.auth import Auth
 from backend.log import Log
 
-# from backend.clientLauncher import ClientLauncher
-
-
-
 class MaintenanceCheckThread(QThread):
-    def __init__(self, username, password, apikey, tmPath, maintenanceWidget, logs, links):
+    def __init__(self, username, password, api_key, tm_path, maintenanceWidget, logs, links):
         QThread.__init__(self)
-        self.getUsername = username
-        self.getPassword = password
-        self.apiKey = apikey
+        self.get_username = username
+        self.get_password = password
+        self.api_key = api_key
 
-        self.tmPath = tmPath
+        self.tm_path = tm_path
 
         self.maintenanceWidget = maintenanceWidget
         self.crashCheckBox = self.maintenanceWidget.crashCheckBox
@@ -39,34 +33,34 @@ class MaintenanceCheckThread(QThread):
         self.wait()
 
     @Auth.authenticate(level='basic')
-    def __getMaintenanceStatus(self, token):
-        data = {'key': self.apiKey(),
-                'name': self.getUsername()}
+    def __getMaintenanceStatus(self):
+        data = {'key': self.api_key(),
+                'name': self.get_username()}
         maintenanceStatus = requests.post(
             self.links['MaintenanceCheck'], data=data).text
         return bool(maintenanceStatus)
 
     @Log.log
     def __maintenanceCheck(self):
-        if self.__getMaintenanceStatus():
-            self.maintenance = True
-            if self.restartCheckBox.isChecked():
-                # os.system('shutdown -r -f -t 0') uncommen in live version
-                return 'Restarting pc'  # remove in live version
-            elif self.crashCheckBox.isChecked():
-                # os.system('Taskkill -IM TerminalManager.exe -F') uncomment in live
-                # os.system('Taskkill -IM Maplestory.exe -F')
-                return 'Killing maple'  # remove in live version
-                return 'Terminated Manager and Maplestory instances'
-            else:
-                if not self.notified:
-                    return 'Maplestory is now on maintenance'
-                    self.notified = True
+        if not self.__getMaintenanceStatus():
+            if not self.startBotsCheckBox.isChecked():
+                return
+            if not self.maintenance:
+                return
+            self.maintenance = False
+            return
+        self.maintenance = True
+        if self.restartCheckBox.isChecked():
+            os.system('shutdown -r -f -t 0')
+        elif self.crashCheckBox.isChecked():
+            os.system('Taskkill -IM TerminalManager.exe -F')
+            os.system('Taskkill -IM Maplestory.exe -F')
+            return 'Terminated Manager and Maplestory instances'
         else:
-            if self.startBotsCheckBox.isChecked():
-                if self.maintenance:
-                    # clientLauncher().launchClients()
-                    self.maintenance = False
+            if self.notified:
+                return
+            self.notified = True
+            return 'Maplestory is now on maintenance'
 
     def run(self):
         while True:

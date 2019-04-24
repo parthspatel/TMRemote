@@ -5,22 +5,20 @@ from winreg import *
 
 import psutil
 import requests
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from PyQt5.QtCore import QThread
 
 from backend.auth import Auth
 from backend.log import Log
 
 
 class setStartupThread(QThread):
-    def __init__(self, username, password, apikey, tmPath, logs, links, generalSettings):
+    def __init__(self, username, password, api_key, tm_path, logs, links, generalSettings):
         QThread.__init__(self)
-        self.getUsername = username
-        self.getPassword = password
-        self.apiKey = apikey
+        self.get_username = username
+        self.get_password = password
+        self.api_key = api_key
 
-        self.tmPath = tmPath
+        self.tm_path = tm_path
 
         self.generalSettings = generalSettings
 
@@ -72,16 +70,14 @@ class setStartupThread(QThread):
 
     @Log.log
     def __startTerminalManager(self, token=None):
-        if self.generalSettings.startManagerCheckBox.isChecked():
-            # self.generalSettings.startManagerCheckBox.setEnabled(False)
-            # self.generalSettings.startManagerCheckBox.setChecked(False)
-            # return 'Start Manager is bugged, disabling.'
-            if not self.__terminalIsActive():
-                process = subprocess.call(self.tmPath(), cwd=self.tmPath().split('TerminalManager.exe')[0], shell = True)
-                return 'Started Terminal Manager'
+        if not self.generalSettings.startManagerCheckBox.isChecked():
+            return
+        if self.__terminalIsActive():
+            return
+        subprocess.call(self.tm_path(), cwd=self.tm_path().split('TerminalManager.exe')[0], shell = True)
+        return 'Started Terminal Manager'
 
     def run(self):
         while True:
-            # self.__WriteRegistry()
             self.__startTerminalManager()
             self.sleep(self.sleep_time)

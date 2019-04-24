@@ -144,10 +144,7 @@ class Log(object):
                 return False
 
     def __Disconnect(self):
-        currentTime = datetime.datetime.now()
-        disconnect = {'disconnect': '{0}: {1}: {2} {3}/{4}/{5}'.format(currentTime.hour, currentTime.minute,
-                                                                       currentTime.second, currentTime.day,
-                                                                       currentTime.month, currentTime.year)}
+        disconnect = {'disconnect': f'{datetime.datetime.now().isoformat(" ", "seconds")}'}
 
         self.__toFile('TMRemote/temp/logs', 'ab', disconnect)
         return True
@@ -175,6 +172,7 @@ class Log(object):
             return WorldsToCheck
         except FileNotFoundError as e:
             pass
+            
     def __toFile(self, filename, mode, data):
         with open(filename, mode) as PickleFile:
             pickle.dump(data, PickleFile)

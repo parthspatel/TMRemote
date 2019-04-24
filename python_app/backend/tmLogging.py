@@ -13,13 +13,13 @@ from backend.log import Log
 
 
 class TMLoggingThread(QThread):
-    def __init__(self, username, password, apikey, tmPath, logs, links):
+    def __init__(self, username, password, api_key, tm_path, logs, links):
         QThread.__init__(self)
-        self.getUsername = username
-        self.getPassword = password
-        self.apiKey = apikey
+        self.get_username = username
+        self.get_password = password
+        self.api_key = api_key
 
-        self.getTmPath = tmPath
+        self.get_tm_path = tm_path
 
         self.logs = logs
         self.links = links
@@ -33,7 +33,7 @@ class TMLoggingThread(QThread):
         self.wait()
 
     def __getFilePath(self):
-        return self.getTmPath().split('TerminalManager.exe')[0] + '/TerminalManager.log'
+        return self.get_tm_path().split('TerminalManager.exe')[0] + '/TerminalManager.log'
 
     def __createPreviousContentFile(self, oldContent):
         with open(self.__getFilePath().replace('TerminalManager.log', '/TMRemote/TerminalManager.previous.log'), 'w') as LogFile:
